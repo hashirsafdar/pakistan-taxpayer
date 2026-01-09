@@ -1,0 +1,85 @@
+#!/bin/bash
+set -euo pipefail
+
+PDF="TaxpayersDirectory2018.pdf"
+COMPANIES_CSV="companies.csv"
+INDIVIDUALS_CSV="individuals.csv"
+
+echo "=== Fast PDF Extraction using pdftotext + awk ==="
+echo
+
+if [ ! -f "$PDF" ]; then
+    echo "Error: $PDF not found"
+    exit 1
+fi
+
+echo "Step 1: Extracting all text from PDF (this will take a few minutes)..."
+echo "  This extracts all 35,445 pages at once..."
+
+pdftotext -layout "$PDF" - | \
+perl -ne '
+BEGIN {
+    open($comp_fh, ">", "'"$COMPANIES_CSV"'") or die $!;
+    open($ind_fh, ">", "'"$INDIVIDUALS_CSV"'") or die $!;
+    print $comp_fh "sr_no,name,registration_no,tax_paid\n";
+    print $ind_fh "sr_no,name,registration_no,tax_paid\n";
+    $company_count = 0;
+    $individual_count = 0;
+}
+
+if (/^\s*(\d+)\s+(.+?)\s+(\d{7,13})\s+([-\d,]+)\s*$/) {
+    $sr_no = $1;
+    $name = $2;
+    $regno = $3;
+    $tax_str = $4;
+
+    $name =~ s/\s+/ /g;
+    $name =~ s/^\s+|\s+$//g;
+    $name =~ s/"/""/g;
+
+    $tax_paid = ($tax_str eq "-") ? 0 : ($tax_str =~ s/,//gr);
+
+    if (length($regno) == 13) {
+        print $ind_fh "$sr_no,\"$name\",$regno,$tax_paid\n";
+        $individual_count++;
+        if ($individual_count % 10000 == 0) {
+            print STDERR "  Individuals: $individual_count\n";
+        }
+    } elsif (length($regno) == 7) {
+        print $comp_fh "$sr_no,\"$name\",$regno,$tax_paid\n";
+        $company_count++;
+        if ($company_count % 1000 == 0) {
+            print STDERR "  Companies: $company_count\n";
+        }
+    }
+}
+
+END {
+    close($comp_fh);
+    close($ind_fh);
+    print STDERR "\nExtraction complete!\n";
+    print STDERR "  Companies: $company_count\n";
+    print STDERR "  Individuals: $individual_count\n";
+}
+'
+
+echo
+echo "Step 2: Verifying CSV files..."
+if [ -f "$COMPANIES_CSV" ]; then
+    comp_lines=$(wc -l < "$COMPANIES_CSV")
+    comp_size=$(ls -lh "$COMPANIES_CSV" | awk '{print $5}')
+    echo "  ✓ $COMPANIES_CSV: $comp_lines lines, $comp_size"
+else
+    echo "  ✗ $COMPANIES_CSV not created"
+fi
+
+if [ -f "$INDIVIDUALS_CSV" ]; then
+    ind_lines=$(wc -l < "$INDIVIDUALS_CSV")
+    ind_size=$(ls -lh "$INDIVIDUALS_CSV" | awk '{print $5}')
+    echo "  ✓ $INDIVIDUALS_CSV: $ind_lines lines, $ind_size"
+else
+    echo "  ✗ $INDIVIDUALS_CSV not created"
+fi
+
+echo
+echo "Done! Run 'python3 create_database.py' to load into SQLite."

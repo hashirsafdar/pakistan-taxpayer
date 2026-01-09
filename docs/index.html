@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakistan Taxpayer Directory 2018</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f4c81 0%, #1a6ba8 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #0f4c81;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #0f4c81;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #0f4c81;
+        }
+
+        .tab.active {
+            color: #0f4c81;
+            border-bottom-color: #0f4c81;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        thead {
+            background: #0f4c81;
+            color: white;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .amount {
+            font-family: 'Courier New', monospace;
+            text-align: right;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-company {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-individual {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            background: white;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #0f4c81;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pakistan Taxpayer Directory 2018</h1>
+        <p>Extracted from Federal Board of Revenue (FBR) Public Data</p>
+    </header>
+
+    <div class="container">
+        <div class="stats-grid" id="stats">
+            <div class="loading">Loading statistics...</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('all')">Top 100 Overall</button>
+            <button class="tab" onclick="switchTab('companies')">Top 100 Companies</button>
+            <button class="tab" onclick="switchTab('individuals')">Top 100 Individuals</button>
+        </div>
+
+        <div class="tab-content active" id="tab-all">
+            <table id="table-all">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Registration No.</th>
+                        <th class="amount">Tax Paid (PKR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="5" class="loading">Loading data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="tab-companies">
+            <table id="table-companies">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Company Name</th>
+                        <th>Registration No.</th>
+                        <th class="amount">Tax Paid (PKR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="4" class="loading">Loading data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="tab-individuals">
+            <table id="table-individuals">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Registration No.</th>
+                        <th class="amount">Tax Paid (PKR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="4" class="loading">Loading data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            <strong>Data Source:</strong>
+            <a href="https://opendata.com.pk/dataset/tax-directory-of-pakistan-2018" target="_blank">
+                Tax Directory of Pakistan 2018 - OpenData Pakistan
+            </a>
+        </p>
+        <p style="margin-top: 0.5rem;">
+            Published by Federal Board of Revenue (FBR) Pakistan on 18th September 2020
+        </p>
+        <p style="margin-top: 1rem;">
+            <a href="https://github.com/yourusername/pakistan-taxpayer" target="_blank">
+                View Source Code on GitHub
+            </a>
+        </p>
+    </footer>
+
+    <script>
+        let data = {};
+
+        async function loadData() {
+            try {
+                const [statsRes, topRes] = await Promise.all([
+                    fetch('data/statistics.json'),
+                    fetch('data/top_taxpayers.json')
+                ]);
+
+                const stats = await statsRes.json();
+                const top = await topRes.json();
+
+                data = { stats, top };
+                renderStats(stats);
+                renderTables(top);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('stats').innerHTML = '<div class="stat-card"><p>Error loading data</p></div>';
+            }
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('en-US').format(Math.round(num));
+        }
+
+        function renderStats(stats) {
+            const statsHtml = `
+                <div class="stat-card">
+                    <h3>Companies</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Taxpayers</span>
+                        <span class="stat-value">${formatNumber(stats.companies.total)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Tax Paid</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.companies.total_tax)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Average Tax</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.companies.avg_tax)}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Individuals</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Taxpayers</span>
+                        <span class="stat-value">${formatNumber(stats.individuals.total)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Tax Paid</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.individuals.total_tax)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Average Tax</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.individuals.avg_tax)}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Overall</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Taxpayers</span>
+                        <span class="stat-value">${formatNumber(stats.companies.total + stats.individuals.total)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Tax Collected</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.companies.total_tax + stats.individuals.total_tax)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Companies vs Individuals</span>
+                        <span class="stat-value">${Math.round(stats.companies.total_tax / stats.individuals.total_tax * 100) / 100}x</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = statsHtml;
+        }
+
+        function renderTables(top) {
+            renderAllTable(top.top_all);
+            renderCompaniesTable(top.top_companies);
+            renderIndividualsTable(top.top_individuals);
+        }
+
+        function renderAllTable(data) {
+            const tbody = document.querySelector('#table-all tbody');
+            tbody.innerHTML = data.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><span class="badge badge-${item.type}">${item.type}</span></td>
+                    <td>${item.name}</td>
+                    <td>${item.regno}</td>
+                    <td class="amount">${formatNumber(item.tax)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderCompaniesTable(data) {
+            const tbody = document.querySelector('#table-companies tbody');
+            tbody.innerHTML = data.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.regno}</td>
+                    <td class="amount">${formatNumber(item.tax)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderIndividualsTable(data) {
+            const tbody = document.querySelector('#table-individuals tbody');
+            tbody.innerHTML = data.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.regno}</td>
+                    <td class="amount">${formatNumber(item.tax)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

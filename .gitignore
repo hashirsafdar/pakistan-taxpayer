@@ -1,0 +1,23 @@
+# Large files (generated)
+TaxpayersDirectory2018.pdf
+taxpayers.db
+companies.csv
+individuals.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

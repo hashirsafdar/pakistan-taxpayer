@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext:*)",
+      "Bash(pdfinfo:*)",
+      "Bash(python3:*)",
+      "Bash(ls:*)",
+      "Bash(pkill:*)",
+      "Bash(chmod:*)",
+      "Bash(./extract_fast.sh:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)"
+    ]
+  }
+}
