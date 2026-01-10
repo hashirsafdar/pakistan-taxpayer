@@ -1,7 +1,6 @@
 # Data folder (original and csv files)
 data/*.csv
 data/*.pdf
-data/*.db
 
 # Python
 __pycache__/

@@ -18,39 +18,19 @@ The PDF contains three distinct sections:
    - 2,738,407 records
    - Uses 13-digit CNIC (Computerized National Identity Card)
 
-## Database Schema
+## Data Schema
 
-### Companies Table
-```sql
-CREATE TABLE companies (
-    ntn TEXT PRIMARY KEY,
-    sr INTEGER,
-    name TEXT NOT NULL,
-    tax_paid REAL
-);
-```
+### Companies & AOP
+- `sr` - Serial number from PDF
+- `name` - Taxpayer name
+- `ntn` - 7-digit National Tax Number (unique identifier)
+- `tax_paid` - Tax paid in PKR
 
-### Association of Persons (AOP) Table
-```sql
-CREATE TABLE aop (
-    ntn TEXT PRIMARY KEY,
-    sr INTEGER,
-    name TEXT NOT NULL,
-    tax_paid REAL
-);
-```
-
-### Individuals Table
-```sql
-CREATE TABLE individuals (
-    sr INTEGER,
-    name TEXT NOT NULL,
-    cnic TEXT PRIMARY KEY,
-    tax_paid REAL
-);
-```
-
-No indexes needed - NTN and CNIC are unique government identifiers used as primary keys.
+### Individuals
+- `sr` - Serial number from PDF
+- `name` - Taxpayer name
+- `cnic` - 13-digit CNIC (unique identifier)
+- `tax_paid` - Tax paid in PKR
 
 ## Extraction Process
 
@@ -67,23 +47,7 @@ This processes all 35,445 pages and creates three CSV files using pdftotext + pe
 - `data/aop.csv` - 64,336 AOP records
 - `data/individuals.csv` - 2,738,407 individual records
 
-### 2. Create SQLite Database
-
-```bash
-bash scripts/create_database.sh
-```
-
-Uses SQLite's native `.import` command for fast bulk loading.
-
-**Output:**
-- `data/taxpayers.db` - SQLite database (~500MB)
-
-Creates three views for top taxpayers:
-- `top_companies` - Top 100 companies by tax paid
-- `top_aop` - Top 100 AOPs by tax paid
-- `top_individuals` - Top 100 individuals by tax paid
-
-### 3. Create Parquet Files (Optional)
+### 2. Create Parquet Files
 
 ```bash
 bash scripts/create_parquet_duckdb.sh
@@ -96,28 +60,28 @@ Creates compressed Parquet files using DuckDB. Parquet provides better compressi
 - `data/aop.parquet` - 1.5 MB (40.0% smaller than CSV)
 - `data/individuals.parquet` - 45.8 MB (59.9% smaller than CSV)
 
-### 4. Generate Web Data
+### 3. Generate Web Data
 
 ```bash
 uv run scripts/generate_web_data.py
 ```
 
-Generates JSON files for the GitHub Pages interface:
+Generates JSON files from Parquet for the GitHub Pages interface:
 - `docs/data/statistics.json` - Overall statistics by taxpayer type
 - `docs/data/top_taxpayers.json` - Top 100 taxpayers in each category
 
-## SQL Query Examples
+## DuckDB Query Examples
 
-Query the database directly using sqlite3:
+Query Parquet files directly using DuckDB:
 
 ```bash
-sqlite3 data/taxpayers.db
+duckdb
 ```
 
 ### Search companies by name
 ```sql
 SELECT name, ntn, tax_paid
-FROM companies
+FROM 'data/companies.parquet'
 WHERE name LIKE '%abbott%'
 ORDER BY tax_paid DESC;
 ```
@@ -125,14 +89,14 @@ ORDER BY tax_paid DESC;
 ### Get total tax by all companies
 ```sql
 SELECT COUNT(*), SUM(tax_paid)
-FROM companies
+FROM 'data/companies.parquet'
 WHERE tax_paid > 0;
 ```
 
 ### Find individuals with highest tax
 ```sql
 SELECT name, cnic, tax_paid
-FROM individuals
+FROM 'data/individuals.parquet'
 ORDER BY tax_paid DESC
 LIMIT 50;
 ```
@@ -144,35 +108,32 @@ SELECT
     SUM(tax_paid) as total_tax,
     AVG(tax_paid) as avg_tax,
     MAX(tax_paid) as max_tax
-FROM companies;
+FROM 'data/companies.parquet';
 ```
 
 ## Scripts
 
-### Extraction & Database Creation
+### Extraction & Data Processing
 - `scripts/extract_fast.sh` - Fast extraction from PDF to CSV files using pdftotext + perl
-- `scripts/create_database.sh` - Creates SQLite database using native .import (fast)
 - `scripts/create_parquet_duckdb.sh` - Creates Parquet files using DuckDB (fast, compressed)
-- `scripts/generate_web_data.py` - Generates JSON files for GitHub Pages
+- `scripts/generate_web_data.py` - Generates JSON files from Parquet for GitHub Pages
 
 ### Data Files (Generated - in `data/` folder)
 - `data/companies.csv` - Company taxpayer records
 - `data/aop.csv` - Association of Persons taxpayer records
 - `data/individuals.csv` - Individual taxpayer records
-- `data/taxpayers.db` - SQLite database with 3 tables
 - `data/companies.parquet`, `data/aop.parquet`, `data/individuals.parquet` - Compressed Parquet files
 
 ## Requirements
 
 - Python 3.6+
 - `pdftotext` command-line tool (from poppler-utils)
-- `sqlite3` command-line tool
-- `duckdb` command-line tool (for Parquet creation)
+- `duckdb` command-line tool
 - `uv` (Python package manager)
 
 ## Performance
 
-- Database size: ~500MB
-- Query response time: < 100ms for most queries
+- Parquet file sizes: ~48MB total (vs ~120MB CSV)
+- Query response time: < 100ms for most queries using DuckDB
 - Full-text search: Sub-second for name searches
 - Handles millions of records efficiently

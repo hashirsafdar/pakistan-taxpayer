@@ -114,4 +114,4 @@ else
 fi
 
 echo
-echo "Done! Run 'python3 scripts/create_database.py' to load into SQLite."
+echo "Done! Run 'bash scripts/create_parquet_duckdb.sh' to create Parquet files."

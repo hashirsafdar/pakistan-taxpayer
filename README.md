@@ -32,38 +32,31 @@ This dataset contains **2,847,352** taxpayer records from FBR's 2018 Income Tax 
 
 ## Data Files
 
-All data files are available in the `data/` directory:
+**Only Parquet files are included in this repository** due to GitHub's file size limits. The original PDF (229 MB) and CSV files (120 MB total) are not committed.
 
-- **CSV Format:**
-  - `data/companies.csv` (2.4 MB)
-  - `data/aop.csv` (2.5 MB)
-  - `data/individuals.csv` (114.2 MB)
+**Available Parquet files** (compressed, optimized for analytics):
+- [companies.parquet](docs/companies.parquet) (1.2 MB) - 44,609 company records
+- [aop.parquet](docs/aop.parquet) (1.5 MB) - 64,336 AOP records
+- [individuals.parquet](docs/individuals.parquet) (45.8 MB) - 2,738,407 individual records
 
-- **Parquet Format** (compressed, optimized for analytics):
-  - `data/companies.parquet` (1.2 MB)
-  - `data/aop.parquet` (1.5 MB)
-  - `data/individuals.parquet` (45.8 MB)
-
-- **SQLite Database:**
-  - `data/taxpayers.db` (~500 MB)
+To generate CSV files from the original PDF, follow the extraction instructions in [EXTRACTION.md](EXTRACTION.md).
 
 ## Quick Start
 
-### Download Data Files
+### Download Parquet Files
 
-Clone this repository to access all data files:
+Clone this repository to access the Parquet data files:
 ```bash
 git clone https://github.com/hashirsafdar/pakistan-taxpayer.git
 cd pakistan-taxpayer
 ```
 
-### Query Using SQL
+Or download individual Parquet files directly:
+- [companies.parquet](https://old.hashirsafdar.com/pakistan-taxpayer/companies.parquet)
+- [aop.parquet](https://old.hashirsafdar.com/pakistan-taxpayer/aop.parquet)
+- [individuals.parquet](https://old.hashirsafdar.com/pakistan-taxpayer/individuals.parquet)
 
-```bash
-sqlite3 data/taxpayers.db "SELECT * FROM companies ORDER BY tax_paid DESC LIMIT 10"
-```
-
-### Load Parquet Files
+### Query Parquet Files
 
 Using DuckDB:
 ```bash

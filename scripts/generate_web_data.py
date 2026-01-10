@@ -1,23 +1,22 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uvx --with duckdb python3
 """
-Generate JSON data files for the web interface.
+Generate JSON data files for the web interface from Parquet files.
 """
 
 import json
-import sqlite3
+import duckdb
 
 
 def generate_top_taxpayers(conn, limit=1000):
     """Generate top taxpayers JSON."""
-    cursor = conn.cursor()
 
-    cursor.execute('''
+    top_companies = conn.execute('''
         SELECT name, ntn, tax_paid, 'company' as type
-        FROM companies
+        FROM 'data/companies.parquet'
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
         LIMIT ?
-    ''', (limit // 3,))
+    ''', (limit // 3,)).fetchall()
     top_companies = [
         {
             'name': row[0],
@@ -25,16 +24,16 @@ def generate_top_taxpayers(conn, limit=1000):
             'tax': row[2],
             'type': row[3]
         }
-        for row in cursor.fetchall()
+        for row in top_companies
     ]
 
-    cursor.execute('''
+    top_aop = conn.execute('''
         SELECT name, ntn, tax_paid, 'aop' as type
-        FROM aop
+        FROM 'data/aop.parquet'
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
         LIMIT ?
-    ''', (limit // 3,))
+    ''', (limit // 3,)).fetchall()
     top_aop = [
         {
             'name': row[0],
@@ -42,16 +41,16 @@ def generate_top_taxpayers(conn, limit=1000):
             'tax': row[2],
             'type': row[3]
         }
-        for row in cursor.fetchall()
+        for row in top_aop
     ]
 
-    cursor.execute('''
+    top_individuals = conn.execute('''
         SELECT name, cnic, tax_paid, 'individual' as type
-        FROM individuals
+        FROM 'data/individuals.parquet'
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
         LIMIT ?
-    ''', (limit // 3,))
+    ''', (limit // 3,)).fetchall()
     top_individuals = [
         {
             'name': row[0],
@@ -59,7 +58,7 @@ def generate_top_taxpayers(conn, limit=1000):
             'tax': row[2],
             'type': row[3]
         }
-        for row in cursor.fetchall()
+        for row in top_individuals
     ]
 
     top_all = sorted(
@@ -78,16 +77,18 @@ def generate_top_taxpayers(conn, limit=1000):
 
 def generate_statistics(conn):
     """Generate statistics JSON."""
-    cursor = conn.cursor()
 
-    cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM companies WHERE tax_paid > 0')
-    comp_stats = cursor.fetchone()
+    comp_stats = conn.execute(
+        "SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'data/companies.parquet' WHERE tax_paid > 0"
+    ).fetchone()
 
-    cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM aop WHERE tax_paid > 0')
-    aop_stats = cursor.fetchone()
+    aop_stats = conn.execute(
+        "SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'data/aop.parquet' WHERE tax_paid > 0"
+    ).fetchone()
 
-    cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM individuals WHERE tax_paid > 0')
-    ind_stats = cursor.fetchone()
+    ind_stats = conn.execute(
+        "SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'data/individuals.parquet' WHERE tax_paid > 0"
+    ).fetchone()
 
     return {
         'companies': {
@@ -112,7 +113,7 @@ def generate_statistics(conn):
 
 
 def main():
-    conn = sqlite3.connect('data/taxpayers.db')
+    conn = duckdb.connect()
 
     print("Generating statistics...")
     stats = generate_statistics(conn)
