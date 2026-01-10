@@ -289,14 +289,25 @@
 
                 conn = await db.connect();
 
-                status.textContent = 'Loading Parquet files...';
+                status.textContent = 'Downloading companies.parquet...';
+                const companiesResp = await fetch('companies.parquet');
+                const companiesBuffer = await companiesResp.arrayBuffer();
+                await db.registerFileBuffer('companies.parquet', new Uint8Array(companiesBuffer));
 
-                const baseURL = window.location.origin + window.location.pathname.replace('query.html', '');
+                status.textContent = 'Downloading aop.parquet...';
+                const aopResp = await fetch('aop.parquet');
+                const aopBuffer = await aopResp.arrayBuffer();
+                await db.registerFileBuffer('aop.parquet', new Uint8Array(aopBuffer));
 
-                await conn.query(`INSTALL httpfs; LOAD httpfs;`);
-                await conn.query(`CREATE TABLE companies AS SELECT * FROM read_parquet('${baseURL}companies.parquet')`);
-                await conn.query(`CREATE TABLE aop AS SELECT * FROM read_parquet('${baseURL}aop.parquet')`);
-                await conn.query(`CREATE TABLE individuals AS SELECT * FROM read_parquet('${baseURL}individuals.parquet')`);
+                status.textContent = 'Downloading individuals.parquet (46MB)...';
+                const individualsResp = await fetch('individuals.parquet');
+                const individualsBuffer = await individualsResp.arrayBuffer();
+                await db.registerFileBuffer('individuals.parquet', new Uint8Array(individualsBuffer));
+
+                status.textContent = 'Creating tables...';
+                await conn.query(`CREATE TABLE companies AS SELECT * FROM read_parquet('companies.parquet')`);
+                await conn.query(`CREATE TABLE aop AS SELECT * FROM read_parquet('aop.parquet')`);
+                await conn.query(`CREATE TABLE individuals AS SELECT * FROM read_parquet('individuals.parquet')`);
 
                 status.textContent = 'Ready to query!';
                 status.className = 'status ready';
