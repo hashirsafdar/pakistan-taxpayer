@@ -4,6 +4,7 @@ taxpayers.db
 companies.csv
 aop.csv
 individuals.csv
+*.parquet
 
 # Python
 __pycache__/
