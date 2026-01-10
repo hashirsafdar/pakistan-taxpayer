@@ -287,17 +287,16 @@
                 await db.instantiate(bundle.mainModule);
                 URL.revokeObjectURL(worker_url);
 
-                status.textContent = 'Loading Parquet files...';
-
-                await db.registerFileURL('companies.parquet', 'companies.parquet', duckdb.DuckDBDataProtocol.HTTP, false);
-                await db.registerFileURL('aop.parquet', 'aop.parquet', duckdb.DuckDBDataProtocol.HTTP, false);
-                await db.registerFileURL('individuals.parquet', 'individuals.parquet', duckdb.DuckDBDataProtocol.HTTP, false);
-
                 conn = await db.connect();
 
-                await conn.query(`CREATE TABLE companies AS SELECT * FROM 'companies.parquet'`);
-                await conn.query(`CREATE TABLE aop AS SELECT * FROM 'aop.parquet'`);
-                await conn.query(`CREATE TABLE individuals AS SELECT * FROM 'individuals.parquet'`);
+                status.textContent = 'Loading Parquet files...';
+
+                const baseURL = window.location.origin + window.location.pathname.replace('query.html', '');
+
+                await conn.query(`INSTALL httpfs; LOAD httpfs;`);
+                await conn.query(`CREATE TABLE companies AS SELECT * FROM read_parquet('${baseURL}companies.parquet')`);
+                await conn.query(`CREATE TABLE aop AS SELECT * FROM read_parquet('${baseURL}aop.parquet')`);
+                await conn.query(`CREATE TABLE individuals AS SELECT * FROM read_parquet('${baseURL}individuals.parquet')`);
 
                 status.textContent = 'Ready to query!';
                 status.className = 'status ready';
