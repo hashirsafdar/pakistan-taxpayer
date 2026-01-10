@@ -114,4 +114,4 @@ else
 fi
 
 echo
-echo "Done! Run 'python3 create_database.py' to load into SQLite."
+echo "Done! Run 'python3 scripts/create_database.py' to load into SQLite."

@@ -17,8 +17,25 @@ def generate_top_taxpayers(conn, limit=1000):
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
         LIMIT ?
-    ''', (limit // 2,))
+    ''', (limit // 3,))
     top_companies = [
+        {
+            'name': row[0],
+            'regno': row[1],
+            'tax': row[2],
+            'type': row[3]
+        }
+        for row in cursor.fetchall()
+    ]
+
+    cursor.execute('''
+        SELECT name, ntn, tax_paid, 'aop' as type
+        FROM aop
+        WHERE tax_paid > 0
+        ORDER BY tax_paid DESC
+        LIMIT ?
+    ''', (limit // 3,))
+    top_aop = [
         {
             'name': row[0],
             'regno': row[1],
@@ -34,7 +51,7 @@ def generate_top_taxpayers(conn, limit=1000):
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
         LIMIT ?
-    ''', (limit // 2,))
+    ''', (limit // 3,))
     top_individuals = [
         {
             'name': row[0],
@@ -46,13 +63,14 @@ def generate_top_taxpayers(conn, limit=1000):
     ]
 
     top_all = sorted(
-        top_companies + top_individuals,
+        top_companies + top_aop + top_individuals,
         key=lambda x: x['tax'],
         reverse=True
     )[:limit]
 
     return {
         'top_companies': top_companies[:100],
+        'top_aop': top_aop[:100],
         'top_individuals': top_individuals[:100],
         'top_all': top_all[:100]
     }
@@ -65,6 +83,9 @@ def generate_statistics(conn):
     cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM companies WHERE tax_paid > 0')
     comp_stats = cursor.fetchone()
 
+    cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM aop WHERE tax_paid > 0')
+    aop_stats = cursor.fetchone()
+
     cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM individuals WHERE tax_paid > 0')
     ind_stats = cursor.fetchone()
 
@@ -74,6 +95,12 @@ def generate_statistics(conn):
             'total_tax': comp_stats[1],
             'avg_tax': comp_stats[2],
             'max_tax': comp_stats[3]
+        },
+        'aop': {
+            'total': aop_stats[0],
+            'total_tax': aop_stats[1],
+            'avg_tax': aop_stats[2],
+            'max_tax': aop_stats[3]
         },
         'individuals': {
             'total': ind_stats[0],

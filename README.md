@@ -25,9 +25,11 @@ The PDF contains three distinct sections:
 ## Files
 
 ### Extraction & Database Creation
-- `extract_taxpayer_data.py` - Extracts data from PDF to CSV files
-- `create_database.py` - Creates SQLite database and loads CSV data
-- `query_taxpayers.py` - Query interface for searching the database
+- `scripts/extract_fast.sh` - Fast extraction from PDF to CSV files using pdftotext + perl
+- `scripts/create_database.sh` - Creates SQLite database using native .import (fast)
+- `scripts/create_database.py` - Alternative Python version for database creation
+- `scripts/query_taxpayers.py` - Query interface for searching the database
+- `scripts/generate_web_data.py` - Generates JSON files for GitHub Pages
 
 ### Data Files (Generated)
 - `companies.csv` - Company taxpayer records
@@ -57,48 +59,48 @@ The PDF contains three distinct sections:
 
 ## Usage
 
-### 1. Extract Data from PDF (Long Running)
+### 1. Extract Data from PDF (Fast)
 
 ```bash
-python3 extract_taxpayer_data.py
+bash scripts/extract_fast.sh
 ```
 
-This processes all 35,445 pages and creates two CSV files. Expected time: 1-3 hours depending on system.
+This processes all 35,445 pages and creates three CSV files using pdftotext + perl pipeline.
 
 ### 2. Create SQLite Database
 
 ```bash
-python3 create_database.py
+bash scripts/create_database.sh
 ```
 
-Loads CSV data into SQLite with proper indexes for fast queries.
+Uses SQLite's native `.import` command for fast bulk loading. Alternative Python version available at `scripts/create_database.py`.
 
 ### 3. Query the Database
 
 #### Search by Name
 ```bash
-python3 query_taxpayers.py name "abbott" company 10
-python3 query_taxpayers.py name "shaikh" individual 20
-python3 query_taxpayers.py name "limited" all 50
+python3 scripts/query_taxpayers.py name "abbott" company 10
+python3 scripts/query_taxpayers.py name "shaikh" individual 20
+python3 scripts/query_taxpayers.py name "limited" all 50
 ```
 
 #### Search by Registration Number
 ```bash
-python3 query_taxpayers.py regno 1347561
-python3 query_taxpayers.py regno 4230128739899
+python3 scripts/query_taxpayers.py regno 1347561
+python3 scripts/query_taxpayers.py regno 4230128739899
 ```
 
 #### Get Top Taxpayers
 ```bash
-python3 query_taxpayers.py top company 20
-python3 query_taxpayers.py top individual 50
-python3 query_taxpayers.py top all 100
+python3 scripts/query_taxpayers.py top company 20
+python3 scripts/query_taxpayers.py top individual 50
+python3 scripts/query_taxpayers.py top all 100
 ```
 
 #### Search by Tax Range
 ```bash
-python3 query_taxpayers.py range 1000000 10000000 company 50
-python3 query_taxpayers.py range 500000 1000000 individual 100
+python3 scripts/query_taxpayers.py range 1000000 10000000 company 50
+python3 scripts/query_taxpayers.py range 500000 1000000 individual 100
 ```
 
 ## Direct SQL Queries

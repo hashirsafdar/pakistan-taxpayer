@@ -165,6 +165,11 @@
             color: #1976d2;
         }
 
+        .badge-aop {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
         .badge-individual {
             background: #f3e5f5;
             color: #7b1fa2;
@@ -208,6 +213,7 @@
         <div class="tabs">
             <button class="tab active" onclick="switchTab('all')">Top 100 Overall</button>
             <button class="tab" onclick="switchTab('companies')">Top 100 Companies</button>
+            <button class="tab" onclick="switchTab('aop')">Top 100 AOP</button>
             <button class="tab" onclick="switchTab('individuals')">Top 100 Individuals</button>
         </div>
 
@@ -234,7 +240,23 @@
                     <tr>
                         <th>#</th>
                         <th>Company Name</th>
-                        <th>Registration No.</th>
+                        <th>NTN</th>
+                        <th class="amount">Tax Paid (PKR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="4" class="loading">Loading data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="tab-aop">
+            <table id="table-aop">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>AOP Name</th>
+                        <th>NTN</th>
                         <th class="amount">Tax Paid (PKR)</th>
                     </tr>
                 </thead>
@@ -322,6 +344,21 @@
                     </div>
                 </div>
                 <div class="stat-card">
+                    <h3>Association of Persons</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Taxpayers</span>
+                        <span class="stat-value">${formatNumber(stats.aop.total)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Tax Paid</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.aop.total_tax)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Average Tax</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.aop.avg_tax)}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
                     <h3>Individuals</h3>
                     <div class="stat-item">
                         <span class="stat-label">Total Taxpayers</span>
@@ -340,15 +377,11 @@
                     <h3>Overall</h3>
                     <div class="stat-item">
                         <span class="stat-label">Total Taxpayers</span>
-                        <span class="stat-value">${formatNumber(stats.companies.total + stats.individuals.total)}</span>
+                        <span class="stat-value">${formatNumber(stats.companies.total + stats.aop.total + stats.individuals.total)}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Total Tax Collected</span>
-                        <span class="stat-value">PKR ${formatNumber(stats.companies.total_tax + stats.individuals.total_tax)}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Companies vs Individuals</span>
-                        <span class="stat-value">${Math.round(stats.companies.total_tax / stats.individuals.total_tax * 100) / 100}x</span>
+                        <span class="stat-value">PKR ${formatNumber(stats.companies.total_tax + stats.aop.total_tax + stats.individuals.total_tax)}</span>
                     </div>
                 </div>
             `;
@@ -358,6 +391,7 @@
         function renderTables(top) {
             renderAllTable(top.top_all);
             renderCompaniesTable(top.top_companies);
+            renderAOPTable(top.top_aop);
             renderIndividualsTable(top.top_individuals);
         }
 
@@ -376,6 +410,18 @@
 
         function renderCompaniesTable(data) {
             const tbody = document.querySelector('#table-companies tbody');
+            tbody.innerHTML = data.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.regno}</td>
+                    <td class="amount">${formatNumber(item.tax)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAOPTable(data) {
+            const tbody = document.querySelector('#table-aop tbody');
             tbody.innerHTML = data.map((item, index) => `
                 <tr>
                     <td>${index + 1}</td>
