@@ -197,6 +197,45 @@
             padding: 3rem;
             color: #666;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            color: #0f4c81;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #0f4c81;
+            color: white;
+            border-color: #0f4c81;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -208,6 +247,12 @@
     <div class="container">
         <div class="stats-grid" id="stats">
             <div class="loading">Loading statistics...</div>
+        </div>
+
+        <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+            <a href="query.html" style="display: inline-block; padding: 0.75rem 1.5rem; background: #0f4c81; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#1a6ba8'" onmouseout="this.style.background='#0f4c81'">
+                Interactive SQL Query Interface
+            </a>
         </div>
 
         <div class="tabs">
@@ -232,6 +277,7 @@
                     <tr><td colspan="5" class="loading">Loading data...</td></tr>
                 </tbody>
             </table>
+            <div class="pagination" id="pagination-all"></div>
         </div>
 
         <div class="tab-content" id="tab-companies">
@@ -248,6 +294,7 @@
                     <tr><td colspan="4" class="loading">Loading data...</td></tr>
                 </tbody>
             </table>
+            <div class="pagination" id="pagination-companies"></div>
         </div>
 
         <div class="tab-content" id="tab-aop">
@@ -264,6 +311,7 @@
                     <tr><td colspan="4" class="loading">Loading data...</td></tr>
                 </tbody>
             </table>
+            <div class="pagination" id="pagination-aop"></div>
         </div>
 
         <div class="tab-content" id="tab-individuals">
@@ -280,6 +328,7 @@
                     <tr><td colspan="4" class="loading">Loading data...</td></tr>
                 </tbody>
             </table>
+            <div class="pagination" id="pagination-individuals"></div>
         </div>
     </div>
 
@@ -307,6 +356,13 @@
 
     <script>
         let data = {};
+        const ROWS_PER_PAGE = 10;
+        const pagination = {
+            all: { currentPage: 1, data: [] },
+            companies: { currentPage: 1, data: [] },
+            aop: { currentPage: 1, data: [] },
+            individuals: { currentPage: 1, data: [] }
+        };
 
         async function loadData() {
             try {
@@ -319,6 +375,11 @@
                 const top = await topRes.json();
 
                 data = { stats, top };
+                pagination.all.data = top.top_all;
+                pagination.companies.data = top.top_companies;
+                pagination.aop.data = top.top_aop;
+                pagination.individuals.data = top.top_individuals;
+
                 renderStats(stats);
                 renderTables(top);
             } catch (error) {
@@ -394,59 +455,125 @@
         }
 
         function renderTables(top) {
-            renderAllTable(top.top_all);
-            renderCompaniesTable(top.top_companies);
-            renderAOPTable(top.top_aop);
-            renderIndividualsTable(top.top_individuals);
+            renderAllTable();
+            renderCompaniesTable();
+            renderAOPTable();
+            renderIndividualsTable();
         }
 
-        function renderAllTable(data) {
+        function renderPagination(tableType) {
+            const { currentPage, data } = pagination[tableType];
+            const totalPages = Math.ceil(data.length / ROWS_PER_PAGE);
+            const paginationEl = document.getElementById(`pagination-${tableType}`);
+
+            paginationEl.innerHTML = `
+                <button onclick="changePage('${tableType}', ${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    Previous
+                </button>
+                <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+                <button onclick="changePage('${tableType}', ${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    Next
+                </button>
+            `;
+        }
+
+        function changePage(tableType, newPage) {
+            const totalPages = Math.ceil(pagination[tableType].data.length / ROWS_PER_PAGE);
+            if (newPage < 1 || newPage > totalPages) return;
+
+            pagination[tableType].currentPage = newPage;
+
+            switch(tableType) {
+                case 'all':
+                    renderAllTable();
+                    break;
+                case 'companies':
+                    renderCompaniesTable();
+                    break;
+                case 'aop':
+                    renderAOPTable();
+                    break;
+                case 'individuals':
+                    renderIndividualsTable();
+                    break;
+            }
+        }
+
+        function renderAllTable() {
+            const { currentPage, data } = pagination.all;
+            const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+            const endIndex = startIndex + ROWS_PER_PAGE;
+            const pageData = data.slice(startIndex, endIndex);
+
             const tbody = document.querySelector('#table-all tbody');
-            tbody.innerHTML = data.map((item, index) => `
+            tbody.innerHTML = pageData.map((item, index) => `
                 <tr>
-                    <td>${index + 1}</td>
+                    <td>${startIndex + index + 1}</td>
                     <td><span class="badge badge-${item.type}">${item.type}</span></td>
                     <td>${item.name}</td>
                     <td>${item.regno}</td>
                     <td class="amount">${formatNumber(item.tax)}</td>
                 </tr>
             `).join('');
+
+            renderPagination('all');
         }
 
-        function renderCompaniesTable(data) {
+        function renderCompaniesTable() {
+            const { currentPage, data } = pagination.companies;
+            const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+            const endIndex = startIndex + ROWS_PER_PAGE;
+            const pageData = data.slice(startIndex, endIndex);
+
             const tbody = document.querySelector('#table-companies tbody');
-            tbody.innerHTML = data.map((item, index) => `
+            tbody.innerHTML = pageData.map((item, index) => `
                 <tr>
-                    <td>${index + 1}</td>
+                    <td>${startIndex + index + 1}</td>
                     <td>${item.name}</td>
                     <td>${item.regno}</td>
                     <td class="amount">${formatNumber(item.tax)}</td>
                 </tr>
             `).join('');
+
+            renderPagination('companies');
         }
 
-        function renderAOPTable(data) {
+        function renderAOPTable() {
+            const { currentPage, data } = pagination.aop;
+            const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+            const endIndex = startIndex + ROWS_PER_PAGE;
+            const pageData = data.slice(startIndex, endIndex);
+
             const tbody = document.querySelector('#table-aop tbody');
-            tbody.innerHTML = data.map((item, index) => `
+            tbody.innerHTML = pageData.map((item, index) => `
                 <tr>
-                    <td>${index + 1}</td>
+                    <td>${startIndex + index + 1}</td>
                     <td>${item.name}</td>
                     <td>${item.regno}</td>
                     <td class="amount">${formatNumber(item.tax)}</td>
                 </tr>
             `).join('');
+
+            renderPagination('aop');
         }
 
-        function renderIndividualsTable(data) {
+        function renderIndividualsTable() {
+            const { currentPage, data } = pagination.individuals;
+            const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+            const endIndex = startIndex + ROWS_PER_PAGE;
+            const pageData = data.slice(startIndex, endIndex);
+
             const tbody = document.querySelector('#table-individuals tbody');
-            tbody.innerHTML = data.map((item, index) => `
+            tbody.innerHTML = pageData.map((item, index) => `
                 <tr>
-                    <td>${index + 1}</td>
+                    <td>${startIndex + index + 1}</td>
                     <td>${item.name}</td>
                     <td>${item.regno}</td>
                     <td class="amount">${formatNumber(item.tax)}</td>
                 </tr>
             `).join('');
+
+            renderPagination('individuals');
         }
 
         function switchTab(tab) {

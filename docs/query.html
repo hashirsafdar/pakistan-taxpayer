@@ -208,6 +208,77 @@
             color: #155724;
         }
 
+        .file-selector {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .file-selector h3 {
+            color: #0f4c81;
+            margin-bottom: 1rem;
+        }
+
+        .file-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-option:hover {
+            border-color: #0f4c81;
+            background: #f8f9fa;
+        }
+
+        .file-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .file-option label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .file-size {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .file-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .file-status.loaded {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .file-status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -229,10 +300,41 @@
     </header>
 
     <div class="container">
+        <div class="file-selector">
+            <h3>Select Parquet Files to Load</h3>
+            <div class="file-options">
+                <div class="file-option">
+                    <input type="checkbox" id="file-companies" checked onchange="updateLoadButton()">
+                    <label for="file-companies">
+                        <div>Companies</div>
+                        <div class="file-size">~2MB</div>
+                    </label>
+                    <span id="status-companies" class="file-status" style="display: none;"></span>
+                </div>
+                <div class="file-option">
+                    <input type="checkbox" id="file-aop" checked onchange="updateLoadButton()">
+                    <label for="file-aop">
+                        <div>AOP</div>
+                        <div class="file-size">~200KB</div>
+                    </label>
+                    <span id="status-aop" class="file-status" style="display: none;"></span>
+                </div>
+                <div class="file-option">
+                    <input type="checkbox" id="file-individuals" checked onchange="updateLoadButton()">
+                    <label for="file-individuals">
+                        <div>Individuals</div>
+                        <div class="file-size">~46MB</div>
+                    </label>
+                    <span id="status-individuals" class="file-status" style="display: none;"></span>
+                </div>
+            </div>
+            <button class="primary" onclick="loadSelectedFiles()" id="loadBtn">Load Selected Files</button>
+        </div>
+
         <div class="query-box">
             <h2>SQL Query</h2>
             <div class="button-group" style="margin-bottom: 1rem;">
-                <span id="status" class="status loading">Loading database...</span>
+                <span id="status" class="status loading">Initializing database...</span>
             </div>
             <textarea id="sqlQuery" placeholder="Enter your SQL query here...">SELECT * FROM companies ORDER BY tax_paid DESC LIMIT 10</textarea>
             <div class="button-group">
@@ -268,10 +370,10 @@
 
         let db;
         let conn;
+        const loadedFiles = new Set();
 
         async function initDB() {
             const status = document.getElementById('status');
-            const runBtn = document.getElementById('runBtn');
 
             try {
                 status.textContent = 'Loading DuckDB-WASM...';
@@ -289,37 +391,92 @@
 
                 conn = await db.connect();
 
-                status.textContent = 'Downloading companies.parquet...';
-                const companiesResp = await fetch('companies.parquet');
-                const companiesBuffer = await companiesResp.arrayBuffer();
-                await db.registerFileBuffer('companies.parquet', new Uint8Array(companiesBuffer));
-
-                status.textContent = 'Downloading aop.parquet...';
-                const aopResp = await fetch('aop.parquet');
-                const aopBuffer = await aopResp.arrayBuffer();
-                await db.registerFileBuffer('aop.parquet', new Uint8Array(aopBuffer));
-
-                status.textContent = 'Downloading individuals.parquet (46MB)...';
-                const individualsResp = await fetch('individuals.parquet');
-                const individualsBuffer = await individualsResp.arrayBuffer();
-                await db.registerFileBuffer('individuals.parquet', new Uint8Array(individualsBuffer));
-
-                status.textContent = 'Creating tables...';
-                await conn.query(`CREATE TABLE companies AS SELECT * FROM read_parquet('companies.parquet')`);
-                await conn.query(`CREATE TABLE aop AS SELECT * FROM read_parquet('aop.parquet')`);
-                await conn.query(`CREATE TABLE individuals AS SELECT * FROM read_parquet('individuals.parquet')`);
-
-                status.textContent = 'Ready to query!';
+                status.textContent = 'Database ready';
                 status.className = 'status ready';
-                runBtn.disabled = false;
 
             } catch (error) {
-                status.textContent = 'Error loading database';
+                status.textContent = 'Error initializing database';
                 status.className = 'status error';
                 console.error('Error initializing DuckDB:', error);
                 document.getElementById('results').innerHTML = `<div class="error">Error: ${error.message}</div>`;
                 document.getElementById('results').classList.add('visible');
             }
+        }
+
+        window.loadSelectedFiles = async function() {
+            const status = document.getElementById('status');
+            const runBtn = document.getElementById('runBtn');
+            const loadBtn = document.getElementById('loadBtn');
+
+            const files = {
+                companies: {
+                    checkbox: document.getElementById('file-companies'),
+                    status: document.getElementById('status-companies'),
+                    filename: 'companies.parquet',
+                    table: 'companies',
+                    size: '2MB'
+                },
+                aop: {
+                    checkbox: document.getElementById('file-aop'),
+                    status: document.getElementById('status-aop'),
+                    filename: 'aop.parquet',
+                    table: 'aop',
+                    size: '200KB'
+                },
+                individuals: {
+                    checkbox: document.getElementById('file-individuals'),
+                    status: document.getElementById('status-individuals'),
+                    filename: 'individuals.parquet',
+                    table: 'individuals',
+                    size: '46MB'
+                }
+            };
+
+            loadBtn.disabled = true;
+
+            try {
+                for (const [key, file] of Object.entries(files)) {
+                    if (file.checkbox.checked && !loadedFiles.has(key)) {
+                        status.textContent = `Downloading ${file.filename}...`;
+                        file.status.style.display = 'inline-block';
+                        file.status.textContent = 'Loading...';
+                        file.status.className = 'file-status loading';
+
+                        const resp = await fetch(file.filename);
+                        const buffer = await resp.arrayBuffer();
+                        await db.registerFileBuffer(file.filename, new Uint8Array(buffer));
+
+                        status.textContent = `Creating ${file.table} table...`;
+                        await conn.query(`CREATE TABLE IF NOT EXISTS ${file.table} AS SELECT * FROM read_parquet('${file.filename}')`);
+
+                        file.status.textContent = 'Loaded';
+                        file.status.className = 'file-status loaded';
+                        loadedFiles.add(key);
+                        file.checkbox.disabled = true;
+                    }
+                }
+
+                status.textContent = `Ready to query! (${loadedFiles.size} tables loaded)`;
+                status.className = 'status ready';
+                runBtn.disabled = false;
+
+            } catch (error) {
+                status.textContent = 'Error loading files';
+                status.className = 'status error';
+                console.error('Error loading files:', error);
+                alert(`Error loading files: ${error.message}`);
+            } finally {
+                loadBtn.disabled = false;
+            }
+        }
+
+        window.updateLoadButton = function() {
+            const loadBtn = document.getElementById('loadBtn');
+            const anyChecked =
+                document.getElementById('file-companies').checked ||
+                document.getElementById('file-aop').checked ||
+                document.getElementById('file-individuals').checked;
+            loadBtn.disabled = !anyChecked;
         }
 
         window.runQuery = async function() {
