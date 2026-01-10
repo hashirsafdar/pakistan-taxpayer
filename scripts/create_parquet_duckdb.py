@@ -25,15 +25,15 @@ def csv_to_parquet_duckdb(csv_file, parquet_file):
 
 
 def main():
-    csv_to_parquet_duckdb('companies.csv', 'companies.parquet')
-    csv_to_parquet_duckdb('aop.csv', 'aop.parquet')
-    csv_to_parquet_duckdb('individuals.csv', 'individuals.parquet')
+    csv_to_parquet_duckdb('data/companies.csv', 'data/companies.parquet')
+    csv_to_parquet_duckdb('data/aop.csv', 'data/aop.parquet')
+    csv_to_parquet_duckdb('data/individuals.csv', 'data/individuals.parquet')
 
     import os
     print("\nFile sizes:")
-    for csv, parquet in [('companies.csv', 'companies.parquet'),
-                         ('aop.csv', 'aop.parquet'),
-                         ('individuals.csv', 'individuals.parquet')]:
+    for csv, parquet in [('data/companies.csv', 'data/companies.parquet'),
+                         ('data/aop.csv', 'data/aop.parquet'),
+                         ('data/individuals.csv', 'data/individuals.parquet')]:
         if os.path.exists(csv) and os.path.exists(parquet):
             csv_size = os.path.getsize(csv) / (1024 * 1024)
             parquet_size = os.path.getsize(parquet) / (1024 * 1024)

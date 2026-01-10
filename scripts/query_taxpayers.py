@@ -139,7 +139,7 @@ def print_results(results):
 
 
 def main():
-    db_path = 'taxpayers.db'
+    db_path = 'data/taxpayers.db'
 
     try:
         conn = sqlite3.connect(db_path)

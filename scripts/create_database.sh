@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-DB="taxpayers.db"
+DB="data/taxpayers.db"
 
 echo "Creating database: $DB"
 rm -f "$DB"
@@ -31,9 +31,9 @@ CREATE TABLE individuals (
 
 -- Import data (much faster than Python)
 .mode csv
-.import --skip 1 companies.csv companies
-.import --skip 1 aop.csv aop
-.import --skip 1 individuals.csv individuals
+.import --skip 1 data/companies.csv companies
+.import --skip 1 data/aop.csv aop
+.import --skip 1 data/individuals.csv individuals
 
 -- Create views
 CREATE VIEW top_companies AS

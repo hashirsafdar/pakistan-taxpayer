@@ -1,12 +1,5 @@
-# Large files (generated)
-TaxpayersDirectory2018.pdf
-taxpayers.db
-companies.csv
-aop.csv
-individuals.csv
-
-# Parquet files (except in docs/)
-/*.parquet
+# Data folder (generated files)
+data/
 
 # Python
 __pycache__/

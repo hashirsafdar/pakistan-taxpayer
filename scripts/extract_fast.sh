@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-PDF="TaxpayersDirectory2018.pdf"
-COMPANIES_CSV="companies.csv"
-AOP_CSV="aop.csv"
-INDIVIDUALS_CSV="individuals.csv"
+PDF="data/TaxpayersDirectory2018.pdf"
+COMPANIES_CSV="data/companies.csv"
+AOP_CSV="data/aop.csv"
+INDIVIDUALS_CSV="data/individuals.csv"
 
 echo "=== Fast PDF Extraction using pdftotext + awk ==="
 echo

@@ -112,7 +112,7 @@ def generate_statistics(conn):
 
 
 def main():
-    conn = sqlite3.connect('taxpayers.db')
+    conn = sqlite3.connect('data/taxpayers.db')
 
     print("Generating statistics...")
     stats = generate_statistics(conn)

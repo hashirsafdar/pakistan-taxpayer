@@ -33,11 +33,12 @@ The PDF contains three distinct sections:
 - `scripts/query_taxpayers.py` - Query interface for searching the database
 - `scripts/generate_web_data.py` - Generates JSON files for GitHub Pages
 
-### Data Files (Generated)
-- `companies.csv` - Company taxpayer records
-- `aop.csv` - Association of Persons taxpayer records
-- `individuals.csv` - Individual taxpayer records
-- `taxpayers.db` - SQLite database with 3 tables
+### Data Files (Generated - in `data/` folder)
+- `data/companies.csv` - Company taxpayer records
+- `data/aop.csv` - Association of Persons taxpayer records
+- `data/individuals.csv` - Individual taxpayer records
+- `data/taxpayers.db` - SQLite database with 3 tables
+- `data/companies.parquet`, `data/aop.parquet`, `data/individuals.parquet` - Compressed Parquet files
 
 ## Data Structure
 
@@ -118,7 +119,7 @@ python3 scripts/query_taxpayers.py range 500000 1000000 individual 100
 You can also query directly using sqlite3:
 
 ```bash
-sqlite3 taxpayers.db
+sqlite3 data/taxpayers.db
 
 # Search companies by name
 SELECT name, registration_no, tax_paid
