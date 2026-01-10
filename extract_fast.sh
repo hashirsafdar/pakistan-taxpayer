@@ -21,8 +21,8 @@ perl -ne '
 BEGIN {
     open($comp_fh, ">", "'"$COMPANIES_CSV"'") or die $!;
     open($ind_fh, ">", "'"$INDIVIDUALS_CSV"'") or die $!;
-    print $comp_fh "sr_no,name,registration_no,tax_paid\n";
-    print $ind_fh "sr_no,name,registration_no,tax_paid\n";
+    print $comp_fh "sr_no,name,ntn,tax_paid\n";
+    print $ind_fh "sr_no,name,cnic,tax_paid\n";
     $company_count = 0;
     $individual_count = 0;
 }

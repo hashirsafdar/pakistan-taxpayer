@@ -12,7 +12,7 @@ def generate_top_taxpayers(conn, limit=1000):
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT name, registration_no, tax_paid, 'company' as type
+        SELECT name, ntn, tax_paid, 'company' as type
         FROM companies
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
@@ -29,7 +29,7 @@ def generate_top_taxpayers(conn, limit=1000):
     ]
 
     cursor.execute('''
-        SELECT name, registration_no, tax_paid, 'individual' as type
+        SELECT name, cnic, tax_paid, 'individual' as type
         FROM individuals
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC

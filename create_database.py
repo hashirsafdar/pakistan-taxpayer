@@ -17,9 +17,9 @@ def create_schema(conn):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sr_no INTEGER,
             name TEXT NOT NULL,
-            registration_no TEXT,
+            ntn TEXT,
             tax_paid REAL,
-            UNIQUE(sr_no, registration_no)
+            UNIQUE(sr_no, ntn)
         )
     ''')
 
@@ -28,18 +28,18 @@ def create_schema(conn):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sr_no INTEGER,
             name TEXT NOT NULL,
-            registration_no TEXT,
+            cnic TEXT,
             tax_paid REAL,
-            UNIQUE(sr_no, registration_no)
+            UNIQUE(sr_no, cnic)
         )
     ''')
 
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_companies_name ON companies(name)')
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_companies_regno ON companies(registration_no)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_companies_ntn ON companies(ntn)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_companies_tax ON companies(tax_paid)')
 
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_individuals_name ON individuals(name)')
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_individuals_regno ON individuals(registration_no)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_individuals_cnic ON individuals(cnic)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_individuals_tax ON individuals(tax_paid)')
 
     conn.commit()
@@ -55,6 +55,10 @@ def load_csv_to_table(conn, csv_file, table_name):
     cursor = conn.cursor()
     count = 0
 
+    # Determine the ID column name based on table
+    id_col = 'cnic' if table_name == 'individuals' else 'ntn'
+    csv_id_col = 'cnic' if table_name == 'individuals' else 'ntn'
+
     with open(csv_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         rows = []
@@ -63,14 +67,14 @@ def load_csv_to_table(conn, csv_file, table_name):
             rows.append((
                 int(row['sr_no']),
                 row['name'],
-                row['registration_no'],
+                row[csv_id_col],
                 float(row['tax_paid'])
             ))
             count += 1
 
             if len(rows) >= 1000:
                 cursor.executemany(
-                    f'INSERT OR IGNORE INTO {table_name} (sr_no, name, registration_no, tax_paid) VALUES (?, ?, ?, ?)',
+                    f'INSERT OR IGNORE INTO {table_name} (sr_no, name, {id_col}, tax_paid) VALUES (?, ?, ?, ?)',
                     rows
                 )
                 rows = []
@@ -79,7 +83,7 @@ def load_csv_to_table(conn, csv_file, table_name):
 
         if rows:
             cursor.executemany(
-                f'INSERT OR IGNORE INTO {table_name} (sr_no, name, registration_no, tax_paid) VALUES (?, ?, ?, ?)',
+                f'INSERT OR IGNORE INTO {table_name} (sr_no, name, {id_col}, tax_paid) VALUES (?, ?, ?, ?)',
                 rows
             )
 
@@ -94,7 +98,7 @@ def create_query_helpers(conn):
 
     cursor.execute('''
         CREATE VIEW IF NOT EXISTS top_companies AS
-        SELECT name, registration_no, tax_paid
+        SELECT name, ntn, tax_paid
         FROM companies
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
@@ -103,7 +107,7 @@ def create_query_helpers(conn):
 
     cursor.execute('''
         CREATE VIEW IF NOT EXISTS top_individuals AS
-        SELECT name, registration_no, tax_paid
+        SELECT name, cnic, tax_paid
         FROM individuals
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC

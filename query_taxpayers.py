@@ -16,7 +16,7 @@ def search_by_name(conn, name, entity_type='all', limit=20):
 
     if entity_type in ['all', 'company']:
         cursor.execute('''
-            SELECT 'Company' as type, name, registration_no, tax_paid
+            SELECT 'Company' as type, name, ntn, tax_paid
             FROM companies
             WHERE name LIKE ?
             ORDER BY tax_paid DESC
@@ -26,7 +26,7 @@ def search_by_name(conn, name, entity_type='all', limit=20):
 
     if entity_type in ['all', 'individual']:
         cursor.execute('''
-            SELECT 'Individual' as type, name, registration_no, tax_paid
+            SELECT 'Individual' as type, name, cnic, tax_paid
             FROM individuals
             WHERE name LIKE ?
             ORDER BY tax_paid DESC
@@ -38,21 +38,21 @@ def search_by_name(conn, name, entity_type='all', limit=20):
 
 
 def search_by_regno(conn, regno):
-    """Search by registration number."""
+    """Search by NTN or CNIC."""
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT 'Company' as type, name, registration_no, tax_paid
+        SELECT 'Company' as type, name, ntn, tax_paid
         FROM companies
-        WHERE registration_no = ?
+        WHERE ntn = ?
     ''', (regno,))
     result = cursor.fetchone()
 
     if not result:
         cursor.execute('''
-            SELECT 'Individual' as type, name, registration_no, tax_paid
+            SELECT 'Individual' as type, name, cnic, tax_paid
             FROM individuals
-            WHERE registration_no = ?
+            WHERE cnic = ?
         ''', (regno,))
         result = cursor.fetchone()
 
@@ -66,7 +66,7 @@ def get_top_taxpayers(conn, entity_type='all', limit=20):
 
     if entity_type in ['all', 'company']:
         cursor.execute('''
-            SELECT 'Company' as type, name, registration_no, tax_paid
+            SELECT 'Company' as type, name, ntn, tax_paid
             FROM companies
             WHERE tax_paid > 0
             ORDER BY tax_paid DESC
@@ -76,7 +76,7 @@ def get_top_taxpayers(conn, entity_type='all', limit=20):
 
     if entity_type in ['all', 'individual']:
         cursor.execute('''
-            SELECT 'Individual' as type, name, registration_no, tax_paid
+            SELECT 'Individual' as type, name, cnic, tax_paid
             FROM individuals
             WHERE tax_paid > 0
             ORDER BY tax_paid DESC
@@ -98,7 +98,7 @@ def get_tax_range(conn, min_tax, max_tax, entity_type='all', limit=100):
 
     if entity_type in ['all', 'company']:
         cursor.execute('''
-            SELECT 'Company' as type, name, registration_no, tax_paid
+            SELECT 'Company' as type, name, ntn, tax_paid
             FROM companies
             WHERE tax_paid BETWEEN ? AND ?
             ORDER BY tax_paid DESC
@@ -108,7 +108,7 @@ def get_tax_range(conn, min_tax, max_tax, entity_type='all', limit=100):
 
     if entity_type in ['all', 'individual']:
         cursor.execute('''
-            SELECT 'Individual' as type, name, registration_no, tax_paid
+            SELECT 'Individual' as type, name, cnic, tax_paid
             FROM individuals
             WHERE tax_paid BETWEEN ? AND ?
             ORDER BY tax_paid DESC
@@ -126,7 +126,7 @@ def print_results(results):
         return
 
     print("\n" + "=" * 120)
-    print(f"{'Type':<12} {'Name':<60} {'Reg. No.':<15} {'Tax Paid':>15}")
+    print(f"{'Type':<12} {'Name':<60} {'NTN/CNIC':<15} {'Tax Paid':>15}")
     print("=" * 120)
 
     for row in results:
