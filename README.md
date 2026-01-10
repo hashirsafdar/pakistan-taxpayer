@@ -6,6 +6,22 @@ This project extracts taxpayer data from the massive PDF (229MB, 35,445 pages) a
 
 **Live Demo:** [Explore the dataset online](https://old.hashirsafdar.com/pakistan-taxpayer/)
 
+## PDF Structure
+
+The PDF contains three distinct sections:
+
+1. **COMPANIES** (Page 4 - 473)
+   - 44,609 records
+   - Uses 7-digit NTN (National Tax Number)
+
+2. **ASSOCIATION OF PERSONS (AOP)** (Page 473 - 1150)
+   - 64,336 records
+   - Uses 7-digit NTN (National Tax Number)
+
+3. **INDIVIDUALS** (Page 1151 - 35445)
+   - 2,738,407 records
+   - Uses 13-digit CNIC (Computerized National Identity Card)
+
 ## Files
 
 ### Extraction & Database Creation
@@ -14,23 +30,30 @@ This project extracts taxpayer data from the massive PDF (229MB, 35,445 pages) a
 - `query_taxpayers.py` - Query interface for searching the database
 
 ### Data Files (Generated)
-- `companies.csv` - All company/organization taxpayer records
-- `individuals.csv` - All individual taxpayer records
-- `taxpayers.db` - SQLite database with indexed tables
+- `companies.csv` - Company taxpayer records
+- `aop.csv` - Association of Persons taxpayer records
+- `individuals.csv` - Individual taxpayer records
+- `taxpayers.db` - SQLite database with 3 tables
 
 ## Data Structure
 
 ### Companies Table
-- Serial Number
-- Taxpayer Name
-- Registration Number (7 digits)
-- Tax Paid
+- `ntn` (PRIMARY KEY) - National Tax Number (7 digits)
+- `sr` - Serial number from PDF
+- `name` - Taxpayer Name
+- `tax_paid` - Tax Paid (PKR)
+
+### Association of Persons (AOP) Table
+- `ntn` (PRIMARY KEY) - National Tax Number (7 digits)
+- `sr` - Serial number from PDF
+- `name` - Taxpayer Name
+- `tax_paid` - Tax Paid (PKR)
 
 ### Individuals Table
-- Serial Number
-- Taxpayer Name
-- Registration Number (13 digits)
-- Tax Paid
+- `cnic` (PRIMARY KEY) - CNIC (13 digits)
+- `sr` - Serial number from PDF
+- `name` - Taxpayer Name
+- `tax_paid` - Tax Paid (PKR)
 
 ## Usage
 
@@ -115,28 +138,28 @@ FROM companies;
 
 ```sql
 CREATE TABLE companies (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sr_no INTEGER,
+    ntn TEXT PRIMARY KEY,
+    sr INTEGER,
     name TEXT NOT NULL,
-    registration_no TEXT,
-    tax_paid REAL,
-    UNIQUE(sr_no, registration_no)
+    tax_paid REAL
+);
+
+CREATE TABLE aop (
+    ntn TEXT PRIMARY KEY,
+    sr INTEGER,
+    name TEXT NOT NULL,
+    tax_paid REAL
 );
 
 CREATE TABLE individuals (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sr_no INTEGER,
+    cnic TEXT PRIMARY KEY,
+    sr INTEGER,
     name TEXT NOT NULL,
-    registration_no TEXT,
-    tax_paid REAL,
-    UNIQUE(sr_no, registration_no)
+    tax_paid REAL
 );
 ```
 
-With indexes on:
-- `name` (for name searches)
-- `registration_no` (for exact lookups)
-- `tax_paid` (for range queries and sorting)
+No indexes needed - NTN and CNIC are unique government identifiers used as primary keys.
 
 ## Performance
 

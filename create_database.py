@@ -9,38 +9,35 @@ from pathlib import Path
 
 
 def create_schema(conn):
-    """Create database schema with indexes."""
+    """Create database schema with primary keys on NTN/CNIC."""
     cursor = conn.cursor()
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS companies (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sr_no INTEGER,
+            ntn TEXT PRIMARY KEY,
+            sr INTEGER,
             name TEXT NOT NULL,
-            ntn TEXT,
-            tax_paid REAL,
-            UNIQUE(sr_no, ntn)
+            tax_paid REAL
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS aop (
+            ntn TEXT PRIMARY KEY,
+            sr INTEGER,
+            name TEXT NOT NULL,
+            tax_paid REAL
         )
     ''')
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS individuals (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sr_no INTEGER,
+            cnic TEXT PRIMARY KEY,
+            sr INTEGER,
             name TEXT NOT NULL,
-            cnic TEXT,
-            tax_paid REAL,
-            UNIQUE(sr_no, cnic)
+            tax_paid REAL
         )
     ''')
-
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_companies_name ON companies(name)')
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_companies_ntn ON companies(ntn)')
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_companies_tax ON companies(tax_paid)')
-
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_individuals_name ON individuals(name)')
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_individuals_cnic ON individuals(cnic)')
-    cursor.execute('CREATE INDEX IF NOT EXISTS idx_individuals_tax ON individuals(tax_paid)')
 
     conn.commit()
     print("Database schema created successfully")
@@ -57,7 +54,6 @@ def load_csv_to_table(conn, csv_file, table_name):
 
     # Determine the ID column name based on table
     id_col = 'cnic' if table_name == 'individuals' else 'ntn'
-    csv_id_col = 'cnic' if table_name == 'individuals' else 'ntn'
 
     with open(csv_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -65,16 +61,16 @@ def load_csv_to_table(conn, csv_file, table_name):
 
         for row in reader:
             rows.append((
-                int(row['sr_no']),
+                row[id_col],
+                int(row['sr']),
                 row['name'],
-                row[csv_id_col],
                 float(row['tax_paid'])
             ))
             count += 1
 
             if len(rows) >= 1000:
                 cursor.executemany(
-                    f'INSERT OR IGNORE INTO {table_name} (sr_no, name, {id_col}, tax_paid) VALUES (?, ?, ?, ?)',
+                    f'INSERT OR IGNORE INTO {table_name} ({id_col}, sr, name, tax_paid) VALUES (?, ?, ?, ?)',
                     rows
                 )
                 rows = []
@@ -83,7 +79,7 @@ def load_csv_to_table(conn, csv_file, table_name):
 
         if rows:
             cursor.executemany(
-                f'INSERT OR IGNORE INTO {table_name} (sr_no, name, {id_col}, tax_paid) VALUES (?, ?, ?, ?)',
+                f'INSERT OR IGNORE INTO {table_name} ({id_col}, sr, name, tax_paid) VALUES (?, ?, ?, ?)',
                 rows
             )
 
@@ -100,6 +96,15 @@ def create_query_helpers(conn):
         CREATE VIEW IF NOT EXISTS top_companies AS
         SELECT name, ntn, tax_paid
         FROM companies
+        WHERE tax_paid > 0
+        ORDER BY tax_paid DESC
+        LIMIT 100
+    ''')
+
+    cursor.execute('''
+        CREATE VIEW IF NOT EXISTS top_aop AS
+        SELECT name, ntn, tax_paid
+        FROM aop
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
         LIMIT 100
@@ -125,6 +130,9 @@ def print_stats(conn):
     cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM companies')
     comp_stats = cursor.fetchone()
 
+    cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM aop')
+    aop_stats = cursor.fetchone()
+
     cursor.execute('SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM individuals')
     ind_stats = cursor.fetchone()
 
@@ -136,6 +144,12 @@ def print_stats(conn):
     print(f"  Total tax paid: {comp_stats[1]:,.2f}" if comp_stats[1] else "  Total tax paid: 0")
     print(f"  Average tax: {comp_stats[2]:,.2f}" if comp_stats[2] else "  Average tax: 0")
     print(f"  Maximum tax: {comp_stats[3]:,.2f}" if comp_stats[3] else "  Maximum tax: 0")
+
+    print(f"\nAssociation of Persons (AOP):")
+    print(f"  Total records: {aop_stats[0]:,}")
+    print(f"  Total tax paid: {aop_stats[1]:,.2f}" if aop_stats[1] else "  Total tax paid: 0")
+    print(f"  Average tax: {aop_stats[2]:,.2f}" if aop_stats[2] else "  Average tax: 0")
+    print(f"  Maximum tax: {aop_stats[3]:,.2f}" if aop_stats[3] else "  Maximum tax: 0")
 
     print(f"\nIndividuals:")
     print(f"  Total records: {ind_stats[0]:,}")
@@ -155,6 +169,9 @@ def main():
 
     print("\nLoading companies from CSV...")
     load_csv_to_table(conn, 'companies.csv', 'companies')
+
+    print("\nLoading Association of Persons (AOP) from CSV...")
+    load_csv_to_table(conn, 'aop.csv', 'aop')
 
     print("\nLoading individuals from CSV...")
     load_csv_to_table(conn, 'individuals.csv', 'individuals')
