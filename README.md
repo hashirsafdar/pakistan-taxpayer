@@ -28,8 +28,8 @@ The PDF contains three distinct sections:
 
 ### Extraction & Database Creation
 - `scripts/extract_fast.sh` - Fast extraction from PDF to CSV files using pdftotext + perl
-- `scripts/create_database.py` - Creates SQLite database using native .import (fast)
-- `scripts/create_parquet_duckdb.py` - Creates Parquet files using DuckDB (fast, compressed)
+- `scripts/create_database.sh` - Creates SQLite database using native .import (fast)
+- `scripts/create_parquet_duckdb.sh` - Creates Parquet files using DuckDB (fast, compressed)
 - `scripts/generate_web_data.py` - Generates JSON files for GitHub Pages
 
 ### Data Files (Generated - in `data/` folder)
@@ -72,7 +72,7 @@ This processes all 35,445 pages and creates three CSV files using pdftotext + pe
 ### 2. Create SQLite Database
 
 ```bash
-uv run scripts/create_database.py
+bash scripts/create_database.sh
 ```
 
 Uses SQLite's native `.import` command for fast bulk loading.
@@ -80,7 +80,7 @@ Uses SQLite's native `.import` command for fast bulk loading.
 ### 3. Create Parquet Files (Optional)
 
 ```bash
-uv run scripts/create_parquet_duckdb.py
+bash scripts/create_parquet_duckdb.sh
 ```
 
 Creates compressed Parquet files using DuckDB. Parquet provides better compression than CSV and is optimized for analytical queries.
