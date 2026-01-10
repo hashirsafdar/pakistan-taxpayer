@@ -23,9 +23,9 @@ CREATE TABLE aop (
 );
 
 CREATE TABLE individuals (
-    cnic TEXT PRIMARY KEY,
     sr INTEGER,
     name TEXT NOT NULL,
+    cnic TEXT PRIMARY KEY,
     tax_paid REAL
 );
 
