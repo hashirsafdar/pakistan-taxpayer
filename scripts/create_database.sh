@@ -9,16 +9,16 @@ rm -f "$DB"
 sqlite3 "$DB" <<EOF
 -- Create schema
 CREATE TABLE companies (
-    ntn TEXT PRIMARY KEY,
     sr INTEGER,
     name TEXT NOT NULL,
+    ntn TEXT PRIMARY KEY,
     tax_paid REAL
 );
 
 CREATE TABLE aop (
-    ntn TEXT PRIMARY KEY,
     sr INTEGER,
     name TEXT NOT NULL,
+    ntn TEXT PRIMARY KEY,
     tax_paid REAL
 );
 
