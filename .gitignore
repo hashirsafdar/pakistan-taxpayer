@@ -1,23 +1,14 @@
-# Data folder (generated files)
-data/
+# Data folder (original and csv files)
+data/*.csv
+data/*.pdf
+data/*.db
 
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-.Python
-venv/
-*.egg-info/
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*.swo
 
 # Claude
 .claude/settings.local.json
