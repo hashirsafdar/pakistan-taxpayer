@@ -6,6 +6,8 @@ This project extracts taxpayer data from the massive PDF (229MB, 35,445 pages) a
 
 **Live Demo:** [Explore the dataset online](https://old.hashirsafdar.com/pakistan-taxpayer/)
 
+**Interactive Queries:** [Run SQL queries in your browser](https://old.hashirsafdar.com/pakistan-taxpayer/query.html) - Powered by DuckDB-WASM
+
 ## PDF Structure
 
 The PDF contains three distinct sections:

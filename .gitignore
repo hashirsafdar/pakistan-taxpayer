@@ -4,7 +4,9 @@ taxpayers.db
 companies.csv
 aop.csv
 individuals.csv
-*.parquet
+
+# Parquet files (except in docs/)
+/*.parquet
 
 # Python
 __pycache__/
