@@ -1,9 +1,7 @@
-#!/usr/bin/env -S uvx --with duckdb python3
+#!/usr/bin/env python3
 """
 Create Parquet files from CSV data using DuckDB (much faster than pandas).
 Parquet is a columnar format with much better compression than CSV.
-
-Run with: uvx --with duckdb python3 scripts/create_parquet_duckdb.py
 """
 
 import duckdb

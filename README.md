@@ -28,9 +28,8 @@ The PDF contains three distinct sections:
 
 ### Extraction & Database Creation
 - `scripts/extract_fast.sh` - Fast extraction from PDF to CSV files using pdftotext + perl
-- `scripts/create_database.sh` - Creates SQLite database using native .import (fast)
+- `scripts/create_database.py` - Creates SQLite database using native .import (fast)
 - `scripts/create_parquet_duckdb.py` - Creates Parquet files using DuckDB (fast, compressed)
-- `scripts/query_taxpayers.py` - Query interface for searching the database
 - `scripts/generate_web_data.py` - Generates JSON files for GitHub Pages
 
 ### Data Files (Generated - in `data/` folder)
@@ -73,7 +72,7 @@ This processes all 35,445 pages and creates three CSV files using pdftotext + pe
 ### 2. Create SQLite Database
 
 ```bash
-bash scripts/create_database.sh
+uv run scripts/create_database.py
 ```
 
 Uses SQLite's native `.import` command for fast bulk loading.
@@ -81,42 +80,16 @@ Uses SQLite's native `.import` command for fast bulk loading.
 ### 3. Create Parquet Files (Optional)
 
 ```bash
-uvx --with duckdb python3 scripts/create_parquet_duckdb.py
+uv run scripts/create_parquet_duckdb.py
 ```
 
 Creates compressed Parquet files using DuckDB. Parquet provides better compression than CSV and is optimized for analytical queries.
 
 ### 4. Query the Database
 
-#### Search by Name
-```bash
-python3 scripts/query_taxpayers.py name "abbott" company 10
-python3 scripts/query_taxpayers.py name "shaikh" individual 20
-python3 scripts/query_taxpayers.py name "limited" all 50
-```
+## SQL Queries
 
-#### Search by Registration Number
-```bash
-python3 scripts/query_taxpayers.py regno 1347561
-python3 scripts/query_taxpayers.py regno 4230128739899
-```
-
-#### Get Top Taxpayers
-```bash
-python3 scripts/query_taxpayers.py top company 20
-python3 scripts/query_taxpayers.py top individual 50
-python3 scripts/query_taxpayers.py top all 100
-```
-
-#### Search by Tax Range
-```bash
-python3 scripts/query_taxpayers.py range 1000000 10000000 company 50
-python3 scripts/query_taxpayers.py range 500000 1000000 individual 100
-```
-
-## Direct SQL Queries
-
-You can also query directly using sqlite3:
+Query the database directly using sqlite3:
 
 ```bash
 sqlite3 data/taxpayers.db
