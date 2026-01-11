@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Extracts Pakistan's 2018 Tax Directory PDF (229MB, 35,445 pages) into CSV/Parquet formats with web visualizations.
+Extracts Pakistan's Tax Directory PDFs (2017 & 2018) into CSV/Parquet formats with web visualizations.
 
-**Three entity types:** Companies (44k, 7-digit NTN), AOP (64k, 7-digit NTN), Individuals (2.7M, 13-digit CNIC)
+**Three entity types:** Companies (7-digit NTN), AOP (7-digit NTN), Individuals (13-digit CNIC)
+- **2018:** 44k companies, 64k AOP, 2.7M individuals
+- **2017:** 40k companies, 54k AOP, 1.7M individuals
 
 ## Architecture
 
@@ -24,17 +26,24 @@ PDF → [extract_fast.sh] → CSV → [create_parquet_duckdb.sh] → Parquet →
 ## Common Commands
 
 ```bash
-# Full extraction pipeline
-bash scripts/extract_fast.sh                                    # PDF → CSV
-bash scripts/create_parquet_duckdb.sh     # CSV → Parquet
+# Full extraction pipeline for 2018
+bash scripts/extract_fast.sh 2018                              # PDF → CSV
+bash scripts/create_parquet_duckdb.sh 2018                     # CSV → Parquet
+
+# Full extraction pipeline for 2017
+bash scripts/extract_fast.sh 2017                              # PDF → CSV
+bash scripts/create_parquet_duckdb.sh 2017                     # CSV → Parquet
+
+# Generate web data
 uv run scripts/generate_web_data.py                             # Parquet → JSON
 
-# Query examples
-python3 scripts/query_taxpayers.py name "abbott" company 10
-python3 scripts/query_taxpayers.py regno 1347561
-python3 scripts/query_taxpayers.py top all 100
-python3 scripts/query_taxpayers.py range 1000000 10000000 company 50
-duckdb -c "SELECT * FROM 'data/companies.parquet' LIMIT 10;"
+# Query examples (2018)
+duckdb -c "SELECT * FROM 'data/companies_2018.parquet' LIMIT 10;"
+duckdb -c "SELECT * FROM 'data/individuals_2018.parquet' WHERE tax_paid > 100000 LIMIT 5;"
+
+# Query examples (2017)
+duckdb -c "SELECT * FROM 'data/companies_2017.parquet' LIMIT 10;"
+duckdb -c "SELECT * FROM 'data/individuals_2017.parquet' WHERE tax_paid > 100000 LIMIT 5;"
 ```
 
 ## Key Details
