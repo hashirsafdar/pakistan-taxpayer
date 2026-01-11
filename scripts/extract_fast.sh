@@ -1,10 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-PDF="data/TaxpayersDirectory2018.pdf"
-COMPANIES_CSV="data/companies.csv"
-AOP_CSV="data/aop.csv"
-INDIVIDUALS_CSV="data/individuals.csv"
+YEAR="${1:-2018}"
+PDF="data/TaxpayersDirectory${YEAR}.pdf"
+COMPANIES_CSV="data/companies${YEAR:+_$YEAR}.csv"
+AOP_CSV="data/aop${YEAR:+_$YEAR}.csv"
+INDIVIDUALS_CSV="data/individuals${YEAR:+_$YEAR}.csv"
 
 echo "=== Fast PDF Extraction using pdftotext + awk ==="
 echo
@@ -88,7 +89,7 @@ END {
 '
 
 echo
-echo "Step 2: Verifying CSV files..."
+echo "Step 2: Verifying CSV files (Year: $YEAR)..."
 if [ -f "$COMPANIES_CSV" ]; then
     comp_lines=$(wc -l < "$COMPANIES_CSV")
     comp_size=$(ls -lh "$COMPANIES_CSV" | awk '{print $5}')
@@ -114,4 +115,4 @@ else
 fi
 
 echo
-echo "Done! Run 'bash scripts/create_parquet_duckdb.sh' to create Parquet files."
+echo "Done! Run 'bash scripts/create_parquet_duckdb.sh $YEAR' to create Parquet files."

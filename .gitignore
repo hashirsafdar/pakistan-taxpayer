@@ -1,6 +1,7 @@
 # Data folder (original and csv files)
 data/*.csv
 data/*.pdf
+data/*.parquet
 
 # Python
 __pycache__/
