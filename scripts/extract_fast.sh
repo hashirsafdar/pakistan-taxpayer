@@ -31,6 +31,7 @@ BEGIN {
     $aop_count = 0;
     $individual_count = 0;
     $in_aop_section = 0;
+    $auto_sr = 0;
 }
 
 # Detect section headers
@@ -42,37 +43,50 @@ if (/^\s*INDIVIDUALS\s*$/) {
     $in_aop_section = 0;
 }
 
+# Try matching with explicit serial number (for 2017, 2018)
 if (/^\s*(\d+)\s+(.+?)\s+(\d{7,13})\s+([-\d,]+)\s*$/) {
     $sr = $1;
     $name = $2;
     $regno = $3;
     $tax_str = $4;
+    $auto_sr = $sr;
+} 
+# Try matching without serial number (for 2016) - auto-generate sr
+elsif (/^\s*(.+?)\s+(\d{7,13})\s+([-\d,]+)\s*$/) {
+    $auto_sr++;
+    $sr = $auto_sr;
+    $name = $1;
+    $regno = $2;
+    $tax_str = $3;
+}
+else {
+    next;
+}
 
-    $name =~ s/\s+/ /g;
-    $name =~ s/^\s+|\s+$//g;
-    $name =~ s/"/""/g;
+$name =~ s/\s+/ /g;
+$name =~ s/^\s+|\s+$//g;
+$name =~ s/"/""/g;
 
-    $tax_paid = ($tax_str eq "-") ? 0 : ($tax_str =~ s/,//gr);
+$tax_paid = ($tax_str eq "-") ? 0 : ($tax_str =~ s/,//gr);
 
-    if (length($regno) == 13) {
-        print $ind_fh "$sr,\"$name\",$regno,$tax_paid\n";
-        $individual_count++;
-        if ($individual_count % 10000 == 0) {
-            print STDERR "  Individuals: $individual_count\n";
+if (length($regno) == 13) {
+    print $ind_fh "$sr,\"$name\",$regno,$tax_paid\n";
+    $individual_count++;
+    if ($individual_count % 10000 == 0) {
+        print STDERR "  Individuals: $individual_count\n";
+    }
+} elsif (length($regno) == 7) {
+    if ($in_aop_section) {
+        print $aop_fh "$sr,\"$name\",$regno,$tax_paid\n";
+        $aop_count++;
+        if ($aop_count % 1000 == 0) {
+            print STDERR "  AOP: $aop_count\n";
         }
-    } elsif (length($regno) == 7) {
-        if ($in_aop_section) {
-            print $aop_fh "$sr,\"$name\",$regno,$tax_paid\n";
-            $aop_count++;
-            if ($aop_count % 1000 == 0) {
-                print STDERR "  AOP: $aop_count\n";
-            }
-        } else {
-            print $comp_fh "$sr,\"$name\",$regno,$tax_paid\n";
-            $company_count++;
-            if ($company_count % 1000 == 0) {
-                print STDERR "  Companies: $company_count\n";
-            }
+    } else {
+        print $comp_fh "$sr,\"$name\",$regno,$tax_paid\n";
+        $company_count++;
+        if ($company_count % 1000 == 0) {
+            print STDERR "  Companies: $company_count\n";
         }
     }
 }
