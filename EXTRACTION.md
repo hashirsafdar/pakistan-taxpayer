@@ -81,11 +81,11 @@ This processes PDF pages and creates three CSV files using pdftotext + perl pipe
 
 ```bash
 # Create parquet for specific year
-bash scripts/create_parquet_duckdb.sh 2018
+uv run --with duckdb scripts/create_parquet_python.py 2018
 
 # Or create for all years
 for year in 2013 2014 2015 2016 2017 2018; do
-  bash scripts/create_parquet_duckdb.sh $year
+  uv run --with duckdb scripts/create_parquet_python.py $year
 done
 ```
 
@@ -152,7 +152,7 @@ LIMIT 100;
 
 ### Extraction & Data Processing
 - `scripts/extract_fast.sh` - Fast extraction from PDF to CSV files using pdftotext + perl
-- `scripts/create_parquet_duckdb.sh` - Creates Parquet files using DuckDB (fast, compressed)
+- `scripts/create_parquet_python.py` - Creates Parquet files using DuckDB (fast, compressed)
 - `scripts/generate_web_data.py` - Generates JSON files from Parquet for GitHub Pages
 
 ### Data Files (Generated - in `docs/data/YEAR/` folders)

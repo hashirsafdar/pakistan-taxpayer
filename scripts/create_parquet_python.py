@@ -24,7 +24,7 @@ for name, csv_file, parquet_file in files_to_convert:
     # Read CSV and write to Parquet (with null_padding for rows with missing columns)
     df = conn.read_csv(csv_file, null_padding=True)
     record_count = len(df)
-    df.write_parquet(parquet_file)
+    df.write_parquet(parquet_file, compression='gzip')
 
     print(f"  Done! {record_count} records")
 

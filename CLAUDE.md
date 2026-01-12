@@ -23,7 +23,7 @@ Extracts Pakistan's Tax Directory PDFs (2013-2018) into CSV/Parquet formats with
 
 **Data pipeline:**
 ```
-PDF → [extract_fast.sh YEAR] → CSV → [create_parquet_duckdb.sh YEAR] → Parquet
+PDF → [extract_fast.sh YEAR] → CSV → [create_parquet_python.py YEAR] → Parquet
 ```
 
 **File structure:**
@@ -40,12 +40,12 @@ PDF → [extract_fast.sh YEAR] → CSV → [create_parquet_duckdb.sh YEAR] → P
 ```bash
 # Extract specific year (2013-2018)
 bash scripts/extract_fast.sh 2018                              # PDF → CSV
-bash scripts/create_parquet_duckdb.sh 2018                     # CSV → Parquet
+uv run --with duckdb scripts/create_parquet_python.py 2018     # CSV → Parquet
 
 # Extract all years
 for year in 2013 2014 2015 2016 2017 2018; do
   bash scripts/extract_fast.sh $year
-  bash scripts/create_parquet_duckdb.sh $year
+  uv run --with duckdb scripts/create_parquet_python.py $year
 done
 
 # Generate web data
