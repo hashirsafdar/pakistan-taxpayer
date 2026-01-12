@@ -243,8 +243,19 @@
     </head>
     <body>
         <header>
-            <h1>Pakistan Taxpayer Directory 2018</h1>
+            <h1>Pakistan Taxpayer Directory</h1>
             <p>Extracted from Federal Board of Revenue (FBR) Public Data</p>
+            <div style="margin-top: 1rem;">
+                <label for="yearSelector" style="font-size: 1rem; margin-right: 0.5rem;">Select Year:</label>
+                <select id="yearSelector" onchange="loadYear()" style="padding: 0.5rem 1rem; font-size: 1rem; border-radius: 4px; border: 2px solid white; background: white; color: #0f4c81; cursor: pointer;">
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                </select>
+            </div>
         </header>
 
         <div class="container">
@@ -407,6 +418,7 @@
 
         <script>
             let data = {};
+            let currentYear = 2018;
             const ROWS_PER_PAGE = 10;
             const pagination = {
                 all: { currentPage: 1, data: [] },
@@ -415,11 +427,16 @@
                 individuals: { currentPage: 1, data: [] },
             };
 
+            async function loadYear() {
+                currentYear = parseInt(document.getElementById('yearSelector').value);
+                await loadData();
+            }
+
             async function loadData() {
                 try {
                     const [statsRes, topRes] = await Promise.all([
-                        fetch("data/web/statistics.json"),
-                        fetch("data/web/top_taxpayers.json"),
+                        fetch(`data/web/statistics_${currentYear}.json`),
+                        fetch(`data/web/top_taxpayers_${currentYear}.json`),
                     ]);
 
                     const stats = await statsRes.json();
@@ -427,9 +444,13 @@
 
                     data = { stats, top };
                     pagination.all.data = top.top_all;
+                    pagination.all.currentPage = 1;
                     pagination.companies.data = top.top_companies;
+                    pagination.companies.currentPage = 1;
                     pagination.aop.data = top.top_aop;
+                    pagination.aop.currentPage = 1;
                     pagination.individuals.data = top.top_individuals;
+                    pagination.individuals.currentPage = 1;
 
                     renderStats(stats);
                     renderTables(top);

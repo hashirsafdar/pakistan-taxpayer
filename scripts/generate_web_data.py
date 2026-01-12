@@ -5,18 +5,22 @@ Generate JSON data files for the web interface from Parquet files.
 
 import json
 import duckdb
+import os
 
 
-def generate_top_taxpayers(conn, limit=1000):
-    """Generate top taxpayers JSON."""
+def generate_top_taxpayers(conn, year, limit=1000):
+    """Generate top taxpayers JSON for a specific year."""
 
-    top_companies = conn.execute('''
-        SELECT name, ntn, tax_paid, 'company' as type
-        FROM 'data/companies.parquet'
+    ntn_col_companies = 'ntn_8' if year <= 2016 else 'ntn_7'
+    id_col_individuals = 'ntn_8' if year == 2013 else 'cnic'
+
+    top_companies = conn.execute(f'''
+        SELECT name, {ntn_col_companies}, tax_paid, 'company' as type
+        FROM 'docs/data/{year}/companies.parquet'
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
-        LIMIT ?
-    ''', (limit // 3,)).fetchall()
+        LIMIT {limit // 3}
+    ''').fetchall()
     top_companies = [
         {
             'name': row[0],
@@ -27,13 +31,13 @@ def generate_top_taxpayers(conn, limit=1000):
         for row in top_companies
     ]
 
-    top_aop = conn.execute('''
-        SELECT name, ntn, tax_paid, 'aop' as type
-        FROM 'data/aop.parquet'
+    top_aop = conn.execute(f'''
+        SELECT name, {ntn_col_companies}, tax_paid, 'aop' as type
+        FROM 'docs/data/{year}/aop.parquet'
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
-        LIMIT ?
-    ''', (limit // 3,)).fetchall()
+        LIMIT {limit // 3}
+    ''').fetchall()
     top_aop = [
         {
             'name': row[0],
@@ -44,13 +48,13 @@ def generate_top_taxpayers(conn, limit=1000):
         for row in top_aop
     ]
 
-    top_individuals = conn.execute('''
-        SELECT name, cnic, tax_paid, 'individual' as type
-        FROM 'data/individuals.parquet'
+    top_individuals = conn.execute(f'''
+        SELECT name, {id_col_individuals}, tax_paid, 'individual' as type
+        FROM 'docs/data/{year}/individuals.parquet'
         WHERE tax_paid > 0
         ORDER BY tax_paid DESC
-        LIMIT ?
-    ''', (limit // 3,)).fetchall()
+        LIMIT {limit // 3}
+    ''').fetchall()
     top_individuals = [
         {
             'name': row[0],
@@ -75,19 +79,19 @@ def generate_top_taxpayers(conn, limit=1000):
     }
 
 
-def generate_statistics(conn):
-    """Generate statistics JSON."""
+def generate_statistics(conn, year):
+    """Generate statistics JSON for a specific year."""
 
     comp_stats = conn.execute(
-        "SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'data/companies.parquet' WHERE tax_paid > 0"
+        f"SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'docs/data/{year}/companies.parquet' WHERE tax_paid > 0"
     ).fetchone()
 
     aop_stats = conn.execute(
-        "SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'data/aop.parquet' WHERE tax_paid > 0"
+        f"SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'docs/data/{year}/aop.parquet' WHERE tax_paid > 0"
     ).fetchone()
 
     ind_stats = conn.execute(
-        "SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'data/individuals.parquet' WHERE tax_paid > 0"
+        f"SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'docs/data/{year}/individuals.parquet' WHERE tax_paid > 0"
     ).fetchone()
 
     return {
@@ -113,25 +117,33 @@ def generate_statistics(conn):
 
 
 def main():
+    os.makedirs('docs/data/web', exist_ok=True)
     conn = duckdb.connect()
 
-    print("Generating statistics...")
-    stats = generate_statistics(conn)
-    with open('docs/data/statistics.json', 'w') as f:
-        json.dump(stats, f, indent=2)
-    print("  Written: docs/data/statistics.json")
+    years = [2013, 2014, 2015, 2016, 2017, 2018]
 
-    print("Generating top taxpayers...")
-    top = generate_top_taxpayers(conn, 1000)
-    with open('docs/data/top_taxpayers.json', 'w') as f:
-        json.dump(top, f, indent=2)
-    print("  Written: docs/data/top_taxpayers.json")
+    for year in years:
+        print(f"\nProcessing year {year}...")
+
+        if not os.path.exists(f'docs/data/{year}/companies.parquet'):
+            print(f"  Skipping {year} - data files not found")
+            continue
+
+        print(f"  Generating statistics for {year}...")
+        stats = generate_statistics(conn, year)
+        with open(f'docs/data/web/statistics_{year}.json', 'w') as f:
+            json.dump(stats, f, indent=2)
+        print(f"    Written: docs/data/web/statistics_{year}.json")
+
+        print(f"  Generating top taxpayers for {year}...")
+        top = generate_top_taxpayers(conn, year, 1000)
+        with open(f'docs/data/web/top_taxpayers_{year}.json', 'w') as f:
+            json.dump(top, f, indent=2)
+        print(f"    Written: docs/data/web/top_taxpayers_{year}.json")
 
     conn.close()
-    print("\nWeb data generation complete!")
+    print("\nWeb data generation complete for all years!")
 
 
 if __name__ == '__main__':
-    import os
-    os.makedirs('docs/data', exist_ok=True)
     main()

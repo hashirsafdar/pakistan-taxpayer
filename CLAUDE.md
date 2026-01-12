@@ -4,20 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Extracts Pakistan's Tax Directory PDFs (2013-2018) into CSV/Parquet formats with web visualizations.
-
-**Total dataset:** 8.2M+ taxpayer records across 6 years
-
-**Three entity types:** Companies (NTN), AOP (NTN), Individuals (CNIC or NTN)
-
-| Year | Companies | AOP | Individuals | Format |
-|------|-----------|-----|-------------|--------|
-| 2018 | 44k | 64k | 2.7M | Serial + ntn_7/cnic |
-| 2017 | 37k | 54k | 1.7M | Serial + ntn_7/cnic |
-| 2016 | 31k | 48k | 1.1M | ntn_8/cnic |
-| 2015 | 28k | 45k | 691k | ntn_8/cnic |
-| 2014 | 24k | 41k | 789k | ntn_8/cnic |
-| 2013 | 23k | 41k | 727k | ntn_8 (individuals use NTN) |
+Extracts Pakistan's Tax Directory PDFs (2013-2018) into CSV/Parquet formats with web visualizations. See README.md for dataset statistics.
 
 ## Architecture
 
@@ -50,17 +37,9 @@ done
 
 # Generate web data
 uv run scripts/generate_web_data.py                             # Parquet → JSON
-
-# Query examples (single year)
-duckdb -c "SELECT * FROM 'docs/data/2018/companies.parquet' LIMIT 10;"
-duckdb -c "SELECT * FROM 'docs/data/2017/individuals.parquet' WHERE tax_paid > 100000 LIMIT 5;"
-
-# Query examples (multi-year)
-duckdb -c "SELECT '2013' as year, * FROM 'docs/data/2013/individuals.parquet'
-           UNION ALL
-           SELECT '2014' as year, * FROM 'docs/data/2014/individuals.parquet'
-           ORDER BY tax_paid DESC LIMIT 100;"
 ```
+
+**Note:** Query examples are in README.md.
 
 ## Key Details
 

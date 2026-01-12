@@ -1,0 +1,2410 @@
+{
+  "top_companies": [
+    {
+      "name": "OIL AND GAS DEVELOPMENT COMPANY LIMITED",
+      "regno": "07872232",
+      "tax": 36963745646,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN PETROLEUM LIMITED",
+      "regno": "07115458",
+      "tax": 15404269282,
+      "type": "company"
+    },
+    {
+      "name": "HABIB BANK LIMITED",
+      "regno": "06981879",
+      "tax": 11786705153,
+      "type": "company"
+    },
+    {
+      "name": "GOVERNMENT HOLDINGS (PRIVATE) LIMITED",
+      "regno": "12186694",
+      "tax": 10756321121,
+      "type": "company"
+    },
+    {
+      "name": "FAUJI FERTILIZER COMPANY LIMITED",
+      "regno": "14358093",
+      "tax": 9898049256,
+      "type": "company"
+    },
+    {
+      "name": "MUSLIM COMMERCIAL BANK LIMITED",
+      "regno": "07002670",
+      "tax": 9589120400,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN STATE OIL COMPANY LIMITED",
+      "regno": "07115547",
+      "tax": 7946259287,
+      "type": "company"
+    },
+    {
+      "name": "UNITED BANK LIMITED",
+      "regno": "08011648",
+      "tax": 6588129067,
+      "type": "company"
+    },
+    {
+      "name": "PAK-ARAB REFINERY LIMITED",
+      "regno": "08014353",
+      "tax": 6213915419,
+      "type": "company"
+    },
+    {
+      "name": "ENI PAKISTAN LIMITED",
+      "regno": "08234147",
+      "tax": 5145178569,
+      "type": "company"
+    },
+    {
+      "name": "CIVIL AVIATION AUTHORITY",
+      "regno": "19458266",
+      "tax": 5100197646,
+      "type": "company"
+    },
+    {
+      "name": "NATIONAL BANK OF PAKISTAN",
+      "regno": "07002718",
+      "tax": 4486609700,
+      "type": "company"
+    },
+    {
+      "name": "KOT ADDU POWER COMPANY LIMITED",
+      "regno": "07080107",
+      "tax": 3916656945,
+      "type": "company"
+    },
+    {
+      "name": "BHP PETROLEUM PAKISTAN PTY LIMITED",
+      "regno": "15052028",
+      "tax": 3456964686,
+      "type": "company"
+    },
+    {
+      "name": "ALLIED BANK OF PAKISTAN LIMITED",
+      "regno": "08014287",
+      "tax": 3358099795,
+      "type": "company"
+    },
+    {
+      "name": "BANK AL HABIB LIMITED",
+      "regno": "07098570",
+      "tax": 3197816366,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN TELECOMMUNICATION AUTHORITY",
+      "regno": "26349221",
+      "tax": 3140132933,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN OILFIELDS LIMITED",
+      "regno": "06576583",
+      "tax": 2739043233,
+      "type": "company"
+    },
+    {
+      "name": "KIRTHAR PAKISTAN B. V.",
+      "regno": "07121202",
+      "tax": 2682810578,
+      "type": "company"
+    },
+    {
+      "name": "UNILEVER PAKISTAN LIMITED",
+      "regno": "09127259",
+      "tax": 2353785690,
+      "type": "company"
+    },
+    {
+      "name": "HABIB METROPOLITAN BANK LIMITED",
+      "regno": "07111673",
+      "tax": 2209280571,
+      "type": "company"
+    },
+    {
+      "name": "PEPSI-COLA INTERNATIONAL (PRIVATE) LIMITED",
+      "regno": "07116314",
+      "tax": 2175666033,
+      "type": "company"
+    },
+    {
+      "name": "ENI PAKISTAN (M) LIMITED S.A.R.L",
+      "regno": "16894618",
+      "tax": 2139436878,
+      "type": "company"
+    },
+    {
+      "name": "STANDARD CHARTERED BANK (PAKISTAN) LIMITED",
+      "regno": "27311341",
+      "tax": 2050011450,
+      "type": "company"
+    },
+    {
+      "name": "FAUJI FERTILIZER BIN QASIM LIMITED",
+      "regno": "06572979",
+      "tax": 2046773876,
+      "type": "company"
+    },
+    {
+      "name": "UNITED ENERGY PAKISTAN LIMITED",
+      "regno": "37927469",
+      "tax": 1876002340,
+      "type": "company"
+    },
+    {
+      "name": "INDUS MOTOR COMPANY LIMITED",
+      "regno": "06765467",
+      "tax": 1822993007,
+      "type": "company"
+    },
+    {
+      "name": "ENI AEP LIMITED",
+      "regno": "16894600",
+      "tax": 1728376093,
+      "type": "company"
+    },
+    {
+      "name": "ATTOCK PETROLEUM LIMITED",
+      "regno": "09445447",
+      "tax": 1659963223,
+      "type": "company"
+    },
+    {
+      "name": "MARI PETROLEUM COMPANY LIMITED",
+      "regno": "14146738",
+      "tax": 1616940173,
+      "type": "company"
+    },
+    {
+      "name": "BANK ALFALAH LIMITED",
+      "regno": "06982026",
+      "tax": 1539981471,
+      "type": "company"
+    },
+    {
+      "name": "NESTLE PAKISTAN LIMITED",
+      "regno": "02258625",
+      "tax": 1498936479,
+      "type": "company"
+    },
+    {
+      "name": "MEEZAN BANK LIMITED",
+      "regno": "07872267",
+      "tax": 1427078960,
+      "type": "company"
+    },
+    {
+      "name": "ZARAI TARAQIATI BANK LIMITED",
+      "regno": "25670689",
+      "tax": 1414868346,
+      "type": "company"
+    },
+    {
+      "name": "OMV (PAKISTAN) EXPLORATION GESELLSCHAFT M.B.H.",
+      "regno": "07869118",
+      "tax": 1385103872,
+      "type": "company"
+    },
+    {
+      "name": "PKP EXPLORATION 2 LIMITED",
+      "regno": "30364426",
+      "tax": 1294291629,
+      "type": "company"
+    },
+    {
+      "name": "QASIM INTERNATIONAL CONTAINER TERMINAL PAKISTAN LIMITED",
+      "regno": "08236496",
+      "tax": 1293414906,
+      "type": "company"
+    },
+    {
+      "name": "CHEVRON PAKISTAN LIMITED",
+      "regno": "07869045",
+      "tax": 1231140751,
+      "type": "company"
+    },
+    {
+      "name": "PKP EXPLORATION LIMITED",
+      "regno": "06570909",
+      "tax": 1168372650,
+      "type": "company"
+    },
+    {
+      "name": "KARACHI INTERNATIONAL CONTAINER TERMINAL LIMITED",
+      "regno": "08035385",
+      "tax": 1162191804,
+      "type": "company"
+    },
+    {
+      "name": "FAUJI FOUNDATION",
+      "regno": "07103972",
+      "tax": 1094064396,
+      "type": "company"
+    },
+    {
+      "name": "SHELL PAKISTAN LIMITED",
+      "regno": "08041431",
+      "tax": 1085084121,
+      "type": "company"
+    },
+    {
+      "name": "NATIONAL REFINERY LIMITED",
+      "regno": "07113257",
+      "tax": 1065977142,
+      "type": "company"
+    },
+    {
+      "name": "MILLAT TRACTORS LIMITED",
+      "regno": "08014370",
+      "tax": 1043149828,
+      "type": "company"
+    },
+    {
+      "name": "TAPAL TEA (PRIVATE) LIMITED",
+      "regno": "07123317",
+      "tax": 1025292744,
+      "type": "company"
+    },
+    {
+      "name": "AL GHAZI TRACTORS LIMITED",
+      "regno": "07095074",
+      "tax": 960833557,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN SECURITY PRINTING CORPORATION (PRIVATE) LIMITED",
+      "regno": "07114923",
+      "tax": 960367365,
+      "type": "company"
+    },
+    {
+      "name": "PKP KIRTHAR 2 B.V",
+      "regno": "29715628",
+      "tax": 950543986,
+      "type": "company"
+    },
+    {
+      "name": "ABBOTT LABORATORIES PAKISTAN LIMITED",
+      "regno": "13475614",
+      "tax": 895030776,
+      "type": "company"
+    },
+    {
+      "name": "RAFHAN MAIZE PRODUCTS COMPANY LIMITED",
+      "regno": "07117957",
+      "tax": 876938659,
+      "type": "company"
+    },
+    {
+      "name": "THE ATTOCK OIL COMPANY LIMITED",
+      "regno": "08003548",
+      "tax": 857052275,
+      "type": "company"
+    },
+    {
+      "name": "PKP KADANWARI 2 LIMITED",
+      "regno": "16917243",
+      "tax": 818143871,
+      "type": "company"
+    },
+    {
+      "name": "PRESSON DESCON INTERNATIONAL (PRIVATE) LIMITED",
+      "regno": "14843536",
+      "tax": 807783382,
+      "type": "company"
+    },
+    {
+      "name": "ASKARI BANK LIMITED",
+      "regno": "07090455",
+      "tax": 769993779,
+      "type": "company"
+    },
+    {
+      "name": "COLGATE-PALMOLIVE (PAKISTAN) LIMITED",
+      "regno": "07100604",
+      "tax": 738675258,
+      "type": "company"
+    },
+    {
+      "name": "PROCTER & GAMBLE PAKISTAN (PRIVATE) LIMITED",
+      "regno": "07117345",
+      "tax": 669685838,
+      "type": "company"
+    },
+    {
+      "name": "NISHAT MILLS LIMITED",
+      "regno": "21806527",
+      "tax": 668373334,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN REFINERY LIMITED",
+      "regno": "08913404",
+      "tax": 662120349,
+      "type": "company"
+    },
+    {
+      "name": "DESCON ENGINEERING LIMITED",
+      "regno": "08035261",
+      "tax": 660231773,
+      "type": "company"
+    },
+    {
+      "name": "PKP KIRTHAR B. V.",
+      "regno": "15284514",
+      "tax": 651803541,
+      "type": "company"
+    },
+    {
+      "name": "KHADIJA EDIBLE OIL REFINERY PRIVATE LIMITED",
+      "regno": "26615533",
+      "tax": 648397015,
+      "type": "company"
+    },
+    {
+      "name": "GLAXO SMITHKLINE PAKISTAN LIMITED",
+      "regno": "07105017",
+      "tax": 640940231,
+      "type": "company"
+    },
+    {
+      "name": "HUAWEI TECHNOLOGIES PAKISTAN (PRIVATE) LIMITED",
+      "regno": "14179598",
+      "tax": 637939012,
+      "type": "company"
+    },
+    {
+      "name": "PEPSICO INVESTMENTS EUROPE I.B.V",
+      "regno": "30443474",
+      "tax": 626847327,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN TOBACCO COMPANY LIMITED",
+      "regno": "07128215",
+      "tax": 613558083,
+      "type": "company"
+    },
+    {
+      "name": "KUFPEC (PAKISTAN) B.V",
+      "regno": "07099592",
+      "tax": 606366866,
+      "type": "company"
+    },
+    {
+      "name": "THAL LIMITED",
+      "regno": "07110103",
+      "tax": 604025223,
+      "type": "company"
+    },
+    {
+      "name": "LUCKY CEMENT LIMITED",
+      "regno": "00098078",
+      "tax": 593207938,
+      "type": "company"
+    },
+    {
+      "name": "MOL PAKISTAN OIL & GAS COMPANY B. V.",
+      "regno": "19389299",
+      "tax": 581818532,
+      "type": "company"
+    },
+    {
+      "name": "PKP KADANWARI LIMITED",
+      "regno": "16894464",
+      "tax": 563813985,
+      "type": "company"
+    },
+    {
+      "name": "GETZ PHARMA (PRIVATE) LIMITTED",
+      "regno": "07119534",
+      "tax": 555996520,
+      "type": "company"
+    },
+    {
+      "name": "ATTOCK CEMENT PAKISTAN LIMITED",
+      "regno": "07097786",
+      "tax": 555898652,
+      "type": "company"
+    },
+    {
+      "name": "DAWLANCE ELECTRONICS (PRIVATE) LIMITED",
+      "regno": "21396108",
+      "tax": 554129798,
+      "type": "company"
+    },
+    {
+      "name": "ENGRO EXIMP (PRIVATE) LIMITED",
+      "regno": "15131351",
+      "tax": 544204927,
+      "type": "company"
+    },
+    {
+      "name": "EDUCATIONAL SERVICES (PRIVATE) LIMITED",
+      "regno": "07861583",
+      "tax": 531655881,
+      "type": "company"
+    },
+    {
+      "name": "THE COCA-COLA EXPORT CORPORATION",
+      "regno": "02241528",
+      "tax": 524887388,
+      "type": "company"
+    },
+    {
+      "name": "PAK SUZUKI MOTOR CO. LIMITED",
+      "regno": "07128371",
+      "tax": 513605147,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN MOBILE COMMUNICATIONS LIMITED",
+      "regno": "08026947",
+      "tax": 509356994,
+      "type": "company"
+    },
+    {
+      "name": "UNILEVER OVERSEAS HOLDING LIMITED",
+      "regno": "08605757",
+      "tax": 500555433,
+      "type": "company"
+    },
+    {
+      "name": "ATLAS HONDA LIMITED",
+      "regno": "08010633",
+      "tax": 494413732,
+      "type": "company"
+    },
+    {
+      "name": "EFU LIFE ASSURANCE LIMITED",
+      "regno": "09448942",
+      "tax": 477548482,
+      "type": "company"
+    },
+    {
+      "name": "UNITED REFRIGERATION INDUSTRIES LIMITED",
+      "regno": "07866003",
+      "tax": 476091352,
+      "type": "company"
+    },
+    {
+      "name": "CARGILL PAKISTAN AGRI FOODS (PRIVATE) LIMITED",
+      "regno": "39999041",
+      "tax": 455658203,
+      "type": "company"
+    },
+    {
+      "name": "NOVARTIS PHARMA (PAKISTAN) LIMITED",
+      "regno": "07119828",
+      "tax": 445673972,
+      "type": "company"
+    },
+    {
+      "name": "MAPAK EDIBLE OILS (PRIVATE) LIMITED",
+      "regno": "08170185",
+      "tax": 441570357,
+      "type": "company"
+    },
+    {
+      "name": "TRADING CORPORATION OF PAKISTAN (PRIVATE) LIMITED",
+      "regno": "07124465",
+      "tax": 434844350,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN SERVICES LIMITED",
+      "regno": "08229104",
+      "tax": 428731650,
+      "type": "company"
+    },
+    {
+      "name": "TELENOR PAKISTAN (PRIVATE) LIMITED",
+      "regno": "20460040",
+      "tax": 427579061,
+      "type": "company"
+    },
+    {
+      "name": "RECKITT BENCKISER PAKISTAN LIMITED",
+      "regno": "08237786",
+      "tax": 421977892,
+      "type": "company"
+    },
+    {
+      "name": "STATE LIFE INSURANCE CORPORATION OF PAKISTAN",
+      "regno": "07122276",
+      "tax": 410727775,
+      "type": "company"
+    },
+    {
+      "name": "SITARA CHEMICAL INDUSTRIES LIMITED",
+      "regno": "08238413",
+      "tax": 404910290,
+      "type": "company"
+    },
+    {
+      "name": "HABIB CONSTRUCTION SERVICES (PRIVATE) LIMITED",
+      "regno": "32370539",
+      "tax": 403495849,
+      "type": "company"
+    },
+    {
+      "name": "MURREE BREWERY COMPANY LIMITED",
+      "regno": "07869096",
+      "tax": 401342406,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN INTERNATIONAL CONTAINER TERMINAL LIMITED",
+      "regno": "14255600",
+      "tax": 397552545,
+      "type": "company"
+    },
+    {
+      "name": "THE BANK OF KHYBER",
+      "regno": "00000922",
+      "tax": 396640829,
+      "type": "company"
+    },
+    {
+      "name": "DALDA FOODS (PRIVATE) LIMITED",
+      "regno": "21281335",
+      "tax": 394332240,
+      "type": "company"
+    },
+    {
+      "name": "ATTOCK REFINERY LIMITED",
+      "regno": "07097824",
+      "tax": 385058343,
+      "type": "company"
+    },
+    {
+      "name": "JAMSHORO JOINT VENTURE LIMITED",
+      "regno": "15081338",
+      "tax": 379437329,
+      "type": "company"
+    },
+    {
+      "name": "TAHIR OMER INDUSTRIES LIMITED",
+      "regno": "14368048",
+      "tax": 373311786,
+      "type": "company"
+    },
+    {
+      "name": "BATA PAKISTAN LIMITED",
+      "regno": "07098774",
+      "tax": 372108292,
+      "type": "company"
+    }
+  ],
+  "top_aop": [
+    {
+      "name": "LTHJV",
+      "regno": "34199284",
+      "tax": 496882503,
+      "type": "aop"
+    },
+    {
+      "name": "UNITED AGRO CHEMICAL",
+      "regno": "11587440",
+      "tax": 464893376,
+      "type": "aop"
+    },
+    {
+      "name": "LIMAK JV ZKB",
+      "regno": "31340636",
+      "tax": 424226717,
+      "type": "aop"
+    },
+    {
+      "name": "ZAHIR KHAN & BROTHERS",
+      "regno": "06851932",
+      "tax": 384895596,
+      "type": "aop"
+    },
+    {
+      "name": "CHAWLA INTERNATIONAL",
+      "regno": "11965240",
+      "tax": 357433819,
+      "type": "aop"
+    },
+    {
+      "name": "SMADB LILEY SHAH RUKH",
+      "regno": "24577740",
+      "tax": 264592927,
+      "type": "aop"
+    },
+    {
+      "name": "ADVANCE TELECOM",
+      "regno": "28489055",
+      "tax": 231960765,
+      "type": "aop"
+    },
+    {
+      "name": "KINGCRETE BUILDERS",
+      "regno": "02860082",
+      "tax": 223181907,
+      "type": "aop"
+    },
+    {
+      "name": "UNITED MOBILES",
+      "regno": "16917138",
+      "tax": 217779874,
+      "type": "aop"
+    },
+    {
+      "name": "TRIPLE TREE ASSOCIATES",
+      "regno": "27711455",
+      "tax": 210177344,
+      "type": "aop"
+    },
+    {
+      "name": "DESCON-CCC JOINT VENTURE",
+      "regno": "39964426",
+      "tax": 172649975,
+      "type": "aop"
+    },
+    {
+      "name": "WR EDIBLE OIL REFINERY",
+      "regno": "27962318",
+      "tax": 171263860,
+      "type": "aop"
+    },
+    {
+      "name": "ZAFAR ENTERPRISES",
+      "regno": "14533880",
+      "tax": 153574140,
+      "type": "aop"
+    },
+    {
+      "name": "A.F. FERGUSON AND CO.",
+      "regno": "08048258",
+      "tax": 140711931,
+      "type": "aop"
+    },
+    {
+      "name": "DBH JOINT VENTURE PROJECTS",
+      "regno": "36394653",
+      "tax": 134749136,
+      "type": "aop"
+    },
+    {
+      "name": "HABIB CONSTRUCTION - IKAN JV",
+      "regno": "40198839",
+      "tax": 134280851,
+      "type": "aop"
+    },
+    {
+      "name": "SAADULLAH KHAN & BROTHERS ENGINEERING & CONSTRUCTION",
+      "regno": "06852165",
+      "tax": 126851510,
+      "type": "aop"
+    },
+    {
+      "name": "S.M.JAFFER & COMPANY",
+      "regno": "02881276",
+      "tax": 124614948,
+      "type": "aop"
+    },
+    {
+      "name": "EKO -KRC (JOINT VENTURE)",
+      "regno": "39328848",
+      "tax": 119052042,
+      "type": "aop"
+    },
+    {
+      "name": "NIAZ MUHAMMAD KHAN AND BROTHERS",
+      "regno": "14623277",
+      "tax": 110160293,
+      "type": "aop"
+    },
+    {
+      "name": "RAJBY INDUSTRIES",
+      "regno": "14317717",
+      "tax": 97768036,
+      "type": "aop"
+    },
+    {
+      "name": "M IRFAN M AAMIR CONSTRUCTION(MIMA CONSTRUCTION",
+      "regno": "21931666",
+      "tax": 96714838,
+      "type": "aop"
+    },
+    {
+      "name": "HAJI MUHAMMAD SHABIR CH. NAZIR & CO.",
+      "regno": "37814377",
+      "tax": 86687866,
+      "type": "aop"
+    },
+    {
+      "name": "ERNST & YOUNG FORD RHODES SIDAT HYDER.",
+      "regno": "14521911",
+      "tax": 84726066,
+      "type": "aop"
+    },
+    {
+      "name": "KPMG TASEER HADI & CO.",
+      "regno": "09999317",
+      "tax": 82480509,
+      "type": "aop"
+    },
+    {
+      "name": "TAYYAB MANZOOR TARAR",
+      "regno": "28414799",
+      "tax": 79850001,
+      "type": "aop"
+    },
+    {
+      "name": "WAZIR ALI & COMPANY",
+      "regno": "10007318",
+      "tax": 73728419,
+      "type": "aop"
+    },
+    {
+      "name": "TELETEC ENTERPRISES",
+      "regno": "37939408",
+      "tax": 68875982,
+      "type": "aop"
+    },
+    {
+      "name": "WERRICK PHARMACEUTICALS",
+      "regno": "24656003",
+      "tax": 63469852,
+      "type": "aop"
+    },
+    {
+      "name": "NKKE (JV)",
+      "regno": "33856532",
+      "tax": 62314770,
+      "type": "aop"
+    },
+    {
+      "name": "SPARCO-CLIC JOINT VENTURE",
+      "regno": "37508679",
+      "tax": 61830419,
+      "type": "aop"
+    },
+    {
+      "name": "SHAFIQUE BROTHERS AND COMPANY",
+      "regno": "26623374",
+      "tax": 60582986,
+      "type": "aop"
+    },
+    {
+      "name": "MUHAMMAD RAMZAN & COMPANY",
+      "regno": "36849715",
+      "tax": 59054448,
+      "type": "aop"
+    },
+    {
+      "name": "WILSONS PHARMACEUTICALS",
+      "regno": "08168717",
+      "tax": 57162719,
+      "type": "aop"
+    },
+    {
+      "name": "S.EJAZ UD DIN & COMPANY",
+      "regno": "02762617",
+      "tax": 56832072,
+      "type": "aop"
+    },
+    {
+      "name": "BHALLI CONSTRUCTORS",
+      "regno": "38367688",
+      "tax": 56677380,
+      "type": "aop"
+    },
+    {
+      "name": "CRESCENT CORPORATION",
+      "regno": "25545604",
+      "tax": 55759206,
+      "type": "aop"
+    },
+    {
+      "name": "HANTEX",
+      "regno": "22863028",
+      "tax": 54940039,
+      "type": "aop"
+    },
+    {
+      "name": "KHATTAK ALLIED CONSTRUCTION COMPANY",
+      "regno": "36560812",
+      "tax": 53967219,
+      "type": "aop"
+    },
+    {
+      "name": "GOURMET FOODS",
+      "regno": "32187092",
+      "tax": 52874139,
+      "type": "aop"
+    },
+    {
+      "name": "SAADAT INTERNATIONAL",
+      "regno": "06669603",
+      "tax": 51873837,
+      "type": "aop"
+    },
+    {
+      "name": "NEIE-LAC (JOINT VENTURE)",
+      "regno": "41364597",
+      "tax": 51183579,
+      "type": "aop"
+    },
+    {
+      "name": "AMAN AUTOS",
+      "regno": "14676052",
+      "tax": 50193912,
+      "type": "aop"
+    },
+    {
+      "name": "AL KAMAL INTERNATIONAL",
+      "regno": "33554633",
+      "tax": 50080044,
+      "type": "aop"
+    },
+    {
+      "name": "CHIEF MACHINERY CORPORATION",
+      "regno": "14113887",
+      "tax": 48013666,
+      "type": "aop"
+    },
+    {
+      "name": "CGC RSL SMMC JOINT VENTURE",
+      "regno": "41287894",
+      "tax": 46764338,
+      "type": "aop"
+    },
+    {
+      "name": "HAJI ABDUL SATTAR & CO",
+      "regno": "21342539",
+      "tax": 46641618,
+      "type": "aop"
+    },
+    {
+      "name": "GREEN STONE CORPORATION",
+      "regno": "29876095",
+      "tax": 46547076,
+      "type": "aop"
+    },
+    {
+      "name": "MULTILYNX",
+      "regno": "11498528",
+      "tax": 45152140,
+      "type": "aop"
+    },
+    {
+      "name": "FRIENDS ENTERPRISES",
+      "regno": "27641414",
+      "tax": 45108210,
+      "type": "aop"
+    },
+    {
+      "name": "PAKISTAN RUBBER & TYRE CO",
+      "regno": "22876487",
+      "tax": 43859437,
+      "type": "aop"
+    },
+    {
+      "name": "KAMAL TEXTILE MILLS",
+      "regno": "32350350",
+      "tax": 42625533,
+      "type": "aop"
+    },
+    {
+      "name": "SHAFIQ CONSTRUCTION COMPANY",
+      "regno": "11318619",
+      "tax": 42493372,
+      "type": "aop"
+    },
+    {
+      "name": "U.M ENTERPRISES",
+      "regno": "12118524",
+      "tax": 42140749,
+      "type": "aop"
+    },
+    {
+      "name": "UNITED TOWEL EXPORTERS",
+      "regno": "06755330",
+      "tax": 42138805,
+      "type": "aop"
+    },
+    {
+      "name": "GKG",
+      "regno": "27087987",
+      "tax": 41812402,
+      "type": "aop"
+    },
+    {
+      "name": "JAMALUDDIN & COMPANY",
+      "regno": "26054892",
+      "tax": 41724427,
+      "type": "aop"
+    },
+    {
+      "name": "IFTIKHAR & COMPANY CONTRACTORS",
+      "regno": "14399202",
+      "tax": 40953982,
+      "type": "aop"
+    },
+    {
+      "name": "BABA ENTERPRISES",
+      "regno": "27370135",
+      "tax": 40366018,
+      "type": "aop"
+    },
+    {
+      "name": "SINOTEC CO.",
+      "regno": "38220837",
+      "tax": 40334835,
+      "type": "aop"
+    },
+    {
+      "name": "NAFCON CONSTRUCTION",
+      "regno": "12860367",
+      "tax": 40040147,
+      "type": "aop"
+    },
+    {
+      "name": "ELCON ASSOCIATES",
+      "regno": "26319144",
+      "tax": 39801538,
+      "type": "aop"
+    },
+    {
+      "name": "RMC CONSTRUCTION COMPANY",
+      "regno": "13443585",
+      "tax": 38391730,
+      "type": "aop"
+    },
+    {
+      "name": "INLAND CONSTRUCTION COMPANY",
+      "regno": "24682721",
+      "tax": 36882648,
+      "type": "aop"
+    },
+    {
+      "name": "UNIQUE TRADING COMPANY",
+      "regno": "12916846",
+      "tax": 36550945,
+      "type": "aop"
+    },
+    {
+      "name": "IMRAN SHIP BREAKING CO.",
+      "regno": "06764380",
+      "tax": 36355040,
+      "type": "aop"
+    },
+    {
+      "name": "QASIM KHAN & COMPANY",
+      "regno": "35571365",
+      "tax": 35832614,
+      "type": "aop"
+    },
+    {
+      "name": "A.K. TRADERS",
+      "regno": "29426073",
+      "tax": 35632984,
+      "type": "aop"
+    },
+    {
+      "name": "CONSTRUCT",
+      "regno": "24599778",
+      "tax": 35492899,
+      "type": "aop"
+    },
+    {
+      "name": "KAZI NISAR AHMED PIRZADA & CO",
+      "regno": "35384034",
+      "tax": 35445003,
+      "type": "aop"
+    },
+    {
+      "name": "AL HAMZA TRADING COMPANY",
+      "regno": "25352253",
+      "tax": 35236187,
+      "type": "aop"
+    },
+    {
+      "name": "FASHION KNIT INDUSTRIES",
+      "regno": "06748732",
+      "tax": 34394033,
+      "type": "aop"
+    },
+    {
+      "name": "S.S. ENTERPRISES",
+      "regno": "08162026",
+      "tax": 34226571,
+      "type": "aop"
+    },
+    {
+      "name": "RIAALAW",
+      "regno": "10011862",
+      "tax": 34149093,
+      "type": "aop"
+    },
+    {
+      "name": "CHOUDHERY CONSTRUCTION COMPANY",
+      "regno": "17739027",
+      "tax": 33647308,
+      "type": "aop"
+    },
+    {
+      "name": "SHAHEEN FREIGHT SERVICES",
+      "regno": "21233233",
+      "tax": 33641143,
+      "type": "aop"
+    },
+    {
+      "name": "CH ENGINEERS ASSOCIATES",
+      "regno": "06826989",
+      "tax": 33252943,
+      "type": "aop"
+    },
+    {
+      "name": "SS FASHION RESOURCES",
+      "regno": "33862036",
+      "tax": 33251530,
+      "type": "aop"
+    },
+    {
+      "name": "PLASTOCHEM CORPORATION",
+      "regno": "11969962",
+      "tax": 32595465,
+      "type": "aop"
+    },
+    {
+      "name": "RACHNA AGRI BUSINESS",
+      "regno": "06784267",
+      "tax": 32553140,
+      "type": "aop"
+    },
+    {
+      "name": "SATTAR ELECTRONICS",
+      "regno": "09919607",
+      "tax": 32135867,
+      "type": "aop"
+    },
+    {
+      "name": "JUBILEE CORPORATION",
+      "regno": "02708086",
+      "tax": 30136384,
+      "type": "aop"
+    },
+    {
+      "name": "ADVANCE BUSINESS SYSTEMS",
+      "regno": "20484488",
+      "tax": 30109915,
+      "type": "aop"
+    },
+    {
+      "name": "ZAHOOR DIE CASTING CO.",
+      "regno": "13140272",
+      "tax": 30072930,
+      "type": "aop"
+    },
+    {
+      "name": "KAGHAN TRADING COMPANY",
+      "regno": "08237905",
+      "tax": 30067098,
+      "type": "aop"
+    },
+    {
+      "name": "KANPA INTERNATIONAL SALES",
+      "regno": "08194556",
+      "tax": 29809227,
+      "type": "aop"
+    },
+    {
+      "name": "ADAMJEE ENTERPRISES",
+      "regno": "12296481",
+      "tax": 29632055,
+      "type": "aop"
+    },
+    {
+      "name": "NATIONAL TENT HOUSE",
+      "regno": "03003663",
+      "tax": 29498725,
+      "type": "aop"
+    },
+    {
+      "name": "AQ ENTEPRISES",
+      "regno": "30179807",
+      "tax": 29480328,
+      "type": "aop"
+    },
+    {
+      "name": "ZAIN UL ABIDEEN AND SONS",
+      "regno": "15056023",
+      "tax": 29398532,
+      "type": "aop"
+    },
+    {
+      "name": "THE LEGEND",
+      "regno": "15586855",
+      "tax": 29342277,
+      "type": "aop"
+    },
+    {
+      "name": "AL HAMZA TRADING & SHIP BREAKING COMPANY",
+      "regno": "28996470",
+      "tax": 29321325,
+      "type": "aop"
+    },
+    {
+      "name": "A & B PRODUCTIONS",
+      "regno": "33614059",
+      "tax": 28904812,
+      "type": "aop"
+    },
+    {
+      "name": "ASIF BROTHERS",
+      "regno": "38152274",
+      "tax": 28877725,
+      "type": "aop"
+    },
+    {
+      "name": "PINGGAO-POTENTIAL JV",
+      "regno": "39763536",
+      "tax": 28555197,
+      "type": "aop"
+    },
+    {
+      "name": "TRANSFAB",
+      "regno": "16893662",
+      "tax": 28297503,
+      "type": "aop"
+    },
+    {
+      "name": "HAJI SAID MUHAMMAD AND SONS",
+      "regno": "17289947",
+      "tax": 28239681,
+      "type": "aop"
+    },
+    {
+      "name": "AMIR RICE TRADERS",
+      "regno": "06786910",
+      "tax": 28105446,
+      "type": "aop"
+    },
+    {
+      "name": "M. YAHYA M. YOUSUF BARI",
+      "regno": "13602167",
+      "tax": 27243493,
+      "type": "aop"
+    },
+    {
+      "name": "IQBAL RICE MILLS",
+      "regno": "04306082",
+      "tax": 26924165,
+      "type": "aop"
+    }
+  ],
+  "top_individuals": [
+    {
+      "name": "IRFAN USMAN",
+      "regno": "14092131",
+      "tax": 749008253,
+      "type": "individual"
+    },
+    {
+      "name": "MUSTAFA HUMAEE",
+      "regno": "02590999",
+      "tax": 423039499,
+      "type": "individual"
+    },
+    {
+      "name": "NAJMUDDIN",
+      "regno": "02798352",
+      "tax": 300009499,
+      "type": "individual"
+    },
+    {
+      "name": "IFTIKHARUDDIN",
+      "regno": "02770199",
+      "tax": 275009499,
+      "type": "individual"
+    },
+    {
+      "name": "MOHAMMAD YAQOOB",
+      "regno": "13410687",
+      "tax": 240639499,
+      "type": "individual"
+    },
+    {
+      "name": "WAZIR ALI PARDHAN",
+      "regno": "02323168",
+      "tax": 210332864,
+      "type": "individual"
+    },
+    {
+      "name": "HAJI SHAH MUHAMMAD",
+      "regno": "13097164",
+      "tax": 204700230,
+      "type": "individual"
+    },
+    {
+      "name": "ARBAB SAEED ULLAH",
+      "regno": "09130489",
+      "tax": 192509499,
+      "type": "individual"
+    },
+    {
+      "name": "TARIQ NISAR",
+      "regno": "01523902",
+      "tax": 189910478,
+      "type": "individual"
+    },
+    {
+      "name": "TARIQ RAFI",
+      "regno": "02965780",
+      "tax": 174246502,
+      "type": "individual"
+    },
+    {
+      "name": "MOHAMMAD NAEEM MUKHTAR",
+      "regno": "02259117",
+      "tax": 159149750,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD WASEEM MUKHTAR",
+      "regno": "24839558",
+      "tax": 158858269,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD SALEHEEN SOLEJA",
+      "regno": "09442367",
+      "tax": 158689499,
+      "type": "individual"
+    },
+    {
+      "name": "HASSAN MANSHA",
+      "regno": "12034533",
+      "tax": 149423639,
+      "type": "individual"
+    },
+    {
+      "name": "SHEIKH MUKHTAR AHMED",
+      "regno": "02970961",
+      "tax": 147855957,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD IRFAN GHAZI",
+      "regno": "11478284",
+      "tax": 117179385,
+      "type": "individual"
+    },
+    {
+      "name": "ASIM SHAHZAD",
+      "regno": "36490881",
+      "tax": 106779499,
+      "type": "individual"
+    },
+    {
+      "name": "SOHAIL NISAR",
+      "regno": "01519409",
+      "tax": 105657657,
+      "type": "individual"
+    },
+    {
+      "name": "SH JHANZEB JILANI",
+      "regno": "12182354",
+      "tax": 104780291,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD MUKHLIS UR REHMAN",
+      "regno": "21512710",
+      "tax": 101102600,
+      "type": "individual"
+    },
+    {
+      "name": "ABDULLAH A. HASHWANI",
+      "regno": "08200157",
+      "tax": 100131932,
+      "type": "individual"
+    },
+    {
+      "name": "SHEIKH WAJAHAT ALI",
+      "regno": "15434508",
+      "tax": 98363593,
+      "type": "individual"
+    },
+    {
+      "name": "FARRUKH IJAZ",
+      "regno": "25726846",
+      "tax": 96964775,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD AKRAM KHAN PANAZAI",
+      "regno": "32822863",
+      "tax": 95509632,
+      "type": "individual"
+    },
+    {
+      "name": "KHALIL A SATTAR",
+      "regno": "02891557",
+      "tax": 93288432,
+      "type": "individual"
+    },
+    {
+      "name": "IQBAL AHMAD QARSHI",
+      "regno": "02248859",
+      "tax": 84362395,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD AMEEN",
+      "regno": "17641926",
+      "tax": 83375785,
+      "type": "individual"
+    },
+    {
+      "name": "ANJUM NISAR",
+      "regno": "13391615",
+      "tax": 80983805,
+      "type": "individual"
+    },
+    {
+      "name": "ARIF HABIB",
+      "regno": "07296720",
+      "tax": 80681004,
+      "type": "individual"
+    },
+    {
+      "name": "ASIFA MALIK",
+      "regno": "06931057",
+      "tax": 80634780,
+      "type": "individual"
+    },
+    {
+      "name": "IQBAL NAEEM",
+      "regno": "12001309",
+      "tax": 78390180,
+      "type": "individual"
+    },
+    {
+      "name": "SHER MUHAMMAD MUGHERI",
+      "regno": "33977259",
+      "tax": 77243231,
+      "type": "individual"
+    },
+    {
+      "name": "SABIR HUSSAIN",
+      "regno": "12119148",
+      "tax": 75084388,
+      "type": "individual"
+    },
+    {
+      "name": "FARHAN HANIF",
+      "regno": "21344353",
+      "tax": 73142703,
+      "type": "individual"
+    },
+    {
+      "name": "ALAM KHAN",
+      "regno": "27098575",
+      "tax": 71051166,
+      "type": "individual"
+    },
+    {
+      "name": "AAMIR ZIA",
+      "regno": "35970146",
+      "tax": 68125766,
+      "type": "individual"
+    },
+    {
+      "name": "MADIHA MEHMOOD MOULVI",
+      "regno": "02913941",
+      "tax": 67582338,
+      "type": "individual"
+    },
+    {
+      "name": "FALAK SHER AWAN",
+      "regno": "12408760",
+      "tax": 66678108,
+      "type": "individual"
+    },
+    {
+      "name": "HAJI SIRAJUDDIN",
+      "regno": "02386470",
+      "tax": 66324515,
+      "type": "individual"
+    },
+    {
+      "name": "WAHID KARIM",
+      "regno": "29418232",
+      "tax": 66097971,
+      "type": "individual"
+    },
+    {
+      "name": "HUMAYUN FAROOQ",
+      "regno": "16917936",
+      "tax": 65709499,
+      "type": "individual"
+    },
+    {
+      "name": "MIAN UMER MANSHA",
+      "regno": "16825322",
+      "tax": 64828437,
+      "type": "individual"
+    },
+    {
+      "name": "ABDUL SAMAD",
+      "regno": "29372089",
+      "tax": 63628741,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD YASIN MALIK",
+      "regno": "05435803",
+      "tax": 58599486,
+      "type": "individual"
+    },
+    {
+      "name": "IQBAL ALIMOHAMED",
+      "regno": "02979292",
+      "tax": 58168344,
+      "type": "individual"
+    },
+    {
+      "name": "ALI MEHBOOB",
+      "regno": "33634874",
+      "tax": 57477619,
+      "type": "individual"
+    },
+    {
+      "name": "ALI JEHANGIR SIDDIQUI",
+      "regno": "14487845",
+      "tax": 57249652,
+      "type": "individual"
+    },
+    {
+      "name": "ASIM ASHFAQ",
+      "regno": "13332368",
+      "tax": 56993295,
+      "type": "individual"
+    },
+    {
+      "name": "SYED ABDUL MANAN",
+      "regno": "12779105",
+      "tax": 56447033,
+      "type": "individual"
+    },
+    {
+      "name": "FAZAL AHMED SHEIKH",
+      "regno": "01057880",
+      "tax": 55751010,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD SHOAIB",
+      "regno": "21249539",
+      "tax": 54717751,
+      "type": "individual"
+    },
+    {
+      "name": "RAFIUDDIN ZAKIR MAHMOOD",
+      "regno": "14351897",
+      "tax": 54312821,
+      "type": "individual"
+    },
+    {
+      "name": "FAISAL MUKHTAR",
+      "regno": "01057855",
+      "tax": 54167795,
+      "type": "individual"
+    },
+    {
+      "name": "NELOFAR SIKANDAR",
+      "regno": "02985586",
+      "tax": 53529363,
+      "type": "individual"
+    },
+    {
+      "name": "JAVED JAFAR IMAM",
+      "regno": "27539776",
+      "tax": 53359499,
+      "type": "individual"
+    },
+    {
+      "name": "QALANDER BUX ABRO",
+      "regno": "13131842",
+      "tax": 53356908,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD TEHREEM SHAMIM",
+      "regno": "15228681",
+      "tax": 53083878,
+      "type": "individual"
+    },
+    {
+      "name": "TARIQ CHOBDAR",
+      "regno": "09846786",
+      "tax": 52575479,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD ANEEQ SIDDIQUI",
+      "regno": "07877579",
+      "tax": 52488217,
+      "type": "individual"
+    },
+    {
+      "name": "S.M. ASHFAQ",
+      "regno": "02988534",
+      "tax": 52216103,
+      "type": "individual"
+    },
+    {
+      "name": "SHAHID ANSARI",
+      "regno": "01566067",
+      "tax": 52048375,
+      "type": "individual"
+    },
+    {
+      "name": "MALIK MUHAMMAD MUKARRAM",
+      "regno": "12862690",
+      "tax": 51886071,
+      "type": "individual"
+    },
+    {
+      "name": "SHUAIB ANWER MALIK",
+      "regno": "23727167",
+      "tax": 51076156,
+      "type": "individual"
+    },
+    {
+      "name": "ARPAD KONYE",
+      "regno": "38366894",
+      "tax": 49862638,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD DAWOOD",
+      "regno": "36789267",
+      "tax": 49725378,
+      "type": "individual"
+    },
+    {
+      "name": "LIAQUAT ALI GONDAL",
+      "regno": "11985917",
+      "tax": 49282666,
+      "type": "individual"
+    },
+    {
+      "name": "RABNAWAZ",
+      "regno": "11780398",
+      "tax": 48660492,
+      "type": "individual"
+    },
+    {
+      "name": "MANZOOR HUSSAIN",
+      "regno": "09035237",
+      "tax": 47612252,
+      "type": "individual"
+    },
+    {
+      "name": "MUHUKUM UDDIN SOLANGI",
+      "regno": "30151309",
+      "tax": 46964804,
+      "type": "individual"
+    },
+    {
+      "name": "SABIHA KHATOON",
+      "regno": "23409924",
+      "tax": 46668733,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD RIAZ",
+      "regno": "06705405",
+      "tax": 45463685,
+      "type": "individual"
+    },
+    {
+      "name": "MOHAMMAD SALEEM",
+      "regno": "10039066",
+      "tax": 44922249,
+      "type": "individual"
+    },
+    {
+      "name": "ABDUL JABBAR",
+      "regno": "05106915",
+      "tax": 44674656,
+      "type": "individual"
+    },
+    {
+      "name": "WAQAR A. MALIK",
+      "regno": "01935933",
+      "tax": 44415066,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD WARIS PANHWAR",
+      "regno": "07870957",
+      "tax": 44344256,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD AKBAR SHEIKH",
+      "regno": "01924547",
+      "tax": 44289527,
+      "type": "individual"
+    },
+    {
+      "name": "EJAZ AHMED DOGAR",
+      "regno": "12674699",
+      "tax": 43709625,
+      "type": "individual"
+    },
+    {
+      "name": "SYED BABAR ALI",
+      "regno": "08993432",
+      "tax": 43505178,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD TARIQ BUTT",
+      "regno": "16510387",
+      "tax": 42422376,
+      "type": "individual"
+    },
+    {
+      "name": "UZAIR SABOOR",
+      "regno": "12797936",
+      "tax": 41266844,
+      "type": "individual"
+    },
+    {
+      "name": "AFTAB FAIZULLAH TAPAL",
+      "regno": "02958996",
+      "tax": 40097924,
+      "type": "individual"
+    },
+    {
+      "name": "SABZ ALI",
+      "regno": "24504564",
+      "tax": 39793113,
+      "type": "individual"
+    },
+    {
+      "name": "PERVAIZ AFZAL KHAN",
+      "regno": "12381004",
+      "tax": 39578741,
+      "type": "individual"
+    },
+    {
+      "name": "NAEEM ALI MUHAMMAD MUNSHI",
+      "regno": "02312395",
+      "tax": 38927581,
+      "type": "individual"
+    },
+    {
+      "name": "MOHAMMAD ANWAR PERVEZ",
+      "regno": "12875694",
+      "tax": 38733282,
+      "type": "individual"
+    },
+    {
+      "name": "NISAR AHMED DOGAR",
+      "regno": "16081234",
+      "tax": 38563185,
+      "type": "individual"
+    },
+    {
+      "name": "AMIN MUHAMMAD LAKHANI",
+      "regno": "06861217",
+      "tax": 38517189,
+      "type": "individual"
+    },
+    {
+      "name": "MIAN MOHAMMAD JAHANGIR",
+      "regno": "15615375",
+      "tax": 37834401,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD USMAN",
+      "regno": "32849095",
+      "tax": 37529538,
+      "type": "individual"
+    },
+    {
+      "name": "SAIFULLAH MANGAT",
+      "regno": "21297908",
+      "tax": 37463832,
+      "type": "individual"
+    },
+    {
+      "name": "MUHAMMAD ATIF BUTT",
+      "regno": "12775947",
+      "tax": 37328546,
+      "type": "individual"
+    },
+    {
+      "name": "DILAWAR HUSSAIN",
+      "regno": "06771726",
+      "tax": 37166425,
+      "type": "individual"
+    },
+    {
+      "name": "SYED JALEEL UR REHMAN",
+      "regno": "31777917",
+      "tax": 37095900,
+      "type": "individual"
+    },
+    {
+      "name": "MOHAMMAD UMAIR KARA",
+      "regno": "33578460",
+      "tax": 36898227,
+      "type": "individual"
+    },
+    {
+      "name": "SAIMA SHAB MALIK",
+      "regno": "05435722",
+      "tax": 36638766,
+      "type": "individual"
+    },
+    {
+      "name": "AHMAD GHEZAL USMANI",
+      "regno": "06878156",
+      "tax": 36181766,
+      "type": "individual"
+    },
+    {
+      "name": "ATIF BAJWA",
+      "regno": "01906534",
+      "tax": 36020888,
+      "type": "individual"
+    },
+    {
+      "name": "ABDUL WAHEED SHAIKH",
+      "regno": "02707152",
+      "tax": 35700855,
+      "type": "individual"
+    },
+    {
+      "name": "ZEESHAN ARSHAD",
+      "regno": "23431806",
+      "tax": 35540911,
+      "type": "individual"
+    },
+    {
+      "name": "AMMIL RAZA MANSHA",
+      "regno": "15511316",
+      "tax": 35521875,
+      "type": "individual"
+    }
+  ],
+  "top_all": [
+    {
+      "name": "OIL AND GAS DEVELOPMENT COMPANY LIMITED",
+      "regno": "07872232",
+      "tax": 36963745646,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN PETROLEUM LIMITED",
+      "regno": "07115458",
+      "tax": 15404269282,
+      "type": "company"
+    },
+    {
+      "name": "HABIB BANK LIMITED",
+      "regno": "06981879",
+      "tax": 11786705153,
+      "type": "company"
+    },
+    {
+      "name": "GOVERNMENT HOLDINGS (PRIVATE) LIMITED",
+      "regno": "12186694",
+      "tax": 10756321121,
+      "type": "company"
+    },
+    {
+      "name": "FAUJI FERTILIZER COMPANY LIMITED",
+      "regno": "14358093",
+      "tax": 9898049256,
+      "type": "company"
+    },
+    {
+      "name": "MUSLIM COMMERCIAL BANK LIMITED",
+      "regno": "07002670",
+      "tax": 9589120400,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN STATE OIL COMPANY LIMITED",
+      "regno": "07115547",
+      "tax": 7946259287,
+      "type": "company"
+    },
+    {
+      "name": "UNITED BANK LIMITED",
+      "regno": "08011648",
+      "tax": 6588129067,
+      "type": "company"
+    },
+    {
+      "name": "PAK-ARAB REFINERY LIMITED",
+      "regno": "08014353",
+      "tax": 6213915419,
+      "type": "company"
+    },
+    {
+      "name": "ENI PAKISTAN LIMITED",
+      "regno": "08234147",
+      "tax": 5145178569,
+      "type": "company"
+    },
+    {
+      "name": "CIVIL AVIATION AUTHORITY",
+      "regno": "19458266",
+      "tax": 5100197646,
+      "type": "company"
+    },
+    {
+      "name": "NATIONAL BANK OF PAKISTAN",
+      "regno": "07002718",
+      "tax": 4486609700,
+      "type": "company"
+    },
+    {
+      "name": "KOT ADDU POWER COMPANY LIMITED",
+      "regno": "07080107",
+      "tax": 3916656945,
+      "type": "company"
+    },
+    {
+      "name": "BHP PETROLEUM PAKISTAN PTY LIMITED",
+      "regno": "15052028",
+      "tax": 3456964686,
+      "type": "company"
+    },
+    {
+      "name": "ALLIED BANK OF PAKISTAN LIMITED",
+      "regno": "08014287",
+      "tax": 3358099795,
+      "type": "company"
+    },
+    {
+      "name": "BANK AL HABIB LIMITED",
+      "regno": "07098570",
+      "tax": 3197816366,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN TELECOMMUNICATION AUTHORITY",
+      "regno": "26349221",
+      "tax": 3140132933,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN OILFIELDS LIMITED",
+      "regno": "06576583",
+      "tax": 2739043233,
+      "type": "company"
+    },
+    {
+      "name": "KIRTHAR PAKISTAN B. V.",
+      "regno": "07121202",
+      "tax": 2682810578,
+      "type": "company"
+    },
+    {
+      "name": "UNILEVER PAKISTAN LIMITED",
+      "regno": "09127259",
+      "tax": 2353785690,
+      "type": "company"
+    },
+    {
+      "name": "HABIB METROPOLITAN BANK LIMITED",
+      "regno": "07111673",
+      "tax": 2209280571,
+      "type": "company"
+    },
+    {
+      "name": "PEPSI-COLA INTERNATIONAL (PRIVATE) LIMITED",
+      "regno": "07116314",
+      "tax": 2175666033,
+      "type": "company"
+    },
+    {
+      "name": "ENI PAKISTAN (M) LIMITED S.A.R.L",
+      "regno": "16894618",
+      "tax": 2139436878,
+      "type": "company"
+    },
+    {
+      "name": "STANDARD CHARTERED BANK (PAKISTAN) LIMITED",
+      "regno": "27311341",
+      "tax": 2050011450,
+      "type": "company"
+    },
+    {
+      "name": "FAUJI FERTILIZER BIN QASIM LIMITED",
+      "regno": "06572979",
+      "tax": 2046773876,
+      "type": "company"
+    },
+    {
+      "name": "UNITED ENERGY PAKISTAN LIMITED",
+      "regno": "37927469",
+      "tax": 1876002340,
+      "type": "company"
+    },
+    {
+      "name": "INDUS MOTOR COMPANY LIMITED",
+      "regno": "06765467",
+      "tax": 1822993007,
+      "type": "company"
+    },
+    {
+      "name": "ENI AEP LIMITED",
+      "regno": "16894600",
+      "tax": 1728376093,
+      "type": "company"
+    },
+    {
+      "name": "ATTOCK PETROLEUM LIMITED",
+      "regno": "09445447",
+      "tax": 1659963223,
+      "type": "company"
+    },
+    {
+      "name": "MARI PETROLEUM COMPANY LIMITED",
+      "regno": "14146738",
+      "tax": 1616940173,
+      "type": "company"
+    },
+    {
+      "name": "BANK ALFALAH LIMITED",
+      "regno": "06982026",
+      "tax": 1539981471,
+      "type": "company"
+    },
+    {
+      "name": "NESTLE PAKISTAN LIMITED",
+      "regno": "02258625",
+      "tax": 1498936479,
+      "type": "company"
+    },
+    {
+      "name": "MEEZAN BANK LIMITED",
+      "regno": "07872267",
+      "tax": 1427078960,
+      "type": "company"
+    },
+    {
+      "name": "ZARAI TARAQIATI BANK LIMITED",
+      "regno": "25670689",
+      "tax": 1414868346,
+      "type": "company"
+    },
+    {
+      "name": "OMV (PAKISTAN) EXPLORATION GESELLSCHAFT M.B.H.",
+      "regno": "07869118",
+      "tax": 1385103872,
+      "type": "company"
+    },
+    {
+      "name": "PKP EXPLORATION 2 LIMITED",
+      "regno": "30364426",
+      "tax": 1294291629,
+      "type": "company"
+    },
+    {
+      "name": "QASIM INTERNATIONAL CONTAINER TERMINAL PAKISTAN LIMITED",
+      "regno": "08236496",
+      "tax": 1293414906,
+      "type": "company"
+    },
+    {
+      "name": "CHEVRON PAKISTAN LIMITED",
+      "regno": "07869045",
+      "tax": 1231140751,
+      "type": "company"
+    },
+    {
+      "name": "PKP EXPLORATION LIMITED",
+      "regno": "06570909",
+      "tax": 1168372650,
+      "type": "company"
+    },
+    {
+      "name": "KARACHI INTERNATIONAL CONTAINER TERMINAL LIMITED",
+      "regno": "08035385",
+      "tax": 1162191804,
+      "type": "company"
+    },
+    {
+      "name": "FAUJI FOUNDATION",
+      "regno": "07103972",
+      "tax": 1094064396,
+      "type": "company"
+    },
+    {
+      "name": "SHELL PAKISTAN LIMITED",
+      "regno": "08041431",
+      "tax": 1085084121,
+      "type": "company"
+    },
+    {
+      "name": "NATIONAL REFINERY LIMITED",
+      "regno": "07113257",
+      "tax": 1065977142,
+      "type": "company"
+    },
+    {
+      "name": "MILLAT TRACTORS LIMITED",
+      "regno": "08014370",
+      "tax": 1043149828,
+      "type": "company"
+    },
+    {
+      "name": "TAPAL TEA (PRIVATE) LIMITED",
+      "regno": "07123317",
+      "tax": 1025292744,
+      "type": "company"
+    },
+    {
+      "name": "AL GHAZI TRACTORS LIMITED",
+      "regno": "07095074",
+      "tax": 960833557,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN SECURITY PRINTING CORPORATION (PRIVATE) LIMITED",
+      "regno": "07114923",
+      "tax": 960367365,
+      "type": "company"
+    },
+    {
+      "name": "PKP KIRTHAR 2 B.V",
+      "regno": "29715628",
+      "tax": 950543986,
+      "type": "company"
+    },
+    {
+      "name": "ABBOTT LABORATORIES PAKISTAN LIMITED",
+      "regno": "13475614",
+      "tax": 895030776,
+      "type": "company"
+    },
+    {
+      "name": "RAFHAN MAIZE PRODUCTS COMPANY LIMITED",
+      "regno": "07117957",
+      "tax": 876938659,
+      "type": "company"
+    },
+    {
+      "name": "THE ATTOCK OIL COMPANY LIMITED",
+      "regno": "08003548",
+      "tax": 857052275,
+      "type": "company"
+    },
+    {
+      "name": "PKP KADANWARI 2 LIMITED",
+      "regno": "16917243",
+      "tax": 818143871,
+      "type": "company"
+    },
+    {
+      "name": "PRESSON DESCON INTERNATIONAL (PRIVATE) LIMITED",
+      "regno": "14843536",
+      "tax": 807783382,
+      "type": "company"
+    },
+    {
+      "name": "ASKARI BANK LIMITED",
+      "regno": "07090455",
+      "tax": 769993779,
+      "type": "company"
+    },
+    {
+      "name": "IRFAN USMAN",
+      "regno": "14092131",
+      "tax": 749008253,
+      "type": "individual"
+    },
+    {
+      "name": "COLGATE-PALMOLIVE (PAKISTAN) LIMITED",
+      "regno": "07100604",
+      "tax": 738675258,
+      "type": "company"
+    },
+    {
+      "name": "PROCTER & GAMBLE PAKISTAN (PRIVATE) LIMITED",
+      "regno": "07117345",
+      "tax": 669685838,
+      "type": "company"
+    },
+    {
+      "name": "NISHAT MILLS LIMITED",
+      "regno": "21806527",
+      "tax": 668373334,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN REFINERY LIMITED",
+      "regno": "08913404",
+      "tax": 662120349,
+      "type": "company"
+    },
+    {
+      "name": "DESCON ENGINEERING LIMITED",
+      "regno": "08035261",
+      "tax": 660231773,
+      "type": "company"
+    },
+    {
+      "name": "PKP KIRTHAR B. V.",
+      "regno": "15284514",
+      "tax": 651803541,
+      "type": "company"
+    },
+    {
+      "name": "KHADIJA EDIBLE OIL REFINERY PRIVATE LIMITED",
+      "regno": "26615533",
+      "tax": 648397015,
+      "type": "company"
+    },
+    {
+      "name": "GLAXO SMITHKLINE PAKISTAN LIMITED",
+      "regno": "07105017",
+      "tax": 640940231,
+      "type": "company"
+    },
+    {
+      "name": "HUAWEI TECHNOLOGIES PAKISTAN (PRIVATE) LIMITED",
+      "regno": "14179598",
+      "tax": 637939012,
+      "type": "company"
+    },
+    {
+      "name": "PEPSICO INVESTMENTS EUROPE I.B.V",
+      "regno": "30443474",
+      "tax": 626847327,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN TOBACCO COMPANY LIMITED",
+      "regno": "07128215",
+      "tax": 613558083,
+      "type": "company"
+    },
+    {
+      "name": "KUFPEC (PAKISTAN) B.V",
+      "regno": "07099592",
+      "tax": 606366866,
+      "type": "company"
+    },
+    {
+      "name": "THAL LIMITED",
+      "regno": "07110103",
+      "tax": 604025223,
+      "type": "company"
+    },
+    {
+      "name": "LUCKY CEMENT LIMITED",
+      "regno": "00098078",
+      "tax": 593207938,
+      "type": "company"
+    },
+    {
+      "name": "MOL PAKISTAN OIL & GAS COMPANY B. V.",
+      "regno": "19389299",
+      "tax": 581818532,
+      "type": "company"
+    },
+    {
+      "name": "PKP KADANWARI LIMITED",
+      "regno": "16894464",
+      "tax": 563813985,
+      "type": "company"
+    },
+    {
+      "name": "GETZ PHARMA (PRIVATE) LIMITTED",
+      "regno": "07119534",
+      "tax": 555996520,
+      "type": "company"
+    },
+    {
+      "name": "ATTOCK CEMENT PAKISTAN LIMITED",
+      "regno": "07097786",
+      "tax": 555898652,
+      "type": "company"
+    },
+    {
+      "name": "DAWLANCE ELECTRONICS (PRIVATE) LIMITED",
+      "regno": "21396108",
+      "tax": 554129798,
+      "type": "company"
+    },
+    {
+      "name": "ENGRO EXIMP (PRIVATE) LIMITED",
+      "regno": "15131351",
+      "tax": 544204927,
+      "type": "company"
+    },
+    {
+      "name": "EDUCATIONAL SERVICES (PRIVATE) LIMITED",
+      "regno": "07861583",
+      "tax": 531655881,
+      "type": "company"
+    },
+    {
+      "name": "THE COCA-COLA EXPORT CORPORATION",
+      "regno": "02241528",
+      "tax": 524887388,
+      "type": "company"
+    },
+    {
+      "name": "PAK SUZUKI MOTOR CO. LIMITED",
+      "regno": "07128371",
+      "tax": 513605147,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN MOBILE COMMUNICATIONS LIMITED",
+      "regno": "08026947",
+      "tax": 509356994,
+      "type": "company"
+    },
+    {
+      "name": "UNILEVER OVERSEAS HOLDING LIMITED",
+      "regno": "08605757",
+      "tax": 500555433,
+      "type": "company"
+    },
+    {
+      "name": "LTHJV",
+      "regno": "34199284",
+      "tax": 496882503,
+      "type": "aop"
+    },
+    {
+      "name": "ATLAS HONDA LIMITED",
+      "regno": "08010633",
+      "tax": 494413732,
+      "type": "company"
+    },
+    {
+      "name": "EFU LIFE ASSURANCE LIMITED",
+      "regno": "09448942",
+      "tax": 477548482,
+      "type": "company"
+    },
+    {
+      "name": "UNITED REFRIGERATION INDUSTRIES LIMITED",
+      "regno": "07866003",
+      "tax": 476091352,
+      "type": "company"
+    },
+    {
+      "name": "UNITED AGRO CHEMICAL",
+      "regno": "11587440",
+      "tax": 464893376,
+      "type": "aop"
+    },
+    {
+      "name": "CARGILL PAKISTAN AGRI FOODS (PRIVATE) LIMITED",
+      "regno": "39999041",
+      "tax": 455658203,
+      "type": "company"
+    },
+    {
+      "name": "NOVARTIS PHARMA (PAKISTAN) LIMITED",
+      "regno": "07119828",
+      "tax": 445673972,
+      "type": "company"
+    },
+    {
+      "name": "MAPAK EDIBLE OILS (PRIVATE) LIMITED",
+      "regno": "08170185",
+      "tax": 441570357,
+      "type": "company"
+    },
+    {
+      "name": "TRADING CORPORATION OF PAKISTAN (PRIVATE) LIMITED",
+      "regno": "07124465",
+      "tax": 434844350,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN SERVICES LIMITED",
+      "regno": "08229104",
+      "tax": 428731650,
+      "type": "company"
+    },
+    {
+      "name": "TELENOR PAKISTAN (PRIVATE) LIMITED",
+      "regno": "20460040",
+      "tax": 427579061,
+      "type": "company"
+    },
+    {
+      "name": "LIMAK JV ZKB",
+      "regno": "31340636",
+      "tax": 424226717,
+      "type": "aop"
+    },
+    {
+      "name": "MUSTAFA HUMAEE",
+      "regno": "02590999",
+      "tax": 423039499,
+      "type": "individual"
+    },
+    {
+      "name": "RECKITT BENCKISER PAKISTAN LIMITED",
+      "regno": "08237786",
+      "tax": 421977892,
+      "type": "company"
+    },
+    {
+      "name": "STATE LIFE INSURANCE CORPORATION OF PAKISTAN",
+      "regno": "07122276",
+      "tax": 410727775,
+      "type": "company"
+    },
+    {
+      "name": "SITARA CHEMICAL INDUSTRIES LIMITED",
+      "regno": "08238413",
+      "tax": 404910290,
+      "type": "company"
+    },
+    {
+      "name": "HABIB CONSTRUCTION SERVICES (PRIVATE) LIMITED",
+      "regno": "32370539",
+      "tax": 403495849,
+      "type": "company"
+    },
+    {
+      "name": "MURREE BREWERY COMPANY LIMITED",
+      "regno": "07869096",
+      "tax": 401342406,
+      "type": "company"
+    },
+    {
+      "name": "PAKISTAN INTERNATIONAL CONTAINER TERMINAL LIMITED",
+      "regno": "14255600",
+      "tax": 397552545,
+      "type": "company"
+    },
+    {
+      "name": "THE BANK OF KHYBER",
+      "regno": "00000922",
+      "tax": 396640829,
+      "type": "company"
+    }
+  ]
+}
