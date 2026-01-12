@@ -11,9 +11,9 @@ year_suffix = f"_{year}"
 print(f"Creating Parquet files from CSV using DuckDB (Year: {year})...")
 
 files_to_convert = [
-    ("companies", f"data/{year}/companies.csv", f"data/{year}/companies.parquet"),
-    ("aop", f"data/{year}/aop.csv", f"data/{year}/aop.parquet"),
-    ("individuals", f"data/{year}/individuals.csv", f"data/{year}/individuals.parquet"),
+    ("companies", f"docs/data/{year}/companies.csv", f"docs/data/{year}/companies.parquet"),
+    ("aop", f"docs/data/{year}/aop.csv", f"docs/data/{year}/aop.parquet"),
+    ("individuals", f"docs/data/{year}/individuals.csv", f"docs/data/{year}/individuals.parquet"),
 ]
 
 conn = duckdb.connect(":memory:")
@@ -21,8 +21,8 @@ conn = duckdb.connect(":memory:")
 for name, csv_file, parquet_file in files_to_convert:
     print(f"Converting {csv_file} to {parquet_file}...")
 
-    # Read CSV and write to Parquet
-    df = conn.read_csv(csv_file)
+    # Read CSV and write to Parquet (with null_padding for rows with missing columns)
+    df = conn.read_csv(csv_file, null_padding=True)
     record_count = len(df)
     df.write_parquet(parquet_file)
 
