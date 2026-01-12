@@ -318,6 +318,99 @@
                 color: #0f4c81;
                 text-decoration: none;
             }
+
+            .tabs {
+                background: white;
+                padding: 0;
+                border-radius: 8px 8px 0 0;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 0;
+                display: flex;
+                overflow: hidden;
+            }
+
+            .tab-button {
+                flex: 1;
+                padding: 1rem 1.5rem;
+                background: #f5f5f5;
+                border: none;
+                border-bottom: 3px solid transparent;
+                cursor: pointer;
+                font-size: 1rem;
+                font-weight: 500;
+                color: #666;
+                transition: all 0.3s;
+            }
+
+            .tab-button:hover {
+                background: #e8f4f8;
+                color: #0f4c81;
+            }
+
+            .tab-button.active {
+                background: white;
+                color: #0f4c81;
+                border-bottom-color: #0f4c81;
+            }
+
+            .tab-content {
+                display: none;
+            }
+
+            .tab-content.active {
+                display: block;
+            }
+
+            .lookup-box {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 0 0 8px 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+            }
+
+            .lookup-box h2 {
+                color: #0f4c81;
+                margin-bottom: 1rem;
+            }
+
+            .input-group {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .input-group input {
+                flex: 1;
+                padding: 0.75rem;
+                border: 2px solid #ddd;
+                border-radius: 4px;
+                font-size: 1rem;
+            }
+
+            .input-group input:focus {
+                outline: none;
+                border-color: #0f4c81;
+            }
+
+            .lookup-info {
+                background: #f8f9fa;
+                padding: 1rem;
+                border-radius: 4px;
+                margin-bottom: 1rem;
+                font-size: 0.9rem;
+                color: #666;
+            }
+
+            .entity-section {
+                margin-bottom: 1.5rem;
+            }
+
+            .entity-section h4 {
+                color: #0f4c81;
+                margin-bottom: 0.5rem;
+                font-size: 1rem;
+            }
         </style>
     </head>
     <body>
@@ -331,146 +424,178 @@
 
         <div class="container">
             <div class="left-panel">
-                <div class="file-selector">
-                    <h3>Select Parquet Files to Load</h3>
-                    <div class="file-options">
-                        <div class="file-option">
-                            <input
-                                type="checkbox"
-                                id="file-companies"
-                                checked
-                                onchange="updateLoadButton()"
-                            />
-                            <label for="file-companies" style="flex: 0 0 auto; min-width: 100px;">
-                                <div>Companies</div>
-                            </label>
-                            <select id="year-companies" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
-                                <option value="2018">2018</option>
-                                <option value="2017">2017</option>
-                                <option value="2016">2016</option>
-                                <option value="2015">2015</option>
-                                <option value="2014">2014</option>
-                                <option value="2013">2013</option>
-                            </select>
-                            <span
-                                id="status-companies"
-                                class="file-status"
-                                style="display: none"
-                            ></span>
-                        </div>
-                        <div class="file-option">
-                            <input
-                                type="checkbox"
-                                id="file-aop"
-                                checked
-                                onchange="updateLoadButton()"
-                            />
-                            <label for="file-aop" style="flex: 0 0 auto; min-width: 100px;">
-                                <div>AOP</div>
-                            </label>
-                            <select id="year-aop" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
-                                <option value="2018">2018</option>
-                                <option value="2017">2017</option>
-                                <option value="2016">2016</option>
-                                <option value="2015">2015</option>
-                                <option value="2014">2014</option>
-                                <option value="2013">2013</option>
-                            </select>
-                            <span
-                                id="status-aop"
-                                class="file-status"
-                                style="display: none"
-                            ></span>
-                        </div>
-                        <div class="file-option">
-                            <input
-                                type="checkbox"
-                                id="file-individuals"
-                                checked
-                                onchange="updateLoadButton()"
-                            />
-                            <label for="file-individuals" style="flex: 0 0 auto; min-width: 100px;">
-                                <div>Individuals</div>
-                            </label>
-                            <select id="year-individuals" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
-                                <option value="2018">2018</option>
-                                <option value="2017">2017</option>
-                                <option value="2016">2016</option>
-                                <option value="2015">2015</option>
-                                <option value="2014">2014</option>
-                                <option value="2013">2013</option>
-                            </select>
-                            <span
-                                id="status-individuals"
-                                class="file-status"
-                                style="display: none"
-                            ></span>
-                        </div>
-                    </div>
-                    <button
-                        class="primary"
-                        onclick="loadSelectedFiles()"
-                        id="loadBtn"
-                    >
-                        Load Selected Files
-                    </button>
+                <div class="tabs">
+                    <button class="tab-button active" onclick="switchTab('sql')">SQL Query</button>
+                    <button class="tab-button" onclick="switchTab('lookup')">NTN/CNIC Lookup</button>
                 </div>
 
-                <div class="query-box">
-                    <h2>SQL Query</h2>
-                    <div class="button-group" style="margin-bottom: 1rem">
-                        <span id="status" class="status loading"
-                            >Initializing database...</span
-                        >
-                    </div>
-                    <textarea
-                        id="sqlQuery"
-                        placeholder="Enter your SQL query here..."
-                    >
-SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
-                    >
-                    <div class="button-group">
+                <div id="sql-tab" class="tab-content active">
+                    <div class="file-selector">
+                        <h3>Select Parquet Files to Load</h3>
+                        <div class="file-options">
+                            <div class="file-option">
+                                <input
+                                    type="checkbox"
+                                    id="file-companies"
+                                    checked
+                                    onchange="updateLoadButton()"
+                                />
+                                <label for="file-companies" style="flex: 0 0 auto; min-width: 100px;">
+                                    <div>Companies</div>
+                                </label>
+                                <select id="year-companies" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                    <option value="2018">2018</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2014">2014</option>
+                                    <option value="2013">2013</option>
+                                </select>
+                                <span
+                                    id="status-companies"
+                                    class="file-status"
+                                    style="display: none"
+                                ></span>
+                            </div>
+                            <div class="file-option">
+                                <input
+                                    type="checkbox"
+                                    id="file-aop"
+                                    checked
+                                    onchange="updateLoadButton()"
+                                />
+                                <label for="file-aop" style="flex: 0 0 auto; min-width: 100px;">
+                                    <div>AOP</div>
+                                </label>
+                                <select id="year-aop" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                    <option value="2018">2018</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2014">2014</option>
+                                    <option value="2013">2013</option>
+                                </select>
+                                <span
+                                    id="status-aop"
+                                    class="file-status"
+                                    style="display: none"
+                                ></span>
+                            </div>
+                            <div class="file-option">
+                                <input
+                                    type="checkbox"
+                                    id="file-individuals"
+                                    checked
+                                    onchange="updateLoadButton()"
+                                />
+                                <label for="file-individuals" style="flex: 0 0 auto; min-width: 100px;">
+                                    <div>Individuals</div>
+                                </label>
+                                <select id="year-individuals" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                    <option value="2018">2018</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2014">2014</option>
+                                    <option value="2013">2013</option>
+                                </select>
+                                <span
+                                    id="status-individuals"
+                                    class="file-status"
+                                    style="display: none"
+                                ></span>
+                            </div>
+                        </div>
                         <button
                             class="primary"
-                            onclick="runQuery()"
-                            id="runBtn"
-                            disabled
+                            onclick="loadSelectedFiles()"
+                            id="loadBtn"
                         >
-                            Run Query
+                            Load Selected Files
                         </button>
-                        <button class="secondary" onclick="clearResults()">
-                            Clear Results
-                        </button>
+                    </div>
+
+                    <div class="query-box">
+                        <h2>SQL Query</h2>
+                        <div class="button-group" style="margin-bottom: 1rem">
+                            <span id="status" class="status loading"
+                                >Initializing database...</span
+                            >
+                        </div>
+                        <textarea
+                            id="sqlQuery"
+                            placeholder="Enter your SQL query here..."
+                        >
+SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
+                        >
+                        <div class="button-group">
+                            <button
+                                class="primary"
+                                onclick="runQuery()"
+                                id="runBtn"
+                                disabled
+                            >
+                                Run Query
+                            </button>
+                            <button class="secondary" onclick="clearResults()">
+                                Clear Results
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="examples">
+                        <h3>Example Queries (click to load)</h3>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM aop_2018 ORDER BY tax_paid DESC LIMIT 10
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM individuals_2018 ORDER BY tax_paid DESC LIMIT 10
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT COUNT(*), SUM(tax_paid) as total_tax FROM companies_2018
+                            WHERE tax_paid > 0
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM companies_2018 WHERE name LIKE '%BANK%' ORDER BY
+                            tax_paid DESC LIMIT 20
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM individuals_2018 WHERE name LIKE '%MUHAMMAD%' ORDER
+                            BY tax_paid DESC LIMIT 20
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM companies_2013
+                            UNION ALL SELECT * FROM companies_2014
+                            ORDER BY tax_paid DESC LIMIT 20
+                        </div>
                     </div>
                 </div>
 
-                <div class="examples">
-                    <h3>Example Queries (click to load)</h3>
-                    <div class="example-query" onclick="loadExample(this)">
-                        SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10
-                    </div>
-                    <div class="example-query" onclick="loadExample(this)">
-                        SELECT * FROM aop_2018 ORDER BY tax_paid DESC LIMIT 10
-                    </div>
-                    <div class="example-query" onclick="loadExample(this)">
-                        SELECT * FROM individuals_2018 ORDER BY tax_paid DESC LIMIT 10
-                    </div>
-                    <div class="example-query" onclick="loadExample(this)">
-                        SELECT COUNT(*), SUM(tax_paid) as total_tax FROM companies_2018
-                        WHERE tax_paid > 0
-                    </div>
-                    <div class="example-query" onclick="loadExample(this)">
-                        SELECT * FROM companies_2018 WHERE name LIKE '%BANK%' ORDER BY
-                        tax_paid DESC LIMIT 20
-                    </div>
-                    <div class="example-query" onclick="loadExample(this)">
-                        SELECT * FROM individuals_2018 WHERE name LIKE '%MUHAMMAD%' ORDER
-                        BY tax_paid DESC LIMIT 20
-                    </div>
-                    <div class="example-query" onclick="loadExample(this)">
-                        SELECT * FROM companies_2013
-                        UNION ALL SELECT * FROM companies_2014
-                        ORDER BY tax_paid DESC LIMIT 20
+                <div id="lookup-tab" class="tab-content">
+                    <div class="lookup-box">
+                        <h2>NTN/CNIC Lookup</h2>
+                        <div class="button-group" style="margin-bottom: 1rem">
+                            <span id="status-lookup" class="status loading"
+                                >Initializing database...</span
+                            >
+                        </div>
+                        <div class="lookup-info">
+                            Enter an NTN or CNIC to search across all years (2013-2018) and entity types. This uses HTTP range requests to query remote files without downloading them entirely.
+                        </div>
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                id="idInput"
+                                placeholder="Enter NTN (7-8 digits) or CNIC (13 digits)"
+                                onkeypress="if(event.key === 'Enter') lookupId()"
+                            />
+                            <button class="primary" onclick="lookupId()" id="lookupBtn" disabled>
+                                Lookup
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -509,9 +634,11 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
 
             async function initDB() {
                 const status = document.getElementById("status");
+                const statusLookup = document.getElementById("status-lookup");
 
                 try {
                     status.textContent = "Loading DuckDB-WASM...";
+                    statusLookup.textContent = "Loading DuckDB-WASM...";
 
                     const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
                     const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
@@ -530,9 +657,14 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
 
                     status.textContent = "Database ready";
                     status.className = "status ready";
+                    statusLookup.textContent = "Database ready";
+                    statusLookup.className = "status ready";
+                    document.getElementById("lookupBtn").disabled = false;
                 } catch (error) {
                     status.textContent = "Error initializing database";
                     status.className = "status error";
+                    statusLookup.textContent = "Error initializing database";
+                    statusLookup.className = "status error";
                     console.error("Error initializing DuckDB:", error);
                     document.getElementById("results").innerHTML =
                         `<div class="error">Error: ${error.message}</div>`;
@@ -683,6 +815,109 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                 document.getElementById("resultsInfo").textContent = "";
                 document.getElementById("resultsTable").innerHTML =
                     '<p style="color: #666; padding: 2rem; text-align: center;">Run a query to see results</p>';
+            };
+
+            window.switchTab = function (tabName) {
+                const tabs = document.querySelectorAll('.tab-button');
+                const contents = document.querySelectorAll('.tab-content');
+
+                tabs.forEach(tab => tab.classList.remove('active'));
+                contents.forEach(content => content.classList.remove('active'));
+
+                event.target.classList.add('active');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            };
+
+            window.lookupId = async function () {
+                const idValue = document.getElementById("idInput").value.trim();
+                if (!idValue || !conn) return;
+
+                const resultsInfo = document.getElementById("resultsInfo");
+                const resultsTable = document.getElementById("resultsTable");
+
+                resultsTable.innerHTML = '<div class="loading">Searching across all files...</div>';
+                resultsInfo.textContent = "";
+
+                try {
+                    const startTime = performance.now();
+                    const baseUrl = 'https://old.hashirsafdar.com/pakistan-taxpayer/data';
+                    const years = [2018, 2017, 2016, 2015, 2014, 2013];
+
+                    let queries = [];
+
+                    for (const year of years) {
+                        queries.push(`
+                            SELECT ${year} as year, 'Company' as entity_type, name, ntn as id, tax_paid
+                            FROM '${baseUrl}/${year}/companies.parquet'
+                            WHERE ntn = '${idValue}'
+                        `);
+
+                        queries.push(`
+                            SELECT ${year} as year, 'AOP' as entity_type, name, ntn as id, tax_paid
+                            FROM '${baseUrl}/${year}/aop.parquet'
+                            WHERE ntn = '${idValue}'
+                        `);
+
+                        if (year === 2013) {
+                            queries.push(`
+                                SELECT ${year} as year, 'Individual' as entity_type, name, ntn as id, tax_paid
+                                FROM '${baseUrl}/${year}/individuals.parquet'
+                                WHERE ntn = '${idValue}'
+                            `);
+                        } else {
+                            queries.push(`
+                                SELECT ${year} as year, 'Individual' as entity_type, name, cnic as id, tax_paid
+                                FROM '${baseUrl}/${year}/individuals.parquet'
+                                WHERE cnic = '${idValue}'
+                            `);
+                        }
+                    }
+
+                    const fullQuery = queries.join(' UNION ALL ') + ' ORDER BY year DESC, entity_type';
+
+                    const result = await conn.query(fullQuery);
+                    const endTime = performance.now();
+                    const rows = result.toArray();
+
+                    resultsInfo.textContent = `${rows.length} record(s) found in ${(endTime - startTime).toFixed(2)}ms`;
+
+                    if (rows.length === 0) {
+                        resultsTable.innerHTML = "<p>No records found for this NTN/CNIC.</p>";
+                        return;
+                    }
+
+                    let html = '<div>';
+
+                    const groupedByEntity = {};
+                    rows.forEach(row => {
+                        if (!groupedByEntity[row.entity_type]) {
+                            groupedByEntity[row.entity_type] = [];
+                        }
+                        groupedByEntity[row.entity_type].push(row);
+                    });
+
+                    for (const [entityType, records] of Object.entries(groupedByEntity)) {
+                        html += `<div class="entity-section">`;
+                        html += `<h4>${entityType} Records</h4>`;
+                        html += `<table><thead><tr><th>Year</th><th>Name</th><th>ID</th><th>Tax Paid</th></tr></thead><tbody>`;
+
+                        records.forEach(row => {
+                            html += `<tr>`;
+                            html += `<td>${row.year}</td>`;
+                            html += `<td>${row.name}</td>`;
+                            html += `<td>${row.id}</td>`;
+                            html += `<td>${row.tax_paid.toLocaleString()}</td>`;
+                            html += `</tr>`;
+                        });
+
+                        html += `</tbody></table></div>`;
+                    }
+
+                    html += '</div>';
+                    resultsTable.innerHTML = html;
+                } catch (error) {
+                    resultsTable.innerHTML = `<div class="error">Lookup Error: ${error.message}</div>`;
+                }
             };
 
             initDB();
