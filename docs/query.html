@@ -287,23 +287,36 @@
                 font-size: 0.85rem;
             }
 
-            .file-status {
-                display: inline-block;
-                padding: 0.25rem 0.5rem;
-                border-radius: 3px;
-                font-size: 0.75rem;
-                font-weight: 600;
-                margin-left: 0.5rem;
+            .loaded-files-list {
+                margin-top: 1rem;
+                padding: 1rem;
+                background: #f8f9fa;
+                border-radius: 4px;
+                min-height: 50px;
             }
 
-            .file-status.loaded {
-                background: #d4edda;
-                color: #155724;
+            .loaded-files-list h4 {
+                color: #0f4c81;
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
             }
 
-            .file-status.loading {
-                background: #fff3cd;
-                color: #856404;
+            .loaded-files-list ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .loaded-files-list li {
+                padding: 0.25rem 0;
+                font-size: 0.85rem;
+                color: #666;
+            }
+
+            .loaded-files-list .empty-state {
+                color: #999;
+                font-style: italic;
+                font-size: 0.85rem;
             }
 
             footer {
@@ -381,7 +394,7 @@
             }
 
             .input-group input {
-                flex: 1;
+                flex: 2;
                 padding: 0.75rem;
                 border: 2px solid #ddd;
                 border-radius: 4px;
@@ -389,6 +402,22 @@
             }
 
             .input-group input:focus {
+                outline: none;
+                border-color: #0f4c81;
+            }
+
+            .input-group select {
+                flex: 0 0 auto;
+                min-width: 120px;
+                padding: 0.75rem;
+                border: 2px solid #ddd;
+                border-radius: 4px;
+                font-size: 1rem;
+                background: white;
+                cursor: pointer;
+            }
+
+            .input-group select:focus {
                 outline: none;
                 border-color: #0f4c81;
             }
@@ -425,11 +454,41 @@
         <div class="container">
             <div class="left-panel">
                 <div class="tabs">
-                    <button class="tab-button active" onclick="switchTab('sql')">SQL Query</button>
-                    <button class="tab-button" onclick="switchTab('lookup')">NTN/CNIC Lookup</button>
+                    <button class="tab-button active" onclick="switchTab('lookup')">NTN/CNIC Lookup</button>
+                    <button class="tab-button" onclick="switchTab('sql')">SQL Query</button>
                 </div>
 
-                <div id="sql-tab" class="tab-content active">
+                <div id="lookup-tab" class="tab-content active">
+                    <div class="lookup-box">
+                        <h2>NTN/CNIC Lookup</h2>
+                        <div class="button-group" style="margin-bottom: 1rem">
+                            <span id="status-lookup" class="status loading"
+                                >Initializing database...</span
+                            >
+                        </div>
+                        <div class="lookup-info">
+                            Enter an NTN or CNIC to search across all years (2013-2018) and entity types. This uses HTTP range requests to query remote files without downloading them entirely.
+                        </div>
+                        <div class="input-group">
+                            <select id="idType">
+                                <option value="auto">Auto-detect</option>
+                                <option value="ntn">NTN</option>
+                                <option value="cnic">CNIC</option>
+                            </select>
+                            <input
+                                type="text"
+                                id="idInput"
+                                placeholder="Enter NTN (7-8 digits) or CNIC (13 digits)"
+                                onkeypress="if(event.key === 'Enter') lookupId()"
+                            />
+                            <button class="primary" onclick="lookupId()" id="lookupBtn" disabled>
+                                Lookup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sql-tab" class="tab-content">
                     <div class="file-selector">
                         <h3>Select Parquet Files to Load</h3>
                         <div class="file-options">
@@ -451,11 +510,6 @@
                                     <option value="2014">2014</option>
                                     <option value="2013">2013</option>
                                 </select>
-                                <span
-                                    id="status-companies"
-                                    class="file-status"
-                                    style="display: none"
-                                ></span>
                             </div>
                             <div class="file-option">
                                 <input
@@ -475,11 +529,6 @@
                                     <option value="2014">2014</option>
                                     <option value="2013">2013</option>
                                 </select>
-                                <span
-                                    id="status-aop"
-                                    class="file-status"
-                                    style="display: none"
-                                ></span>
                             </div>
                             <div class="file-option">
                                 <input
@@ -499,11 +548,6 @@
                                     <option value="2014">2014</option>
                                     <option value="2013">2013</option>
                                 </select>
-                                <span
-                                    id="status-individuals"
-                                    class="file-status"
-                                    style="display: none"
-                                ></span>
                             </div>
                         </div>
                         <button
@@ -513,6 +557,10 @@
                         >
                             Load Selected Files
                         </button>
+                        <div class="loaded-files-list">
+                            <h4>Loaded Tables</h4>
+                            <div id="loadedFilesList" class="empty-state">No files loaded yet</div>
+                        </div>
                     </div>
 
                     <div class="query-box">
@@ -570,31 +618,6 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                             SELECT * FROM companies_2013
                             UNION ALL SELECT * FROM companies_2014
                             ORDER BY tax_paid DESC LIMIT 20
-                        </div>
-                    </div>
-                </div>
-
-                <div id="lookup-tab" class="tab-content">
-                    <div class="lookup-box">
-                        <h2>NTN/CNIC Lookup</h2>
-                        <div class="button-group" style="margin-bottom: 1rem">
-                            <span id="status-lookup" class="status loading"
-                                >Initializing database...</span
-                            >
-                        </div>
-                        <div class="lookup-info">
-                            Enter an NTN or CNIC to search across all years (2013-2018) and entity types. This uses HTTP range requests to query remote files without downloading them entirely.
-                        </div>
-                        <div class="input-group">
-                            <input
-                                type="text"
-                                id="idInput"
-                                placeholder="Enter NTN (7-8 digits) or CNIC (13 digits)"
-                                onkeypress="if(event.key === 'Enter') lookupId()"
-                            />
-                            <button class="primary" onclick="lookupId()" id="lookupBtn" disabled>
-                                Lookup
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -684,27 +707,24 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                 const files = {
                     companies: {
                         checkbox: document.getElementById("file-companies"),
-                        status: document.getElementById("status-companies"),
                         year: yearCompanies,
                         filename: `data/${yearCompanies}/companies.parquet`,
                         table: `companies_${yearCompanies}`,
-                        displayName: `companies (${yearCompanies})`,
+                        displayName: `Companies (${yearCompanies})`,
                     },
                     aop: {
                         checkbox: document.getElementById("file-aop"),
-                        status: document.getElementById("status-aop"),
                         year: yearAop,
                         filename: `data/${yearAop}/aop.parquet`,
                         table: `aop_${yearAop}`,
-                        displayName: `aop (${yearAop})`,
+                        displayName: `AOP (${yearAop})`,
                     },
                     individuals: {
                         checkbox: document.getElementById("file-individuals"),
-                        status: document.getElementById("status-individuals"),
                         year: yearIndividuals,
                         filename: `data/${yearIndividuals}/individuals.parquet`,
                         table: `individuals_${yearIndividuals}`,
-                        displayName: `individuals (${yearIndividuals})`,
+                        displayName: `Individuals (${yearIndividuals})`,
                     },
                 };
 
@@ -715,9 +735,6 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                         const fileKey = `${key}_${file.year}`;
                         if (file.checkbox.checked && !loadedFiles.has(fileKey)) {
                             status.textContent = `Downloading ${file.filename}...`;
-                            file.status.style.display = "inline-block";
-                            file.status.textContent = "Loading...";
-                            file.status.className = "file-status loading";
 
                             const resp = await fetch(file.filename);
                             const buffer = await resp.arrayBuffer();
@@ -731,12 +748,11 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                                 `CREATE TABLE IF NOT EXISTS ${file.table} AS SELECT * FROM read_parquet('${file.filename}')`,
                             );
 
-                            file.status.textContent = `Loaded (${file.year})`;
-                            file.status.className = "file-status loaded";
                             loadedFiles.add(fileKey);
                         }
                     }
 
+                    updateLoadedFilesList();
                     status.textContent = `Ready to query! (${loadedFiles.size} tables loaded)`;
                     status.className = "status ready";
                     runBtn.disabled = false;
@@ -749,6 +765,22 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     loadBtn.disabled = false;
                 }
             };
+
+            function updateLoadedFilesList() {
+                const listContainer = document.getElementById("loadedFilesList");
+                if (loadedFiles.size === 0) {
+                    listContainer.className = "empty-state";
+                    listContainer.innerHTML = "No files loaded yet";
+                } else {
+                    listContainer.className = "";
+                    const items = Array.from(loadedFiles).map(fileKey => {
+                        const [type, year] = fileKey.split('_');
+                        const displayName = type.charAt(0).toUpperCase() + type.slice(1);
+                        return `<li>${displayName} (${year})</li>`;
+                    }).join('');
+                    listContainer.innerHTML = `<ul>${items}</ul>`;
+                }
+            }
 
             window.updateLoadButton = function () {
                 const loadBtn = document.getElementById("loadBtn");
@@ -830,6 +862,7 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
 
             window.lookupId = async function () {
                 const idValue = document.getElementById("idInput").value.trim();
+                const idType = document.getElementById("idType").value;
                 if (!idValue || !conn) return;
 
                 const resultsInfo = document.getElementById("resultsInfo");
@@ -843,33 +876,48 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     const baseUrl = 'https://old.hashirsafdar.com/pakistan-taxpayer/data';
                     const years = [2018, 2017, 2016, 2015, 2014, 2013];
 
+                    let detectedType = idType;
+                    if (idType === 'auto') {
+                        detectedType = idValue.length === 13 ? 'cnic' : 'ntn';
+                    }
+
                     let queries = [];
 
-                    for (const year of years) {
-                        queries.push(`
-                            SELECT ${year} as year, 'Company' as entity_type, name, ntn as id, tax_paid
-                            FROM '${baseUrl}/${year}/companies.parquet'
-                            WHERE ntn = '${idValue}'
-                        `);
+                    if (detectedType === 'ntn' || detectedType === 'auto') {
+                        for (const year of years) {
+                            const ntnCol = (year >= 2017) ? 'ntn_7' : 'ntn_8';
 
-                        queries.push(`
-                            SELECT ${year} as year, 'AOP' as entity_type, name, ntn as id, tax_paid
-                            FROM '${baseUrl}/${year}/aop.parquet'
-                            WHERE ntn = '${idValue}'
-                        `);
+                            queries.push(`
+                                SELECT ${year} as year, 'Company' as entity_type, name, ${ntnCol} as id, tax_paid
+                                FROM '${baseUrl}/${year}/companies.parquet'
+                                WHERE ${ntnCol} = '${idValue}'
+                            `);
 
-                        if (year === 2013) {
                             queries.push(`
-                                SELECT ${year} as year, 'Individual' as entity_type, name, ntn as id, tax_paid
-                                FROM '${baseUrl}/${year}/individuals.parquet'
-                                WHERE ntn = '${idValue}'
+                                SELECT ${year} as year, 'AOP' as entity_type, name, ${ntnCol} as id, tax_paid
+                                FROM '${baseUrl}/${year}/aop.parquet'
+                                WHERE ${ntnCol} = '${idValue}'
                             `);
-                        } else {
-                            queries.push(`
-                                SELECT ${year} as year, 'Individual' as entity_type, name, cnic as id, tax_paid
-                                FROM '${baseUrl}/${year}/individuals.parquet'
-                                WHERE cnic = '${idValue}'
-                            `);
+
+                            if (year === 2013) {
+                                queries.push(`
+                                    SELECT ${year} as year, 'Individual' as entity_type, name, ntn_8 as id, tax_paid
+                                    FROM '${baseUrl}/${year}/individuals.parquet'
+                                    WHERE ntn_8 = '${idValue}'
+                                `);
+                            }
+                        }
+                    }
+
+                    if (detectedType === 'cnic' || detectedType === 'auto') {
+                        for (const year of years) {
+                            if (year !== 2013) {
+                                queries.push(`
+                                    SELECT ${year} as year, 'Individual' as entity_type, name, cnic as id, tax_paid
+                                    FROM '${baseUrl}/${year}/individuals.parquet'
+                                    WHERE cnic = '${idValue}'
+                                `);
+                            }
                         }
                     }
 
