@@ -103,24 +103,6 @@ for file in glob.glob('docs/data/*/individuals.parquet'):
 combined = pd.concat(dfs)
 ```
 
-## Statistics
-
-### Total Across All Years (2013-2018)
-- **Companies:** 188,839 records
-- **AOP:** 292,485 records
-- **Individuals:** 7,767,625 records
-- **Grand Total:** 8,248,949 taxpayer records
-
-### Year-by-Year Breakdown
-| Year | Companies | AOP | Individuals | Total |
-|------|-----------|-----|-------------|-------|
-| 2018 | 44,609 | 64,336 | 2,743,396 | 2,852,341 |
-| 2017 | 37,127 | 53,811 | 1,680,396 | 1,771,334 |
-| 2016 | 31,361 | 48,364 | 1,136,880 | 1,216,605 |
-| 2015 | 28,097 | 44,600 | 691,259 | 763,956 |
-| 2014 | 24,186 | 40,764 | 788,630 | 853,580 |
-| 2013 | 23,459 | 40,610 | 727,064 | 791,133 |
-
 ## Technical Documentation
 
 For details on how the data was extracted and processed, see [EXTRACTION.md](EXTRACTION.md).
@@ -128,7 +110,3 @@ For details on how the data was extracted and processed, see [EXTRACTION.md](EXT
 ## License
 
 The original data is published by the Federal Board of Revenue Pakistan and is considered public information.
-
-## Contributing
-
-Issues and pull requests are welcome on [GitHub](https://github.com/hashirsafdar/pakistan-taxpayer).
