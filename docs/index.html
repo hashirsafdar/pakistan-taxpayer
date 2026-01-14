@@ -125,6 +125,12 @@
                 border-radius: 8px;
                 overflow: hidden;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                display: table;
+                margin: 0 auto;
+            }
+
+            .tab-content {
+                overflow-x: auto;
             }
 
             thead {
@@ -475,18 +481,11 @@
             }
 
             function renderStatsOverall() {
-                document.getElementById("stats").innerHTML = `
-                    <div class="stat-card">
-                        <h3>Overall Statistics</h3>
-                        <div class="stat-item">
-                            <span class="stat-label">Viewing</span>
-                            <span class="stat-value">Top 100 Across All Years (2013-2018)</span>
-                        </div>
-                    </div>
-                `;
+                document.getElementById("stats").style.display = 'none';
             }
 
             function renderStatsYear(stats, year) {
+                document.getElementById("stats").style.display = 'grid';
                 const statsHtml = `
                 <div class="stat-card">
                     <h3>Companies</h3>
