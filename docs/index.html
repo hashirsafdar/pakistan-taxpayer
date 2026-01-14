@@ -155,6 +155,19 @@
                 text-align: right;
             }
 
+            table {
+                font-size: 0.9rem;
+            }
+
+            th.amount {
+                font-size: 0.85rem;
+            }
+
+            td.amount {
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+
             .badge {
                 display: inline-block;
                 padding: 0.25rem 0.75rem;
@@ -248,6 +261,7 @@
             <div style="margin-top: 1rem;">
                 <label for="yearSelector" style="font-size: 1rem; margin-right: 0.5rem;">Select Year:</label>
                 <select id="yearSelector" onchange="loadYear()" style="padding: 0.5rem 1rem; font-size: 1rem; border-radius: 4px; border: 2px solid white; background: white; color: #0f4c81; cursor: pointer;">
+                    <option value="overall">Overall (2013-2018)</option>
                     <option value="2018">2018</option>
                     <option value="2017">2017</option>
                     <option value="2016">2016</option>
@@ -293,10 +307,7 @@
             </div>
 
             <div class="tabs">
-                <button class="tab active" onclick="switchTab('all')">
-                    Top 100 Overall
-                </button>
-                <button class="tab" onclick="switchTab('companies')">
+                <button class="tab active" onclick="switchTab('companies')">
                     Top 100 Companies
                 </button>
                 <button class="tab" onclick="switchTab('aop')">
@@ -307,39 +318,16 @@
                 </button>
             </div>
 
-            <div class="tab-content active" id="tab-all">
-                <table id="table-all">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Type</th>
-                            <th>Name</th>
-                            <th>NTN/CNIC.</th>
-                            <th class="amount">Tax Paid (PKR)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="5" class="loading">Loading data...</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="pagination" id="pagination-all"></div>
-            </div>
-
-            <div class="tab-content" id="tab-companies">
+            <div class="tab-content active" id="tab-companies">
                 <table id="table-companies">
-                    <thead>
+                    <thead id="thead-companies">
                         <tr>
-                            <th>#</th>
-                            <th>Company Name</th>
-                            <th>NTN</th>
-                            <th class="amount">Tax Paid (PKR)</th>
+                            <td colspan="10" class="loading">Loading data...</td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody-companies">
                         <tr>
-                            <td colspan="4" class="loading">Loading data...</td>
+                            <td colspan="10" class="loading">Loading data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -348,17 +336,14 @@
 
             <div class="tab-content" id="tab-aop">
                 <table id="table-aop">
-                    <thead>
+                    <thead id="thead-aop">
                         <tr>
-                            <th>#</th>
-                            <th>AOP Name</th>
-                            <th>NTN</th>
-                            <th class="amount">Tax Paid (PKR)</th>
+                            <td colspan="10" class="loading">Loading data...</td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody-aop">
                         <tr>
-                            <td colspan="4" class="loading">Loading data...</td>
+                            <td colspan="10" class="loading">Loading data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -367,17 +352,14 @@
 
             <div class="tab-content" id="tab-individuals">
                 <table id="table-individuals">
-                    <thead>
+                    <thead id="thead-individuals">
                         <tr>
-                            <th>#</th>
-                            <th>Taxpayer Name</th>
-                            <th>CNIC</th>
-                            <th class="amount">Tax Paid (PKR)</th>
+                            <td colspan="10" class="loading">Loading data...</td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody-individuals">
                         <tr>
-                            <td colspan="4" class="loading">Loading data...</td>
+                            <td colspan="10" class="loading">Loading data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -417,34 +399,61 @@
         </footer>
 
         <script>
-            let data = {};
-            let currentYear = 2018;
+            let yearlyData = {};
+            let overallData = {};
+            let currentMode = 'overall';
             const ROWS_PER_PAGE = 10;
+            const YEARS = [2013, 2014, 2015, 2016, 2017, 2018];
             const pagination = {
-                all: { currentPage: 1, data: [] },
                 companies: { currentPage: 1, data: [] },
                 aop: { currentPage: 1, data: [] },
                 individuals: { currentPage: 1, data: [] },
             };
 
             async function loadYear() {
-                currentYear = parseInt(document.getElementById('yearSelector').value);
-                await loadData();
+                const selectedValue = document.getElementById('yearSelector').value;
+                if (selectedValue === 'overall') {
+                    currentMode = 'overall';
+                    await loadOverallData();
+                } else {
+                    currentMode = 'year';
+                    await loadYearData(parseInt(selectedValue));
+                }
             }
 
-            async function loadData() {
+            async function loadOverallData() {
+                try {
+                    if (!overallData.companies) {
+                        const response = await fetch('data/web/top_taxpayers_across_years.json');
+                        overallData = await response.json();
+                    }
+
+                    pagination.companies.data = overallData.companies;
+                    pagination.companies.currentPage = 1;
+                    pagination.aop.data = overallData.aop;
+                    pagination.aop.currentPage = 1;
+                    pagination.individuals.data = overallData.individuals;
+                    pagination.individuals.currentPage = 1;
+
+                    renderStatsOverall();
+                    renderTableHeaders('overall');
+                    renderTables();
+                } catch (error) {
+                    console.error("Error loading overall data:", error);
+                }
+            }
+
+            async function loadYearData(year) {
                 try {
                     const [statsRes, topRes] = await Promise.all([
-                        fetch(`data/web/statistics_${currentYear}.json`),
-                        fetch(`data/web/top_taxpayers_${currentYear}.json`),
+                        fetch(`data/web/statistics_${year}.json`),
+                        fetch(`data/web/top_taxpayers_${year}.json`),
                     ]);
 
                     const stats = await statsRes.json();
                     const top = await topRes.json();
 
-                    data = { stats, top };
-                    pagination.all.data = top.top_all;
-                    pagination.all.currentPage = 1;
+                    yearlyData = { stats, top, year };
                     pagination.companies.data = top.top_companies;
                     pagination.companies.currentPage = 1;
                     pagination.aop.data = top.top_aop;
@@ -452,20 +461,32 @@
                     pagination.individuals.data = top.top_individuals;
                     pagination.individuals.currentPage = 1;
 
-                    renderStats(stats);
-                    renderTables(top);
+                    renderStatsYear(stats, year);
+                    renderTableHeaders('year');
+                    renderTables();
                 } catch (error) {
-                    console.error("Error loading data:", error);
-                    document.getElementById("stats").innerHTML =
-                        '<div class="stat-card"><p>Error loading data</p></div>';
+                    console.error("Error loading year data:", error);
                 }
             }
 
             function formatNumber(num) {
+                if (num === 0 || num === undefined) return '-';
                 return new Intl.NumberFormat("en-US").format(Math.round(num));
             }
 
-            function renderStats(stats) {
+            function renderStatsOverall() {
+                document.getElementById("stats").innerHTML = `
+                    <div class="stat-card">
+                        <h3>Overall Statistics</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Viewing</span>
+                            <span class="stat-value">Top 100 Across All Years (2013-2018)</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function renderStatsYear(stats, year) {
                 const statsHtml = `
                 <div class="stat-card">
                     <h3>Companies</h3>
@@ -527,8 +548,80 @@
                 document.getElementById("stats").innerHTML = statsHtml;
             }
 
-            function renderTables(top) {
-                renderAllTable();
+            function renderTableHeaders(mode) {
+                if (mode === 'overall') {
+                    document.getElementById('thead-companies').innerHTML = `
+                        <tr>
+                            <th>#</th>
+                            <th>Company Name</th>
+                            <th>NTN</th>
+                            <th class="amount">2013</th>
+                            <th class="amount">2014</th>
+                            <th class="amount">2015</th>
+                            <th class="amount">2016</th>
+                            <th class="amount">2017</th>
+                            <th class="amount">2018</th>
+                            <th class="amount">Total</th>
+                        </tr>
+                    `;
+                    document.getElementById('thead-aop').innerHTML = `
+                        <tr>
+                            <th>#</th>
+                            <th>AOP Name</th>
+                            <th>NTN</th>
+                            <th class="amount">2013</th>
+                            <th class="amount">2014</th>
+                            <th class="amount">2015</th>
+                            <th class="amount">2016</th>
+                            <th class="amount">2017</th>
+                            <th class="amount">2018</th>
+                            <th class="amount">Total</th>
+                        </tr>
+                    `;
+                    document.getElementById('thead-individuals').innerHTML = `
+                        <tr>
+                            <th>#</th>
+                            <th>Taxpayer Name</th>
+                            <th>CNIC/NTN</th>
+                            <th class="amount">2013</th>
+                            <th class="amount">2014</th>
+                            <th class="amount">2015</th>
+                            <th class="amount">2016</th>
+                            <th class="amount">2017</th>
+                            <th class="amount">2018</th>
+                            <th class="amount">Total</th>
+                        </tr>
+                    `;
+                } else {
+                    document.getElementById('thead-companies').innerHTML = `
+                        <tr>
+                            <th>#</th>
+                            <th>Company Name</th>
+                            <th>NTN</th>
+                            <th class="amount">Tax Paid (PKR)</th>
+                        </tr>
+                    `;
+                    document.getElementById('thead-aop').innerHTML = `
+                        <tr>
+                            <th>#</th>
+                            <th>AOP Name</th>
+                            <th>NTN</th>
+                            <th class="amount">Tax Paid (PKR)</th>
+                        </tr>
+                    `;
+                    const idLabel = yearlyData.year === 2013 ? 'NTN' : 'CNIC';
+                    document.getElementById('thead-individuals').innerHTML = `
+                        <tr>
+                            <th>#</th>
+                            <th>Taxpayer Name</th>
+                            <th>${idLabel}</th>
+                            <th class="amount">Tax Paid (PKR)</th>
+                        </tr>
+                    `;
+                }
+            }
+
+            function renderTables() {
                 renderCompaniesTable();
                 renderAOPTable();
                 renderIndividualsTable();
@@ -561,9 +654,6 @@
                 pagination[tableType].currentPage = newPage;
 
                 switch (tableType) {
-                    case "all":
-                        renderAllTable();
-                        break;
                     case "companies":
                         renderCompaniesTable();
                         break;
@@ -576,49 +666,42 @@
                 }
             }
 
-            function renderAllTable() {
-                const { currentPage, data } = pagination.all;
-                const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
-                const endIndex = startIndex + ROWS_PER_PAGE;
-                const pageData = data.slice(startIndex, endIndex);
-
-                const tbody = document.querySelector("#table-all tbody");
-                tbody.innerHTML = pageData
-                    .map(
-                        (item, index) => `
-                <tr>
-                    <td>${startIndex + index + 1}</td>
-                    <td><span class="badge badge-${item.type}">${item.type}</span></td>
-                    <td>${item.name}</td>
-                    <td>${item.regno}</td>
-                    <td class="amount">${formatNumber(item.tax)}</td>
-                </tr>
-            `,
-                    )
-                    .join("");
-
-                renderPagination("all");
-            }
-
             function renderCompaniesTable() {
                 const { currentPage, data } = pagination.companies;
                 const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
                 const endIndex = startIndex + ROWS_PER_PAGE;
                 const pageData = data.slice(startIndex, endIndex);
 
-                const tbody = document.querySelector("#table-companies tbody");
-                tbody.innerHTML = pageData
-                    .map(
-                        (item, index) => `
-                <tr>
-                    <td>${startIndex + index + 1}</td>
-                    <td>${item.name}</td>
-                    <td>${item.regno}</td>
-                    <td class="amount">${formatNumber(item.tax)}</td>
-                </tr>
-            `,
-                    )
-                    .join("");
+                const tbody = document.getElementById("tbody-companies");
+
+                if (currentMode === 'overall') {
+                    tbody.innerHTML = pageData
+                        .map(
+                            (item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.ntn}</td>
+                        ${YEARS.map(year => `<td class="amount">${formatNumber(item.years[year])}</td>`).join('')}
+                        <td class="amount" style="font-weight: bold; border-left: 2px solid #ddd;">${formatNumber(item.total)}</td>
+                    </tr>
+                `,
+                        )
+                        .join("");
+                } else {
+                    tbody.innerHTML = pageData
+                        .map(
+                            (item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.regno}</td>
+                        <td class="amount">${formatNumber(item.tax)}</td>
+                    </tr>
+                `,
+                        )
+                        .join("");
+                }
 
                 renderPagination("companies");
             }
@@ -629,19 +712,36 @@
                 const endIndex = startIndex + ROWS_PER_PAGE;
                 const pageData = data.slice(startIndex, endIndex);
 
-                const tbody = document.querySelector("#table-aop tbody");
-                tbody.innerHTML = pageData
-                    .map(
-                        (item, index) => `
-                <tr>
-                    <td>${startIndex + index + 1}</td>
-                    <td>${item.name}</td>
-                    <td>${item.regno}</td>
-                    <td class="amount">${formatNumber(item.tax)}</td>
-                </tr>
-            `,
-                    )
-                    .join("");
+                const tbody = document.getElementById("tbody-aop");
+
+                if (currentMode === 'overall') {
+                    tbody.innerHTML = pageData
+                        .map(
+                            (item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.ntn}</td>
+                        ${YEARS.map(year => `<td class="amount">${formatNumber(item.years[year])}</td>`).join('')}
+                        <td class="amount" style="font-weight: bold; border-left: 2px solid #ddd;">${formatNumber(item.total)}</td>
+                    </tr>
+                `,
+                        )
+                        .join("");
+                } else {
+                    tbody.innerHTML = pageData
+                        .map(
+                            (item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.regno}</td>
+                        <td class="amount">${formatNumber(item.tax)}</td>
+                    </tr>
+                `,
+                        )
+                        .join("");
+                }
 
                 renderPagination("aop");
             }
@@ -652,21 +752,36 @@
                 const endIndex = startIndex + ROWS_PER_PAGE;
                 const pageData = data.slice(startIndex, endIndex);
 
-                const tbody = document.querySelector(
-                    "#table-individuals tbody",
-                );
-                tbody.innerHTML = pageData
-                    .map(
-                        (item, index) => `
-                <tr>
-                    <td>${startIndex + index + 1}</td>
-                    <td>${item.name}</td>
-                    <td>${item.regno}</td>
-                    <td class="amount">${formatNumber(item.tax)}</td>
-                </tr>
-            `,
-                    )
-                    .join("");
+                const tbody = document.getElementById("tbody-individuals");
+
+                if (currentMode === 'overall') {
+                    tbody.innerHTML = pageData
+                        .map(
+                            (item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.id}</td>
+                        ${YEARS.map(year => `<td class="amount">${formatNumber(item.years[year])}</td>`).join('')}
+                        <td class="amount" style="font-weight: bold; border-left: 2px solid #ddd;">${formatNumber(item.total)}</td>
+                    </tr>
+                `,
+                        )
+                        .join("");
+                } else {
+                    tbody.innerHTML = pageData
+                        .map(
+                            (item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.regno}</td>
+                        <td class="amount">${formatNumber(item.tax)}</td>
+                    </tr>
+                `,
+                        )
+                        .join("");
+                }
 
                 renderPagination("individuals");
             }
@@ -683,7 +798,7 @@
                 document.getElementById(`tab-${tab}`).classList.add("active");
             }
 
-            loadData();
+            loadOverallData();
         </script>
     </body>
 </html>
