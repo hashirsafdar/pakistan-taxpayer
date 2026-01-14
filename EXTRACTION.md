@@ -51,6 +51,8 @@ Schema varies by year based on PDF format:
 - `name` - Taxpayer name
 - `ntn_7` - 7-digit National Tax Number (2017-2018, truncated)
 - `ntn_8` - 8-digit National Tax Number (2013-2016, full with check digit)
+  - **Note:** The 8th digit is a check digit that may change over time for the same entity
+  - **Always use first 7 digits for searching/filtering across years**
 - `cnic` - CNIC (Computerized National Identity Card)
   - 2017-2018: Predominantly 13-digit (99.8%), with small number of 7-digit values
   - 2014-2016: Variable length (7-16 digits), predominantly 13-digit (>98%)
@@ -114,12 +116,36 @@ Query Parquet files directly using DuckDB:
 duckdb
 ```
 
+**Important:** When searching by NTN, use only the **first 7 digits**. The 8th digit is a check digit that may change over time for the same entity.
+
 ### Search companies by name (2018)
 ```sql
 SELECT sr, name, ntn_7, tax_paid
 FROM 'docs/data/2018/companies.parquet'
 WHERE name LIKE '%abbott%'
 ORDER BY tax_paid DESC;
+```
+
+### Search by NTN (first 7 digits only)
+```sql
+-- Search across years 2013-2016 using first 7 NTN digits
+SELECT '2013' as year, name, ntn_8, tax_paid
+FROM 'docs/data/2013/companies.parquet'
+WHERE LEFT(CAST(ntn_8 AS VARCHAR), 7) = '9011410'
+UNION ALL
+SELECT '2014' as year, name, ntn_8, tax_paid
+FROM 'docs/data/2014/companies.parquet'
+WHERE LEFT(CAST(ntn_8 AS VARCHAR), 7) = '9011410'
+UNION ALL
+SELECT '2015' as year, name, ntn_8, tax_paid
+FROM 'docs/data/2015/companies.parquet'
+WHERE LEFT(CAST(ntn_8 AS VARCHAR), 7) = '9011410'
+UNION ALL
+SELECT '2016' as year, name, ntn_8, tax_paid
+FROM 'docs/data/2016/companies.parquet'
+WHERE LEFT(CAST(ntn_8 AS VARCHAR), 7) = '9011410'
+ORDER BY year;
+-- Example: Fisheries Development Board has NTN 90114100 (2013-2014) and 90114108 (2015-2016)
 ```
 
 ### Get total tax by all companies (2018)

@@ -8,6 +8,8 @@ Extracted and processed taxpayer data from the Federal Board of Revenue (FBR) Pa
 
 **Interactive Queries:** [Run SQL queries in your browser](https://old.hashirsafdar.com/pakistan-taxpayer/query.html) - Powered by DuckDB-WASM
 
+**NTN Matching:** When searching or filtering by NTN, **only the first 7 digits are required**. The 8th digit is a check digit that may change over time for the same entity. All web interfaces and aggregations match entities using the first 7 NTN digits.
+
 ## Dataset Overview
 
 **Total Dataset: 8.2M+ taxpayer records** across 6 years (2013-2018)
@@ -75,7 +77,13 @@ Using DuckDB:
 # Query 2018 companies
 duckdb -c "SELECT * FROM 'docs/data/2018/companies.parquet' LIMIT 10"
 
-# Query across multiple years
+# Search by NTN (first 7 digits only)
+duckdb -c "
+  SELECT * FROM 'docs/data/2018/companies.parquet'
+  WHERE LEFT(CAST(ntn_7 AS VARCHAR), 7) = '0787223'
+"
+
+# Query across multiple years (matches entities by first 7 NTN digits)
 duckdb -c "
   SELECT '2017' as year, * FROM 'docs/data/2017/individuals.parquet'
   UNION ALL

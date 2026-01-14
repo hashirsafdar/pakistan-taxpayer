@@ -43,6 +43,15 @@ uv run scripts/generate_web_data.py                             # Parquet → JS
 
 ## Key Details
 
+**NTN Matching (CRITICAL):**
+- **Only the first 7 digits of NTN are required for searching/filtering**
+- The 8th digit is a check digit that may change over time for the same entity
+- Examples of entities with changed 8th digit:
+  - Fisheries Development Board: 90114100 (2013-2014) → 90114108 (2015-2016)
+  - Hyderabad Development Authority: 90318330 (2015) → 90318331 (2016)
+- All web interfaces (query.html, index.html) match on first 7 NTN digits only
+- The `generate_web_data.py` script aggregates across years using first 7 digits
+
 **PDF extraction logic (`extract_fast.sh`):**
 - Auto-detects year format (2013-2016 no serial numbers, 2017-2018 with serial numbers)
 - Pattern matching: `^\s*(\d+)?\s*(.+?)\s+(\d{7}[-\d]*|\d{13}[-\d]*)\s+([-\d,]+)\s*$`
