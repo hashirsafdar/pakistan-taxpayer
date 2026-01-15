@@ -274,6 +274,32 @@ def generate_top_taxpayers_across_years(conn, years):
             'total': row[3]
         })
 
+    # Look up 2013 NTN for individuals with unique names
+    unique_2013_names = conn.execute("""
+        SELECT name, ntn_8, tax_paid
+        FROM 'docs/data/2013/individuals.parquet'
+        WHERE name IN (
+            SELECT name FROM 'docs/data/2013/individuals.parquet'
+            GROUP BY name HAVING COUNT(*) = 1
+        )
+    """).fetchall()
+
+    # Create lookup dict: name -> (ntn_8, tax_paid)
+    name_to_2013 = {row[0]: (row[1], row[2]) for row in unique_2013_names}
+
+    # Enrich individuals_data with 2013 info
+    for person in individuals_data:
+        if person['name'] in name_to_2013:
+            ntn, tax = name_to_2013[person['name']]
+            person['ntn_2013'] = ntn
+            # Only add tax if it wasn't already there (it shouldn't be for CNIC-based records)
+            if person['years']['2013'] == 0:
+                person['years']['2013'] = tax
+                person['total'] += tax
+
+    # Re-sort by total after adding 2013 data
+    individuals_data.sort(key=lambda x: x['total'], reverse=True)
+
     return {
         'companies': companies_data,
         'aop': aop_data,

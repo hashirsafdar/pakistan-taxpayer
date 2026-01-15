@@ -254,6 +254,36 @@
                 color: #666;
                 font-size: 0.9rem;
             }
+
+            .ntn-hint {
+                position: relative;
+                cursor: help;
+                margin-left: 4px;
+                color: #0f4c81;
+                font-size: 0.9em;
+                font-weight: bold;
+            }
+
+            .ntn-hint::before {
+                content: "ⓘ";
+            }
+
+            .ntn-hint:hover::after {
+                content: "2013 NTN: " attr(data-ntn);
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                background: #333;
+                color: white;
+                padding: 6px 10px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                white-space: nowrap;
+                margin-left: 8px;
+                z-index: 1000;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            }
         </style>
     </head>
     <body>
@@ -756,7 +786,7 @@
                     <tr>
                         <td>${startIndex + index + 1}</td>
                         <td>${item.name}</td>
-                        <td>${item.id}</td>
+                        <td>${item.id}${item.ntn_2013 ? `<span class="ntn-hint" data-ntn="${item.ntn_2013}"></span>` : ''}</td>
                         ${YEARS.map(year => `<td class="amount">${formatNumber(item.years[year])}</td>`).join('')}
                         <td class="amount" style="font-weight: bold; border-left: 2px solid #ddd;">${formatNumber(item.total)}</td>
                     </tr>
