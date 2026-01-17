@@ -18,15 +18,28 @@ files_to_convert = [
 
 conn = duckdb.connect(":memory:")
 
-for name, csv_file, parquet_file in files_to_convert:
+for entity_type, csv_file, parquet_file in files_to_convert:
     print(f"Converting {csv_file} to {parquet_file}...")
 
-    # Read CSV and write to Parquet (with null_padding for rows with missing columns)
-    df = conn.read_csv(csv_file, null_padding=True)
-    record_count = len(df)
-    df.write_parquet(parquet_file, compression='gzip')
+    # Determine sort column based on entity type and year
+    if entity_type == 'individuals':
+        sort_col = 'ntn_8' if year == '2013' else 'cnic'
+    else:  # companies, aop
+        sort_col = 'ntn_8' if int(year) <= 2016 else 'ntn_7'
 
-    print(f"  Done! {record_count} records")
+    # Sort data before writing to create non-overlapping row group statistics
+    # This enables DuckDB-WASM to skip row groups via HTTP range requests
+    conn.execute(f'''
+        COPY (
+            SELECT * FROM read_csv('{csv_file}', null_padding=true)
+            ORDER BY {sort_col}
+        ) TO '{parquet_file}' (FORMAT 'parquet', COMPRESSION 'gzip')
+    ''')
+
+    # Get record count for reporting
+    record_count = conn.execute(f"SELECT COUNT(*) FROM read_csv('{csv_file}', null_padding=true)").fetchone()[0]
+
+    print(f"  Done! {record_count} records (sorted by {sort_col})")
 
 conn.close()
 
