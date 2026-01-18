@@ -1044,7 +1044,7 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     let fullQuery;
 
                     // Use R2 for lookup (supports HTTP range requests)
-                    const consolidatedUrl = "https://pub-04b8843e76a74070afe36126dfc680ed.r2.dev/all.parquet";
+                    const consolidatedUrl = "https://data.hashirsafdar.com/all.parquet";
 
                     if (detectedType === "ntn") {
                         const searchNtn7 = idValue.substring(0, 7);
