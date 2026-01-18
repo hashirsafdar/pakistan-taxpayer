@@ -1,14 +1,9 @@
 # Pakistan Taxpayer Directory
 
-Extracted and processed taxpayer data from the Federal Board of Revenue (FBR) Pakistan's Income Tax Directory for **6 years (2013-2018)**.
+Extracted and processed taxpayer data from the Federal Board of Revenue (FBR) Pakistan's PDF Income Tax Directory for **6 years (2013-2018)**.
 
-**Data Source:** [FBR Income Tax Directory](https://fbr.gov.pk/Categ/income-tax-directory/742) - Published by Federal Board of Revenue Pakistan
-
-**Live Demo:** [Explore the dataset online](https://old.hashirsafdar.com/pakistan-taxpayer/)
 
 **Interactive Queries:** [Run SQL queries in your browser](https://old.hashirsafdar.com/pakistan-taxpayer/query.html) - Powered by DuckDB-WASM
-
-**NTN Matching:** When searching or filtering by NTN, **only the first 7 digits are required**. The 8th digit is a check digit that may change over time for the same entity. All web interfaces and aggregations match entities using the first 7 NTN digits.
 
 ## Dataset Overview
 
@@ -26,37 +21,18 @@ Extracted and processed taxpayer data from the Federal Board of Revenue (FBR) Pa
 
 ## Data Files
 
-**Only Parquet files are included in this repository** due to GitHub's file size limits. The original PDFs and CSV files are not committed.
-
-All data files are organized by year in `docs/data/YEAR/` directories:
+To save you from working with a ten-thousand page PDF, parquet data files are shared:
 
 ```
 docs/data/
-├── 2013/
-│   ├── companies.parquet (0.5 MB)
-│   ├── aop.parquet (0.8 MB)
-│   └── individuals.parquet (10.3 MB)
-├── 2014/
-│   ├── companies.parquet (0.6 MB)
-│   ├── aop.parquet (0.9 MB)
-│   └── individuals.parquet (13.2 MB)
-├── 2015/
-│   ├── companies.parquet (0.7 MB)
-│   ├── aop.parquet (1.0 MB)
-│   └── individuals.parquet (10.3 MB)
-├── 2016/
-│   ├── companies.parquet (0.8 MB)
-│   ├── aop.parquet (1.0 MB)
-│   └── individuals.parquet (19.5 MB)
-├── 2017/
-│   ├── companies.parquet (1.0 MB)
-│   ├── aop.parquet (1.2 MB)
-│   └── individuals.parquet (29.4 MB)
-└── 2018/
-    ├── companies.parquet (1.2 MB)
-    ├── aop.parquet (1.5 MB)
-    └── individuals.parquet (55.2 MB)
+├── all.parquet
+├── YEAR/
+│   ├── companies.parquet
+│   ├── aop.parquet
+│   └── individuals.parquet
 ```
+
+The original PDFs are not committed due to size, but the scripts expect them to be in the respective year folder for extraction.
 
 To generate CSV files from the original PDFs, follow the extraction instructions in [EXTRACTION.md](EXTRACTION.md).
 
@@ -118,3 +94,4 @@ For details on how the data was extracted and processed, see [EXTRACTION.md](EXT
 ## License
 
 The original data is published by the Federal Board of Revenue Pakistan and is considered public information.
+[FBR Income Tax Directory](https://fbr.gov.pk/Categ/income-tax-directory/742)

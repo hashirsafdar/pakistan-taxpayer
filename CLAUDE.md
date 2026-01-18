@@ -18,6 +18,9 @@ PDF → [extract_fast.sh YEAR] → CSV → [create_parquet_python.py YEAR] → P
   - `YEAR/companies.parquet` - Company records
   - `YEAR/aop.parquet` - AOP records
   - `YEAR/individuals.parquet` - Individual records
+- `docs/data/all.parquet` - Consolidated file with all 8.2M records (2013-2018, all categories)
+  - Schema: `year, category, name, id, id_type, ntn_7, tax_paid`
+  - Sorted for HTTP range request pruning: `ORDER BY id_type, ntn_7 NULLS LAST, id, year, category`
 - `docs/` - GitHub Pages
   - `index.html` - Pre-computed stats from JSON
   - `query.html` - Live SQL via DuckDB-WASM loading Parquet over HTTP
@@ -36,7 +39,10 @@ for year in 2013 2014 2015 2016 2017 2018; do
 done
 
 # Generate web data
-uv run scripts/generate_web_data.py                             # Parquet → JSON
+uv run --with duckdb scripts/generate_web_data.py                             # Parquet → JSON
+
+# Create consolidated file
+uv run --with duckdb scripts/create_consolidated_parquet.py                   # All Parquet → all.parquet
 ```
 
 **Note:** Query examples are in README.md.

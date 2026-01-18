@@ -101,12 +101,57 @@ Creates compressed Parquet files using DuckDB. Parquet provides better compressi
 ### 3. Generate Web Data
 
 ```bash
-uv run scripts/generate_web_data.py
+uv run --with duckdb scripts/generate_web_data.py
 ```
 
 Generates JSON files from Parquet for the GitHub Pages interface:
 - `docs/data/statistics.json` - Overall statistics by taxpayer type
 - `docs/data/top_taxpayers.json` - Top 100 taxpayers in each category
+
+### 4. Create Consolidated File (Optional)
+
+```bash
+uv run --with duckdb scripts/create_consolidated_parquet.py
+```
+
+Creates a single consolidated Parquet file combining all years and categories:
+- `docs/data/all.parquet` - 8.2M records, 69 MB (ZSTD compressed)
+
+**Consolidated Schema:**
+```sql
+year         INTEGER     -- 2013-2018
+category     VARCHAR     -- 'company', 'aop', 'individual'
+name         VARCHAR     -- Taxpayer name (preserved as-is from each year)
+id           VARCHAR     -- Raw NTN (7-8 digit) or CNIC (13 digit)
+id_type      VARCHAR     -- 'ntn' or 'cnic'
+ntn_7        VARCHAR     -- First 7 digits of NTN (NULL for CNIC records)
+tax_paid     BIGINT      -- Tax paid in PKR
+```
+
+**Name Handling Across Years:**
+When the same taxpayer ID (CNIC or NTN) has different name spellings across years, **each year's record preserves its original name**. No normalization or deduplication occurs.
+
+Example:
+```sql
+-- Same CNIC with different names across years
+CNIC 3520223800364:
+  2016: "AYSHA ALI"
+  2017: "(1802) AYSHA ALI"
+  2018: "(1802) AYSHA ALI"
+```
+
+This preserves the exact data from each year's FBR publication. To find all name variants for a taxpayer:
+```sql
+SELECT DISTINCT year, name FROM 'docs/data/all.parquet'
+WHERE id = '3520223800364'
+ORDER BY year;
+```
+
+**Benefits:**
+- Simpler cross-year queries (no UNION ALL needed)
+- HTTP range request optimization (sorted by `id_type, ntn_7, id, year, category`)
+- Pre-computed `ntn_7` column for efficient NTN lookups
+- Preserves historical name changes/variations
 
 ## DuckDB Query Examples
 
@@ -174,12 +219,72 @@ ORDER BY tax_paid DESC
 LIMIT 100;
 ```
 
+## Consolidated File Query Examples
+
+Using the consolidated file (`docs/data/all.parquet`) simplifies cross-year queries:
+
+### Search by NTN across all years
+```sql
+-- No UNION ALL needed with consolidated file
+SELECT * FROM 'docs/data/all.parquet'
+WHERE ntn_7 = '0787223'
+ORDER BY year;
+```
+
+### Top taxpayers across all years (2013-2018)
+```sql
+SELECT name, ntn_7, SUM(tax_paid) as total
+FROM 'docs/data/all.parquet'
+WHERE category = 'company'
+GROUP BY ntn_7, name
+ORDER BY total DESC
+LIMIT 10;
+```
+
+### Search by CNIC across all years
+```sql
+SELECT * FROM 'docs/data/all.parquet'
+WHERE id_type = 'cnic' AND id = '3520223800364'
+ORDER BY year;
+```
+
+### Year-over-year statistics
+```sql
+SELECT year, category, COUNT(*) as count, SUM(tax_paid) as total
+FROM 'docs/data/all.parquet'
+GROUP BY year, category
+ORDER BY year, category;
+```
+
+### Find all records for a specific taxpayer name
+```sql
+SELECT year, category, name, id, tax_paid
+FROM 'docs/data/all.parquet'
+WHERE name LIKE '%OIL AND GAS DEVELOPMENT%'
+ORDER BY year, category;
+```
+
+### Find all name variants for a specific taxpayer ID
+```sql
+-- Track how a taxpayer's name changed across years
+SELECT year, name, tax_paid
+FROM 'docs/data/all.parquet'
+WHERE id = '3520223800364'
+ORDER BY year;
+
+-- Result shows name variations:
+-- 2016: "AYSHA ALI"
+-- 2017: "(1802) AYSHA ALI"
+-- 2018: "(1802) AYSHA ALI"
+```
+
 ## Scripts
 
 ### Extraction & Data Processing
 - `scripts/extract_fast.sh` - Fast extraction from PDF to CSV files using pdftotext + perl
 - `scripts/create_parquet_python.py` - Creates Parquet files using DuckDB (fast, compressed)
 - `scripts/generate_web_data.py` - Generates JSON files from Parquet for GitHub Pages
+- `scripts/create_consolidated_parquet.py` - Creates consolidated all.parquet from all year/category files
 
 ### Data Files (Generated - in `docs/data/YEAR/` folders)
 For each year (2013-2018):
@@ -189,6 +294,9 @@ For each year (2013-2018):
 - `docs/data/YEAR/companies.parquet` - Compressed company records
 - `docs/data/YEAR/aop.parquet` - Compressed AOP records
 - `docs/data/YEAR/individuals.parquet` - Compressed individual records
+
+Consolidated file:
+- `docs/data/all.parquet` - All 8.2M records (2013-2018, all categories) in unified schema
 
 ## Requirements
 

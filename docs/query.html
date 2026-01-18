@@ -493,6 +493,17 @@
                     <div class="file-selector">
                         <h3>Select Parquet Files to Load</h3>
                         <div class="file-options">
+                            <div class="file-option" style="grid-column: 1 / -1; background: #f0f8ff; border-color: #0f4c81;">
+                                <input
+                                    type="checkbox"
+                                    id="file-all"
+                                    onchange="updateLoadButton()"
+                                />
+                                <label for="file-all" style="flex: 1;">
+                                    <div><strong>All Years Consolidated (2013-2018)</strong></div>
+                                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">Single file with all 8.2M records - efficient for cross-year queries</div>
+                                </label>
+                            </div>
                             <div class="file-option">
                                 <input
                                     type="checkbox"
@@ -594,6 +605,23 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
 
                     <div class="examples">
                         <h3>Example Queries (click to load)</h3>
+                        <strong style="display: block; margin-bottom: 0.5rem; color: #0f4c81; font-size: 0.9rem;">Consolidated File (all_years table)</strong>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM all_years WHERE ntn_7 = '0787223' ORDER BY year
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT name, SUM(tax_paid) as total FROM all_years
+                            WHERE category = 'company' GROUP BY ntn_7, name
+                            ORDER BY total DESC LIMIT 10
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT year, category, COUNT(*) as count, SUM(tax_paid) as total
+                            FROM all_years GROUP BY year, category ORDER BY year, category
+                        </div>
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM all_years WHERE id_type = 'cnic' AND id = '3520223800364'
+                        </div>
+                        <strong style="display: block; margin: 1rem 0 0.5rem; color: #0f4c81; font-size: 0.9rem;">Individual Year Files</strong>
                         <div class="example-query" onclick="loadExample(this)">
                             SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10
                         </div>
@@ -706,6 +734,13 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                 const yearIndividuals = document.getElementById("year-individuals").value;
 
                 const files = {
+                    all: {
+                        checkbox: document.getElementById("file-all"),
+                        year: 'all',
+                        filename: `data/all.parquet`,
+                        table: `all_years`,
+                        displayName: `All Years Consolidated`,
+                    },
                     companies: {
                         checkbox: document.getElementById("file-companies"),
                         year: yearCompanies,
@@ -776,6 +811,9 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     listContainer.className = "";
                     const items = Array.from(loadedFiles).map(fileKey => {
                         const [type, year] = fileKey.split('_');
+                        if (type === 'all') {
+                            return `<li><strong>All Years Consolidated (2013-2018)</strong></li>`;
+                        }
                         const displayName = type.charAt(0).toUpperCase() + type.slice(1);
                         return `<li>${displayName} (${year})</li>`;
                     }).join('');
@@ -786,6 +824,7 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
             window.updateLoadButton = function () {
                 const loadBtn = document.getElementById("loadBtn");
                 const anyChecked =
+                    document.getElementById("file-all").checked ||
                     document.getElementById("file-companies").checked ||
                     document.getElementById("file-aop").checked ||
                     document.getElementById("file-individuals").checked;
