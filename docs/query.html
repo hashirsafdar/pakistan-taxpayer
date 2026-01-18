@@ -804,10 +804,11 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     await db.instantiate(bundle.mainModule);
                     URL.revokeObjectURL(worker_url);
 
-                    // Open with filesystem configuration to prevent full HTTP reads
+                    // Open with filesystem configuration for range request optimization
                     await db.open({
                         filesystem: {
-                            allowFullHTTPReads: false,
+                            allowFullHTTPReads: true,
+                            forceFullHTTPReads: false,
                             reliableHeadRequests: true
                         }
                     });
