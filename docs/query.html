@@ -447,16 +447,23 @@
         <header>
             <h1>Interactive SQL Query Interface</h1>
             <p>
-                Query taxpayer records (2013-2018) directly in your browser using
-                DuckDB-WASM
+                Query taxpayer records (2013-2018) directly in your browser
+                using DuckDB-WASM
             </p>
         </header>
 
         <div class="container">
             <div class="left-panel">
                 <div class="tabs">
-                    <button class="tab-button active" onclick="switchTab('lookup')">NTN/CNIC Lookup</button>
-                    <button class="tab-button" onclick="switchTab('sql')">SQL Query</button>
+                    <button
+                        class="tab-button active"
+                        onclick="switchTab('lookup')"
+                    >
+                        NTN/CNIC Lookup
+                    </button>
+                    <button class="tab-button" onclick="switchTab('sql')">
+                        SQL Query
+                    </button>
                 </div>
 
                 <div id="lookup-tab" class="tab-content active">
@@ -468,7 +475,13 @@
                             >
                         </div>
                         <div class="lookup-info">
-                            Enter an NTN (7 digits) or CNIC (13 digits) to search across all years (2013-2018) and entity types. NTN searches match on the first 7 digits to find records even if the 8th digit changed. Uses HTTP range requests to query remote files without downloading them entirely.
+                            Enter an NTN (7 digits) or CNIC (13 digits) to
+                            search across all years (2013-2018) and entity
+                            types. NTN searches match on the first 7 digits to
+                            find records even if the 8th digit changed. Uses
+                            the optimized consolidated file with a single HTTP
+                            range request (sorted by ID type for fast row group
+                            skipping).
                         </div>
                         <div class="input-group">
                             <select id="idType">
@@ -482,7 +495,12 @@
                                 placeholder="Enter NTN (7 digits) or CNIC (13 digits)"
                                 onkeypress="if(event.key === 'Enter') lookupId()"
                             />
-                            <button class="primary" onclick="lookupId()" id="lookupBtn" disabled>
+                            <button
+                                class="primary"
+                                onclick="lookupId()"
+                                id="lookupBtn"
+                                disabled
+                            >
                                 Lookup
                             </button>
                         </div>
@@ -493,15 +511,36 @@
                     <div class="file-selector">
                         <h3>Select Parquet Files to Load</h3>
                         <div class="file-options">
-                            <div class="file-option" style="grid-column: 1 / -1; background: #f0f8ff; border-color: #0f4c81;">
+                            <div
+                                class="file-option"
+                                style="
+                                    grid-column: 1 / -1;
+                                    background: #f0f8ff;
+                                    border-color: #0f4c81;
+                                "
+                            >
                                 <input
                                     type="checkbox"
                                     id="file-all"
                                     onchange="updateLoadButton()"
                                 />
-                                <label for="file-all" style="flex: 1;">
-                                    <div><strong>All Years Consolidated (2013-2018)</strong></div>
-                                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">Single file with all 8.2M records - efficient for cross-year queries</div>
+                                <label for="file-all" style="flex: 1">
+                                    <div>
+                                        <strong
+                                            >All Years Consolidated
+                                            (2013-2018)</strong
+                                        >
+                                    </div>
+                                    <div
+                                        style="
+                                            font-size: 0.85rem;
+                                            color: #666;
+                                            margin-top: 0.25rem;
+                                        "
+                                    >
+                                        Single file with all 8.2M records -
+                                        efficient for cross-year queries
+                                    </div>
                                 </label>
                             </div>
                             <div class="file-option">
@@ -511,10 +550,21 @@
                                     checked
                                     onchange="updateLoadButton()"
                                 />
-                                <label for="file-companies" style="flex: 0 0 auto; min-width: 100px;">
+                                <label
+                                    for="file-companies"
+                                    style="flex: 0 0 auto; min-width: 100px"
+                                >
                                     <div>Companies</div>
                                 </label>
-                                <select id="year-companies" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                <select
+                                    id="year-companies"
+                                    style="
+                                        padding: 0.25rem 0.5rem;
+                                        border: 1px solid #ddd;
+                                        border-radius: 4px;
+                                        font-size: 0.9rem;
+                                    "
+                                >
                                     <option value="2018">2018</option>
                                     <option value="2017">2017</option>
                                     <option value="2016">2016</option>
@@ -530,10 +580,21 @@
                                     checked
                                     onchange="updateLoadButton()"
                                 />
-                                <label for="file-aop" style="flex: 0 0 auto; min-width: 100px;">
+                                <label
+                                    for="file-aop"
+                                    style="flex: 0 0 auto; min-width: 100px"
+                                >
                                     <div>AOP</div>
                                 </label>
-                                <select id="year-aop" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                <select
+                                    id="year-aop"
+                                    style="
+                                        padding: 0.25rem 0.5rem;
+                                        border: 1px solid #ddd;
+                                        border-radius: 4px;
+                                        font-size: 0.9rem;
+                                    "
+                                >
                                     <option value="2018">2018</option>
                                     <option value="2017">2017</option>
                                     <option value="2016">2016</option>
@@ -549,10 +610,21 @@
                                     checked
                                     onchange="updateLoadButton()"
                                 />
-                                <label for="file-individuals" style="flex: 0 0 auto; min-width: 100px;">
+                                <label
+                                    for="file-individuals"
+                                    style="flex: 0 0 auto; min-width: 100px"
+                                >
                                     <div>Individuals</div>
                                 </label>
-                                <select id="year-individuals" style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                <select
+                                    id="year-individuals"
+                                    style="
+                                        padding: 0.25rem 0.5rem;
+                                        border: 1px solid #ddd;
+                                        border-radius: 4px;
+                                        font-size: 0.9rem;
+                                    "
+                                >
                                     <option value="2018">2018</option>
                                     <option value="2017">2017</option>
                                     <option value="2016">2016</option>
@@ -571,7 +643,9 @@
                         </button>
                         <div class="loaded-files-list">
                             <h4>Loaded Tables</h4>
-                            <div id="loadedFilesList" class="empty-state">No files loaded yet</div>
+                            <div id="loadedFilesList" class="empty-state">
+                                No files loaded yet
+                            </div>
                         </div>
                     </div>
 
@@ -605,9 +679,18 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
 
                     <div class="examples">
                         <h3>Example Queries (click to load)</h3>
-                        <strong style="display: block; margin-bottom: 0.5rem; color: #0f4c81; font-size: 0.9rem;">Consolidated File (all_years table)</strong>
+                        <strong
+                            style="
+                                display: block;
+                                margin-bottom: 0.5rem;
+                                color: #0f4c81;
+                                font-size: 0.9rem;
+                            "
+                            >Consolidated File (all_years table)</strong
+                        >
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM all_years WHERE ntn_7 = '0787223' ORDER BY year
+                            SELECT * FROM all_years WHERE ntn_7 = '0787223'
+                            ORDER BY year
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
                             SELECT name, SUM(tax_paid) as total FROM all_years
@@ -615,38 +698,46 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                             ORDER BY total DESC LIMIT 10
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT year, category, COUNT(*) as count, SUM(tax_paid) as total
-                            FROM all_years GROUP BY year, category ORDER BY year, category
+                            SELECT year, category, COUNT(*) as count,
+                            SUM(tax_paid) as total FROM all_years GROUP BY year,
+                            category ORDER BY year, category
+                        </div>
+                        <strong
+                            style="
+                                display: block;
+                                margin: 1rem 0 0.5rem;
+                                color: #0f4c81;
+                                font-size: 0.9rem;
+                            "
+                            >Individual Year Files</strong
+                        >
+                        <div class="example-query" onclick="loadExample(this)">
+                            SELECT * FROM companies_2018 ORDER BY tax_paid DESC
+                            LIMIT 10
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM all_years WHERE id_type = 'cnic' AND id = '3520223800364'
-                        </div>
-                        <strong style="display: block; margin: 1rem 0 0.5rem; color: #0f4c81; font-size: 0.9rem;">Individual Year Files</strong>
-                        <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10
+                            SELECT * FROM aop_2018 ORDER BY tax_paid DESC LIMIT
+                            10
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM aop_2018 ORDER BY tax_paid DESC LIMIT 10
+                            SELECT * FROM individuals_2018 ORDER BY tax_paid
+                            DESC LIMIT 10
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM individuals_2018 ORDER BY tax_paid DESC LIMIT 10
+                            SELECT COUNT(*), SUM(tax_paid) as total_tax FROM
+                            companies_2018 WHERE tax_paid > 0
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT COUNT(*), SUM(tax_paid) as total_tax FROM companies_2018
-                            WHERE tax_paid > 0
+                            SELECT * FROM companies_2018 WHERE name LIKE
+                            '%BANK%' ORDER BY tax_paid DESC LIMIT 20
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM companies_2018 WHERE name LIKE '%BANK%' ORDER BY
-                            tax_paid DESC LIMIT 20
+                            SELECT * FROM individuals_2018 WHERE name LIKE
+                            '%MUHAMMAD%' ORDER BY tax_paid DESC LIMIT 20
                         </div>
                         <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM individuals_2018 WHERE name LIKE '%MUHAMMAD%' ORDER
-                            BY tax_paid DESC LIMIT 20
-                        </div>
-                        <div class="example-query" onclick="loadExample(this)">
-                            SELECT * FROM companies_2013
-                            UNION ALL SELECT * FROM companies_2014
-                            ORDER BY tax_paid DESC LIMIT 20
+                            SELECT * FROM companies_2013 UNION ALL SELECT * FROM
+                            companies_2014 ORDER BY tax_paid DESC LIMIT 20
                         </div>
                     </div>
                 </div>
@@ -657,7 +748,15 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     <h3>Results</h3>
                     <div class="results-info" id="resultsInfo"></div>
                     <div id="resultsTable">
-                        <p style="color: #666; padding: 2rem; text-align: center;">Run a query to see results</p>
+                        <p
+                            style="
+                                color: #666;
+                                padding: 2rem;
+                                text-align: center;
+                            "
+                        >
+                            Run a query to see results
+                        </p>
                     </div>
                 </div>
             </div>
@@ -729,14 +828,16 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                 const runBtn = document.getElementById("runBtn");
                 const loadBtn = document.getElementById("loadBtn");
 
-                const yearCompanies = document.getElementById("year-companies").value;
+                const yearCompanies =
+                    document.getElementById("year-companies").value;
                 const yearAop = document.getElementById("year-aop").value;
-                const yearIndividuals = document.getElementById("year-individuals").value;
+                const yearIndividuals =
+                    document.getElementById("year-individuals").value;
 
                 const files = {
                     all: {
                         checkbox: document.getElementById("file-all"),
-                        year: 'all',
+                        year: "all",
                         filename: `data/all.parquet`,
                         table: `all_years`,
                         displayName: `All Years Consolidated`,
@@ -769,7 +870,10 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                 try {
                     for (const [key, file] of Object.entries(files)) {
                         const fileKey = `${key}_${file.year}`;
-                        if (file.checkbox.checked && !loadedFiles.has(fileKey)) {
+                        if (
+                            file.checkbox.checked &&
+                            !loadedFiles.has(fileKey)
+                        ) {
                             status.textContent = `Downloading ${file.filename}...`;
 
                             const resp = await fetch(file.filename);
@@ -803,20 +907,24 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
             };
 
             function updateLoadedFilesList() {
-                const listContainer = document.getElementById("loadedFilesList");
+                const listContainer =
+                    document.getElementById("loadedFilesList");
                 if (loadedFiles.size === 0) {
                     listContainer.className = "empty-state";
                     listContainer.innerHTML = "No files loaded yet";
                 } else {
                     listContainer.className = "";
-                    const items = Array.from(loadedFiles).map(fileKey => {
-                        const [type, year] = fileKey.split('_');
-                        if (type === 'all') {
-                            return `<li><strong>All Years Consolidated (2013-2018)</strong></li>`;
-                        }
-                        const displayName = type.charAt(0).toUpperCase() + type.slice(1);
-                        return `<li>${displayName} (${year})</li>`;
-                    }).join('');
+                    const items = Array.from(loadedFiles)
+                        .map((fileKey) => {
+                            const [type, year] = fileKey.split("_");
+                            if (type === "all") {
+                                return `<li><strong>All Years Consolidated (2013-2018)</strong></li>`;
+                            }
+                            const displayName =
+                                type.charAt(0).toUpperCase() + type.slice(1);
+                            return `<li>${displayName} (${year})</li>`;
+                        })
+                        .join("");
                     listContainer.innerHTML = `<ul>${items}</ul>`;
                 }
             }
@@ -890,14 +998,18 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
             };
 
             window.switchTab = function (tabName) {
-                const tabs = document.querySelectorAll('.tab-button');
-                const contents = document.querySelectorAll('.tab-content');
+                const tabs = document.querySelectorAll(".tab-button");
+                const contents = document.querySelectorAll(".tab-content");
 
-                tabs.forEach(tab => tab.classList.remove('active'));
-                contents.forEach(content => content.classList.remove('active'));
+                tabs.forEach((tab) => tab.classList.remove("active"));
+                contents.forEach((content) =>
+                    content.classList.remove("active"),
+                );
 
-                event.target.classList.add('active');
-                document.getElementById(`${tabName}-tab`).classList.add('active');
+                event.target.classList.add("active");
+                document
+                    .getElementById(`${tabName}-tab`)
+                    .classList.add("active");
             };
 
             window.lookupId = async function () {
@@ -908,61 +1020,74 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                 const resultsInfo = document.getElementById("resultsInfo");
                 const resultsTable = document.getElementById("resultsTable");
 
-                resultsTable.innerHTML = '<div class="loading">Searching across all files...</div>';
+                resultsTable.innerHTML =
+                    '<div class="loading">Searching across all files...</div>';
                 resultsInfo.textContent = "";
 
                 try {
                     const startTime = performance.now();
-                    const baseUrl = 'https://old.hashirsafdar.com/pakistan-taxpayer/data';
-                    const years = [2018, 2017, 2016, 2015, 2014, 2013];
+                    const baseUrl =
+                        "https://old.hashirsafdar.com/pakistan-taxpayer/data";
 
                     let detectedType = idType;
-                    if (idType === 'auto') {
-                        detectedType = idValue.length === 13 ? 'cnic' : 'ntn';
+                    if (idType === "auto") {
+                        detectedType = idValue.length === 13 ? "cnic" : "ntn";
                     }
 
-                    let queries = [];
+                    let fullQuery;
 
-                    if (detectedType === 'ntn' || detectedType === 'auto') {
+                    // Use optimized consolidated file query (single HTTP request)
+                    const consolidatedUrl = `${baseUrl}/all.parquet`;
+
+                    if (detectedType === "ntn") {
                         const searchNtn7 = idValue.substring(0, 7);
-                        for (const year of years) {
-                            const ntnCol = (year >= 2017) ? 'ntn_7' : 'ntn_8';
-
-                            queries.push(`
-                                SELECT ${year} as year, 'Company' as entity_type, name, ${ntnCol} as id, tax_paid
-                                FROM '${baseUrl}/${year}/companies.parquet'
-                                WHERE LEFT(CAST(${ntnCol} AS VARCHAR), 7) = '${searchNtn7}'
-                            `);
-
-                            queries.push(`
-                                SELECT ${year} as year, 'AOP' as entity_type, name, ${ntnCol} as id, tax_paid
-                                FROM '${baseUrl}/${year}/aop.parquet'
-                                WHERE LEFT(CAST(${ntnCol} AS VARCHAR), 7) = '${searchNtn7}'
-                            `);
-
-                            if (year === 2013) {
-                                queries.push(`
-                                    SELECT ${year} as year, 'Individual' as entity_type, name, ntn_8 as id, tax_paid
-                                    FROM '${baseUrl}/${year}/individuals.parquet'
-                                    WHERE LEFT(CAST(ntn_8 AS VARCHAR), 7) = '${searchNtn7}'
-                                `);
-                            }
-                        }
+                        fullQuery = `
+                            SELECT
+                                year,
+                                CASE category
+                                    WHEN 'company' THEN 'Company'
+                                    WHEN 'aop' THEN 'AOP'
+                                    WHEN 'individual' THEN 'Individual'
+                                END as entity_type,
+                                name,
+                                id,
+                                tax_paid
+                            FROM '${consolidatedUrl}'
+                            WHERE id_type = 'ntn' AND ntn_7 = '${searchNtn7}'
+                            ORDER BY year DESC, category
+                        `;
+                    } else if (detectedType === "cnic") {
+                        fullQuery = `
+                            SELECT
+                                year,
+                                'Individual' as entity_type,
+                                name,
+                                id,
+                                tax_paid
+                            FROM '${consolidatedUrl}'
+                            WHERE id_type = 'cnic' AND id = '${idValue}'
+                            ORDER BY year DESC
+                        `;
+                    } else {
+                        // Auto-detect: search both
+                        const searchNtn7 = idValue.substring(0, 7);
+                        fullQuery = `
+                            SELECT
+                                year,
+                                CASE category
+                                    WHEN 'company' THEN 'Company'
+                                    WHEN 'aop' THEN 'AOP'
+                                    WHEN 'individual' THEN 'Individual'
+                                END as entity_type,
+                                name,
+                                id,
+                                tax_paid
+                            FROM '${consolidatedUrl}'
+                            WHERE (id_type = 'ntn' AND ntn_7 = '${searchNtn7}')
+                               OR (id_type = 'cnic' AND id = '${idValue}')
+                            ORDER BY year DESC, category
+                        `;
                     }
-
-                    if (detectedType === 'cnic' || detectedType === 'auto') {
-                        for (const year of years) {
-                            if (year !== 2013) {
-                                queries.push(`
-                                    SELECT ${year} as year, 'Individual' as entity_type, name, cnic as id, tax_paid
-                                    FROM '${baseUrl}/${year}/individuals.parquet'
-                                    WHERE CAST(cnic AS VARCHAR) = '${idValue}'
-                                `);
-                            }
-                        }
-                    }
-
-                    const fullQuery = queries.join(' UNION ALL ') + ' ORDER BY year DESC, entity_type';
 
                     const result = await conn.query(fullQuery);
                     const endTime = performance.now();
@@ -971,26 +1096,29 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     resultsInfo.textContent = `${rows.length} record(s) found in ${(endTime - startTime).toFixed(2)}ms`;
 
                     if (rows.length === 0) {
-                        resultsTable.innerHTML = "<p>No records found for this NTN/CNIC.</p>";
+                        resultsTable.innerHTML =
+                            "<p>No records found for this NTN/CNIC.</p>";
                         return;
                     }
 
-                    let html = '<div>';
+                    let html = "<div>";
 
                     const groupedByEntity = {};
-                    rows.forEach(row => {
+                    rows.forEach((row) => {
                         if (!groupedByEntity[row.entity_type]) {
                             groupedByEntity[row.entity_type] = [];
                         }
                         groupedByEntity[row.entity_type].push(row);
                     });
 
-                    for (const [entityType, records] of Object.entries(groupedByEntity)) {
+                    for (const [entityType, records] of Object.entries(
+                        groupedByEntity,
+                    )) {
                         html += `<div class="entity-section">`;
                         html += `<h4>${entityType} Records</h4>`;
                         html += `<table><thead><tr><th>Year</th><th>Name</th><th>ID</th><th>Tax Paid</th></tr></thead><tbody>`;
 
-                        records.forEach(row => {
+                        records.forEach((row) => {
                             html += `<tr>`;
                             html += `<td>${row.year}</td>`;
                             html += `<td>${row.name}</td>`;
@@ -1002,7 +1130,7 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                         html += `</tbody></table></div>`;
                     }
 
-                    html += '</div>';
+                    html += "</div>";
                     resultsTable.innerHTML = html;
                 } catch (error) {
                     resultsTable.innerHTML = `<div class="error">Lookup Error: ${error.message}</div>`;
