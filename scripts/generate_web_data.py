@@ -8,116 +8,8 @@ import duckdb
 import os
 
 
-def generate_top_taxpayers(conn, year, limit=1000):
-    """Generate top taxpayers JSON for a specific year."""
-
-    ntn_col_companies = 'ntn_8' if year <= 2016 else 'ntn_7'
-    id_col_individuals = 'ntn_8' if year == 2013 else 'cnic'
-
-    top_companies = conn.execute(f'''
-        SELECT name, {ntn_col_companies}, tax_paid, 'company' as type
-        FROM 'docs/data/{year}/companies.parquet'
-        WHERE tax_paid > 0
-        ORDER BY tax_paid DESC
-        LIMIT {limit // 3}
-    ''').fetchall()
-    top_companies = [
-        {
-            'name': row[0],
-            'regno': row[1],
-            'tax': row[2],
-            'type': row[3]
-        }
-        for row in top_companies
-    ]
-
-    top_aop = conn.execute(f'''
-        SELECT name, {ntn_col_companies}, tax_paid, 'aop' as type
-        FROM 'docs/data/{year}/aop.parquet'
-        WHERE tax_paid > 0
-        ORDER BY tax_paid DESC
-        LIMIT {limit // 3}
-    ''').fetchall()
-    top_aop = [
-        {
-            'name': row[0],
-            'regno': row[1],
-            'tax': row[2],
-            'type': row[3]
-        }
-        for row in top_aop
-    ]
-
-    top_individuals = conn.execute(f'''
-        SELECT name, {id_col_individuals}, tax_paid, 'individual' as type
-        FROM 'docs/data/{year}/individuals.parquet'
-        WHERE tax_paid > 0
-        ORDER BY tax_paid DESC
-        LIMIT {limit // 3}
-    ''').fetchall()
-    top_individuals = [
-        {
-            'name': row[0],
-            'regno': row[1],
-            'tax': row[2],
-            'type': row[3]
-        }
-        for row in top_individuals
-    ]
-
-    top_all = sorted(
-        top_companies + top_aop + top_individuals,
-        key=lambda x: x['tax'],
-        reverse=True
-    )[:limit]
-
-    return {
-        'top_companies': top_companies[:100],
-        'top_aop': top_aop[:100],
-        'top_individuals': top_individuals[:100],
-        'top_all': top_all[:100]
-    }
-
-
-def generate_statistics(conn, year):
-    """Generate statistics JSON for a specific year."""
-
-    comp_stats = conn.execute(
-        f"SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'docs/data/{year}/companies.parquet' WHERE tax_paid > 0"
-    ).fetchone()
-
-    aop_stats = conn.execute(
-        f"SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'docs/data/{year}/aop.parquet' WHERE tax_paid > 0"
-    ).fetchone()
-
-    ind_stats = conn.execute(
-        f"SELECT COUNT(*), SUM(tax_paid), AVG(tax_paid), MAX(tax_paid) FROM 'docs/data/{year}/individuals.parquet' WHERE tax_paid > 0"
-    ).fetchone()
-
-    return {
-        'companies': {
-            'total': comp_stats[0],
-            'total_tax': comp_stats[1],
-            'avg_tax': comp_stats[2],
-            'max_tax': comp_stats[3]
-        },
-        'aop': {
-            'total': aop_stats[0],
-            'total_tax': aop_stats[1],
-            'avg_tax': aop_stats[2],
-            'max_tax': aop_stats[3]
-        },
-        'individuals': {
-            'total': ind_stats[0],
-            'total_tax': ind_stats[1],
-            'avg_tax': ind_stats[2],
-            'max_tax': ind_stats[3]
-        }
-    }
-
-
 def generate_top_taxpayers_across_years(conn, years):
-    """Generate top 100 taxpayers across all years."""
+    """Generate top 1000 taxpayers across all years."""
 
     print("\nGenerating top taxpayers across all years...")
 
@@ -159,7 +51,7 @@ def generate_top_taxpayers_across_years(conn, years):
         SELECT name, ntn, year_breakdown, total_tax
         FROM aggregated
         ORDER BY total_tax DESC
-        LIMIT 100
+        LIMIT 1000
     """).fetchall()
 
     companies_data = []
@@ -210,7 +102,7 @@ def generate_top_taxpayers_across_years(conn, years):
         SELECT name, ntn, year_breakdown, total_tax
         FROM aggregated
         ORDER BY total_tax DESC
-        LIMIT 100
+        LIMIT 1000
     """).fetchall()
 
     aop_data = []
@@ -261,7 +153,7 @@ def generate_top_taxpayers_across_years(conn, years):
         SELECT name, id, year_breakdown, total_tax
         FROM aggregated
         ORDER BY total_tax DESC
-        LIMIT 100
+        LIMIT 1000
     """).fetchall()
 
     individuals_data = []
@@ -313,33 +205,14 @@ def main():
 
     years = [2013, 2014, 2015, 2016, 2017, 2018]
 
-    for year in years:
-        print(f"\nProcessing year {year}...")
-
-        if not os.path.exists(f'docs/data/{year}/companies.parquet'):
-            print(f"  Skipping {year} - data files not found")
-            continue
-
-        print(f"  Generating statistics for {year}...")
-        stats = generate_statistics(conn, year)
-        with open(f'docs/data/web/statistics_{year}.json', 'w') as f:
-            json.dump(stats, f, indent=2)
-        print(f"    Written: docs/data/web/statistics_{year}.json")
-
-        print(f"  Generating top taxpayers for {year}...")
-        top = generate_top_taxpayers(conn, year, 1000)
-        with open(f'docs/data/web/top_taxpayers_{year}.json', 'w') as f:
-            json.dump(top, f, indent=2)
-        print(f"    Written: docs/data/web/top_taxpayers_{year}.json")
-
-    print("\nGenerating across-years top 100...")
+    print("\nGenerating across-years top 1000...")
     across_years = generate_top_taxpayers_across_years(conn, years)
     with open('docs/data/web/top_taxpayers_across_years.json', 'w') as f:
         json.dump(across_years, f, indent=2)
     print("  Written: docs/data/web/top_taxpayers_across_years.json")
 
     conn.close()
-    print("\nWeb data generation complete for all years!")
+    print("\nWeb data generation complete!")
 
 
 if __name__ == '__main__':
