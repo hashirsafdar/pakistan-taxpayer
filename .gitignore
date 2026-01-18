@@ -12,3 +12,7 @@ Thumbs.db
 # Claude
 .claude/settings.local.json
 r2-cors.json
+
+# Wrangler
+.wrangler/
+node_modules/
