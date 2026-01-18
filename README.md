@@ -3,7 +3,7 @@
 Extracted and processed taxpayer data from the Federal Board of Revenue (FBR) Pakistan's PDF Income Tax Directory for **6 years (2013-2018)**.
 
 
-**Interactive Queries:** [Run SQL queries in your browser](https://old.hashirsafdar.com/pakistan-taxpayer/query.html) - Powered by DuckDB-WASM
+**Interactive Queries:** [Run SQL queries in your browser](https://github.hashirsafdar.com/pakistan-taxpayer/query.html) - Powered by DuckDB-WASM
 
 ## Dataset Overview
 
