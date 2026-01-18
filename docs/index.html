@@ -23,19 +23,40 @@
             header {
                 background: linear-gradient(135deg, #0f4c81 0%, #1a6ba8 100%);
                 color: white;
-                padding: 2rem;
+                padding: 1rem 2rem;
                 text-align: center;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                position: relative;
             }
 
             header h1 {
-                font-size: 2rem;
-                margin-bottom: 0.5rem;
+                font-size: 1.5rem;
+                margin-bottom: 0.25rem;
             }
 
             header p {
                 opacity: 0.9;
-                font-size: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .query-button {
+                position: absolute;
+                top: 50%;
+                right: 2rem;
+                transform: translateY(-50%);
+                padding: 0.5rem 1rem;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+                font-weight: 600;
+                transition: background 0.2s;
+                font-size: 0.9rem;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+            }
+
+            .query-button:hover {
+                background: rgba(255, 255, 255, 0.3);
             }
 
             .container {
@@ -215,6 +236,48 @@
                 font-size: 0.9rem;
             }
 
+            .pagination .page-numbers {
+                display: flex;
+                gap: 0.25rem;
+            }
+
+            .pagination .page-number {
+                min-width: 2rem;
+                padding: 0.5rem 0.75rem;
+                border: 1px solid #ddd;
+                background: white;
+                color: #0f4c81;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: all 0.2s;
+            }
+
+            .pagination .page-number:hover {
+                background: #0f4c81;
+                color: white;
+                border-color: #0f4c81;
+            }
+
+            .pagination .page-number.active {
+                background: #0f4c81;
+                color: white;
+                border-color: #0f4c81;
+                font-weight: bold;
+            }
+
+            .pagination .page-number.ellipsis {
+                border: none;
+                background: transparent;
+                cursor: default;
+                color: #666;
+            }
+
+            .pagination .page-number.ellipsis:hover {
+                background: transparent;
+                color: #666;
+            }
+
             .ntn-hint {
                 position: relative;
                 cursor: help;
@@ -250,37 +313,10 @@
         <header>
             <h1>Pakistan Taxpayer Directory</h1>
             <p>Extracted from Federal Board of Revenue (FBR) Public Data</p>
+            <a href="query.html" class="query-button">Query Interface</a>
         </header>
 
         <div class="container">
-            <div
-                style="
-                    background: white;
-                    padding: 1rem;
-                    border-radius: 8px;
-                    margin-bottom: 1.5rem;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                    text-align: center;
-                "
-            >
-                <a
-                    href="query.html"
-                    style="
-                        display: inline-block;
-                        padding: 0.75rem 1.5rem;
-                        background: #0f4c81;
-                        color: white;
-                        text-decoration: none;
-                        border-radius: 6px;
-                        font-weight: 600;
-                        transition: background 0.2s;
-                    "
-                    onmouseover="this.style.background='#1a6ba8'"
-                    onmouseout="this.style.background='#0f4c81'"
-                >
-                    Interactive SQL Query Interface
-                </a>
-            </div>
 
             <div class="tabs">
                 <button class="tab active" onclick="switchTab('companies')">
@@ -474,11 +510,38 @@
                     `pagination-${tableType}`,
                 );
 
+                let pageNumbers = [];
+                const maxVisible = 7;
+
+                if (totalPages <= maxVisible) {
+                    for (let i = 1; i <= totalPages; i++) {
+                        pageNumbers.push(i);
+                    }
+                } else {
+                    if (currentPage <= 3) {
+                        pageNumbers = [1, 2, 3, 4, '...', totalPages];
+                    } else if (currentPage >= totalPages - 2) {
+                        pageNumbers = [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                    } else {
+                        pageNumbers = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+                    }
+                }
+
+                const pageNumbersHTML = pageNumbers.map(page => {
+                    if (page === '...') {
+                        return '<span class="page-number ellipsis">...</span>';
+                    }
+                    const isActive = page === currentPage ? 'active' : '';
+                    return `<button class="page-number ${isActive}" onclick="changePage('${tableType}', ${page})">${page}</button>`;
+                }).join('');
+
                 paginationEl.innerHTML = `
                 <button onclick="changePage('${tableType}', ${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
                     Previous
                 </button>
-                <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+                <div class="page-numbers">
+                    ${pageNumbersHTML}
+                </div>
                 <button onclick="changePage('${tableType}', ${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>
                     Next
                 </button>
