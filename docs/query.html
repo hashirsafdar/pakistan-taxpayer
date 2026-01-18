@@ -884,57 +884,39 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
                     let queries = [];
 
                     if (detectedType === 'ntn' || detectedType === 'auto') {
-                        const searchNtn7 = idValue.substring(0, 7).padStart(7, '0');
-                        const ntn7Int = parseInt(searchNtn7);
-                        const ntn7Next = String(ntn7Int + 1).padStart(7, '0');
-                        const ntn8Min = searchNtn7 + '0';
-                        const ntn8Max = ntn7Next + '0';
-
+                        const searchNtn7 = idValue.substring(0, 7);
                         for (const year of years) {
-                            if (year >= 2017) {
-                                queries.push(`
-                                    SELECT ${year} as year, 'Company' as entity_type, name, ntn_7 as id, tax_paid
-                                    FROM '${baseUrl}/${year}/companies.parquet'
-                                    WHERE ntn_7 = '${searchNtn7}'
-                                `);
+                            const ntnCol = (year >= 2017) ? 'ntn_7' : 'ntn_8';
 
-                                queries.push(`
-                                    SELECT ${year} as year, 'AOP' as entity_type, name, ntn_7 as id, tax_paid
-                                    FROM '${baseUrl}/${year}/aop.parquet'
-                                    WHERE ntn_7 = '${searchNtn7}'
-                                `);
-                            } else {
-                                queries.push(`
-                                    SELECT ${year} as year, 'Company' as entity_type, name, ntn_8 as id, tax_paid
-                                    FROM '${baseUrl}/${year}/companies.parquet'
-                                    WHERE ntn_8 >= '${ntn8Min}' AND ntn_8 < '${ntn8Max}'
-                                `);
+                            queries.push(`
+                                SELECT ${year} as year, 'Company' as entity_type, name, ${ntnCol} as id, tax_paid
+                                FROM '${baseUrl}/${year}/companies.parquet'
+                                WHERE LEFT(CAST(${ntnCol} AS VARCHAR), 7) = '${searchNtn7}'
+                            `);
 
-                                queries.push(`
-                                    SELECT ${year} as year, 'AOP' as entity_type, name, ntn_8 as id, tax_paid
-                                    FROM '${baseUrl}/${year}/aop.parquet'
-                                    WHERE ntn_8 >= '${ntn8Min}' AND ntn_8 < '${ntn8Max}'
-                                `);
+                            queries.push(`
+                                SELECT ${year} as year, 'AOP' as entity_type, name, ${ntnCol} as id, tax_paid
+                                FROM '${baseUrl}/${year}/aop.parquet'
+                                WHERE LEFT(CAST(${ntnCol} AS VARCHAR), 7) = '${searchNtn7}'
+                            `);
 
-                                if (year === 2013) {
-                                    queries.push(`
-                                        SELECT ${year} as year, 'Individual' as entity_type, name, ntn_8 as id, tax_paid
-                                        FROM '${baseUrl}/${year}/individuals.parquet'
-                                        WHERE ntn_8 >= '${ntn8Min}' AND ntn_8 < '${ntn8Max}'
-                                    `);
-                                }
+                            if (year === 2013) {
+                                queries.push(`
+                                    SELECT ${year} as year, 'Individual' as entity_type, name, ntn_8 as id, tax_paid
+                                    FROM '${baseUrl}/${year}/individuals.parquet'
+                                    WHERE LEFT(CAST(ntn_8 AS VARCHAR), 7) = '${searchNtn7}'
+                                `);
                             }
                         }
                     }
 
                     if (detectedType === 'cnic' || detectedType === 'auto') {
-                        const paddedCnic = idValue.padStart(13, '0');
                         for (const year of years) {
                             if (year !== 2013) {
                                 queries.push(`
                                     SELECT ${year} as year, 'Individual' as entity_type, name, cnic as id, tax_paid
                                     FROM '${baseUrl}/${year}/individuals.parquet'
-                                    WHERE cnic = '${paddedCnic}'
+                                    WHERE CAST(cnic AS VARCHAR) = '${idValue}'
                                 `);
                             }
                         }
