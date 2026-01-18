@@ -1026,8 +1026,6 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
 
                 try {
                     const startTime = performance.now();
-                    const baseUrl =
-                        "https://github.hashirsafdar.com/pakistan-taxpayer/data";
 
                     let detectedType = idType;
                     if (idType === "auto") {
@@ -1036,8 +1034,8 @@ SELECT * FROM companies_2018 ORDER BY tax_paid DESC LIMIT 10</textarea
 
                     let fullQuery;
 
-                    // Use optimized consolidated file query (single HTTP request)
-                    const consolidatedUrl = `${baseUrl}/all.parquet`;
+                    // Use R2 for lookup (supports HTTP range requests)
+                    const consolidatedUrl = "https://pub-04b8843e76a74070afe36126dfc680ed.r2.dev/all.parquet";
 
                     if (detectedType === "ntn") {
                         const searchNtn7 = idValue.substring(0, 7);
