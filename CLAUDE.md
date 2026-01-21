@@ -1,7 +1,3 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Project Overview
 
 Extracts Pakistan's Tax Directory PDFs (2013-2018) into CSV/Parquet formats with web visualizations. See README.md for dataset statistics.
@@ -25,27 +21,8 @@ PDF → [extract_fast.sh YEAR] → CSV → [create_parquet_python.py YEAR] → P
   - `index.html` - Pre-computed stats from JSON
   - `query.html` - Live SQL via DuckDB-WASM loading Parquet over HTTP
 
-## Common Commands
+See query examples in EXTRACTION.md.
 
-```bash
-# Extract specific year (2013-2018)
-bash scripts/extract_fast.sh 2018                              # PDF → CSV
-uv run --with duckdb scripts/create_parquet_python.py 2018     # CSV → Parquet
-
-# Extract all years
-for year in 2013 2014 2015 2016 2017 2018; do
-  bash scripts/extract_fast.sh $year
-  uv run --with duckdb scripts/create_parquet_python.py $year
-done
-
-# Generate web data
-uv run --with duckdb scripts/generate_web_data.py                             # Parquet → JSON
-
-# Create consolidated file
-uv run --with duckdb scripts/create_consolidated_parquet.py                   # All Parquet → all.parquet
-```
-
-**Note:** Query examples are in README.md.
 
 ## Key Details
 
