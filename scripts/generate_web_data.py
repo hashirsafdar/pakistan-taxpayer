@@ -13,40 +13,27 @@ def generate_top_taxpayers_across_years(conn, years):
 
     print("\nGenerating top taxpayers across all years...")
 
-    companies_query = ' UNION ALL '.join([
-        f"""
-        SELECT
-            LEFT(CAST({'ntn_8' if year <= 2016 else 'ntn_7'} AS VARCHAR), 7) as ntn7,
-            {'ntn_8' if year <= 2016 else 'ntn_7'} as ntn,
-            name,
-            {year} as year,
-            tax_paid
-        FROM 'docs/data/{year}/companies.parquet'
-        WHERE tax_paid > 0
-        """ for year in years
-    ])
-
-    companies = conn.execute(f"""
-        WITH all_years AS ({companies_query}),
-        yearly_aggregated AS (
+    companies = conn.execute("""
+        WITH yearly_aggregated AS (
             SELECT
-                ntn7,
+                ntn_7,
                 year,
                 SUM(tax_paid) as year_tax,
                 FIRST(name ORDER BY year DESC) as name,
-                FIRST(ntn ORDER BY year DESC) as ntn
-            FROM all_years
-            GROUP BY ntn7, year
+                FIRST(id ORDER BY year DESC) as ntn
+            FROM 'docs/data/all.parquet'
+            WHERE category = 'company' AND tax_paid > 0
+            GROUP BY ntn_7, year
         ),
         aggregated AS (
             SELECT
-                ntn7,
+                ntn_7,
                 FIRST(name ORDER BY year DESC) as name,
                 FIRST(ntn ORDER BY year DESC) as ntn,
                 SUM(year_tax) as total_tax,
                 MAP_FROM_ENTRIES(LIST(ROW(year, year_tax) ORDER BY year)) as year_breakdown
             FROM yearly_aggregated
-            GROUP BY ntn7
+            GROUP BY ntn_7
         )
         SELECT name, ntn, year_breakdown, total_tax
         FROM aggregated
@@ -64,40 +51,27 @@ def generate_top_taxpayers_across_years(conn, years):
             'total': row[3]
         })
 
-    aop_query = ' UNION ALL '.join([
-        f"""
-        SELECT
-            LEFT(CAST({'ntn_8' if year <= 2016 else 'ntn_7'} AS VARCHAR), 7) as ntn7,
-            {'ntn_8' if year <= 2016 else 'ntn_7'} as ntn,
-            name,
-            {year} as year,
-            tax_paid
-        FROM 'docs/data/{year}/aop.parquet'
-        WHERE tax_paid > 0
-        """ for year in years
-    ])
-
-    aop = conn.execute(f"""
-        WITH all_years AS ({aop_query}),
-        yearly_aggregated AS (
+    aop = conn.execute("""
+        WITH yearly_aggregated AS (
             SELECT
-                ntn7,
+                ntn_7,
                 year,
                 SUM(tax_paid) as year_tax,
                 FIRST(name ORDER BY year DESC) as name,
-                FIRST(ntn ORDER BY year DESC) as ntn
-            FROM all_years
-            GROUP BY ntn7, year
+                FIRST(id ORDER BY year DESC) as ntn
+            FROM 'docs/data/all.parquet'
+            WHERE category = 'aop' AND tax_paid > 0
+            GROUP BY ntn_7, year
         ),
         aggregated AS (
             SELECT
-                ntn7,
+                ntn_7,
                 FIRST(name ORDER BY year DESC) as name,
                 FIRST(ntn ORDER BY year DESC) as ntn,
                 SUM(year_tax) as total_tax,
                 MAP_FROM_ENTRIES(LIST(ROW(year, year_tax) ORDER BY year)) as year_breakdown
             FROM yearly_aggregated
-            GROUP BY ntn7
+            GROUP BY ntn_7
         )
         SELECT name, ntn, year_breakdown, total_tax
         FROM aggregated
@@ -115,30 +89,15 @@ def generate_top_taxpayers_across_years(conn, years):
             'total': row[3]
         })
 
-    individuals_parts = []
-    for year in years:
-        id_col = 'ntn_8' if year == 2013 else 'cnic'
-        individuals_parts.append(f"""
-            SELECT
-                {id_col} as id,
-                name,
-                {year} as year,
-                tax_paid
-            FROM 'docs/data/{year}/individuals.parquet'
-            WHERE tax_paid > 0
-        """)
-
-    individuals_query = ' UNION ALL '.join(individuals_parts)
-
-    individuals = conn.execute(f"""
-        WITH all_years AS ({individuals_query}),
-        yearly_aggregated AS (
+    individuals = conn.execute("""
+        WITH yearly_aggregated AS (
             SELECT
                 id,
                 year,
                 SUM(tax_paid) as year_tax,
                 FIRST(name ORDER BY year DESC) as name
-            FROM all_years
+            FROM 'docs/data/all.parquet'
+            WHERE category = 'individual' AND tax_paid > 0
             GROUP BY id, year
         ),
         aggregated AS (
@@ -168,10 +127,13 @@ def generate_top_taxpayers_across_years(conn, years):
 
     # Look up 2013 NTN for individuals with unique names
     unique_2013_names = conn.execute("""
-        SELECT name, ntn_8, tax_paid
-        FROM 'docs/data/2013/individuals.parquet'
-        WHERE name IN (
-            SELECT name FROM 'docs/data/2013/individuals.parquet'
+        SELECT name, id as ntn_8, tax_paid
+        FROM 'docs/data/all.parquet'
+        WHERE category = 'individual' AND year = 2013
+        AND name IN (
+            SELECT name
+            FROM 'docs/data/all.parquet'
+            WHERE category = 'individual' AND year = 2013
             GROUP BY name HAVING COUNT(*) = 1
         )
     """).fetchall()
