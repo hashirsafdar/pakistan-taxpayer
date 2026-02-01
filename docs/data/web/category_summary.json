@@ -1,15 +1,15 @@
 {
-  "aop": {
-    "total_tax": 316023322203,
-    "entity_count": 180449,
-    "avg_tax": 1751316.561482746,
-    "max_tax": 14706760378
-  },
   "individual": {
     "total_tax": 1202679118994,
     "entity_count": 5283501,
     "avg_tax": 227629.20249168118,
     "max_tax": 30105506000
+  },
+  "aop": {
+    "total_tax": 316023322203,
+    "entity_count": 180449,
+    "avg_tax": 1751316.561482746,
+    "max_tax": 14706760378
   },
   "company": {
     "total_tax": 2439801799576,
