@@ -1,19 +1,32 @@
-name: Generate Web Visualization Data
+name: Build Visualization Data and Deploy to Pages
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'docs/data/all.parquet'
       - 'scripts/generate_web_data.py'
+      - 'docs/**'
+      - '.github/workflows/build-and-deploy.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   generate:
     runs-on: ubuntu-latest
+    outputs:
+      files-changed: ${{ steps.check_changes.outputs.changed }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -24,10 +37,10 @@ jobs:
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Install dependencies
-        run: uv pip install duckdb
+        run: uv pip install --system duckdb
 
       - name: Generate visualization data
-        run: uv run scripts/generate_web_data.py
+        run: python scripts/generate_web_data.py
 
       - name: Check for changes
         id: check_changes
@@ -38,7 +51,7 @@ jobs:
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and push changes
+      - name: Commit generated files
         if: steps.check_changes.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
@@ -46,3 +59,31 @@ jobs:
           git add docs/data/web/*.json
           git commit -m "Auto-generate visualization data"
           git push
+
+  deploy:
+    needs: generate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Pull latest changes
+        run: git pull origin main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
