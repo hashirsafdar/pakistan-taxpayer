@@ -1,0 +1,86 @@
+{
+  "2013": {
+    "aop": {
+      "tax": 28758163181,
+      "entities": 24686
+    },
+    "company": {
+      "tax": 315023102930,
+      "entities": 13056
+    },
+    "individual": {
+      "tax": 89417064073,
+      "entities": 422712
+    }
+  },
+  "2014": {
+    "aop": {
+      "tax": 35166879270,
+      "entities": 26043
+    },
+    "company": {
+      "tax": 341171864552,
+      "entities": 13413
+    },
+    "individual": {
+      "tax": 114624316018,
+      "entities": 493654
+    }
+  },
+  "2015": {
+    "aop": {
+      "tax": 47876007608,
+      "entities": 29299
+    },
+    "company": {
+      "tax": 387609567075,
+      "entities": 15021
+    },
+    "individual": {
+      "tax": 202249081638,
+      "entities": 691259
+    }
+  },
+  "2016": {
+    "aop": {
+      "tax": 53454665784,
+      "entities": 30745
+    },
+    "company": {
+      "tax": 430739860741,
+      "entities": 16039
+    },
+    "individual": {
+      "tax": 212831910277,
+      "entities": 803356
+    }
+  },
+  "2017": {
+    "aop": {
+      "tax": 74824991987,
+      "entities": 32630
+    },
+    "company": {
+      "tax": 466047631904,
+      "entities": 17800
+    },
+    "individual": {
+      "tax": 264681636429,
+      "entities": 1087478
+    }
+  },
+  "2018": {
+    "aop": {
+      "tax": 75942614373,
+      "entities": 37046
+    },
+    "company": {
+      "tax": 499209772374,
+      "entities": 19923
+    },
+    "individual": {
+      "tax": 318875110559,
+      "entities": 1785042
+    }
+  }
+}

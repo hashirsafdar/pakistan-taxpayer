@@ -19,8 +19,6 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    outputs:
-      files-changed: ${{ steps.check_changes.outputs.changed }}
 
     steps:
       - name: Checkout code
@@ -29,7 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -42,23 +40,17 @@ jobs:
       - name: Generate visualization data
         run: python scripts/generate_web_data.py
 
-      - name: Check for changes
-        id: check_changes
-        run: |
-          if git diff --quiet docs/data/web/; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Commit generated files
-        if: steps.check_changes.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/data/web/*.json
-          git commit -m "Auto-generate visualization data"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-generate visualization data"
+            git push
+          fi
 
   deploy:
     needs: generate
@@ -77,13 +69,13 @@ jobs:
         run: git pull origin main
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: 'docs'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4
