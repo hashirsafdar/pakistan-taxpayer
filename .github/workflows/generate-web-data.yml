@@ -2,8 +2,6 @@ name: Generate Web Visualization Data
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'docs/data/all.parquet'
       - 'scripts/generate_web_data.py'
