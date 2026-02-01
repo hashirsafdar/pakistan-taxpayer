@@ -39,11 +39,16 @@
                 font-size: 0.9rem;
             }
 
-            .query-button {
+            .nav-buttons {
                 position: absolute;
                 top: 50%;
                 right: 2rem;
                 transform: translateY(-50%);
+                display: flex;
+                gap: 1rem;
+            }
+
+            .nav-button {
                 padding: 0.5rem 1rem;
                 background: rgba(255, 255, 255, 0.2);
                 color: white;
@@ -55,7 +60,7 @@
                 border: 1px solid rgba(255, 255, 255, 0.3);
             }
 
-            .query-button:hover {
+            .nav-button:hover {
                 background: rgba(255, 255, 255, 0.3);
             }
 
@@ -313,7 +318,10 @@
         <header>
             <h1>Pakistan Taxpayer Directory</h1>
             <p>Extracted from Federal Board of Revenue (FBR) Public Data</p>
-            <a href="query.html" class="query-button">Query Interface</a>
+            <div class="nav-buttons">
+                <a href="visualizations.html" class="nav-button">Visualizations</a>
+                <a href="query.html" class="nav-button">Query Interface</a>
+            </div>
         </header>
 
         <div class="container">
