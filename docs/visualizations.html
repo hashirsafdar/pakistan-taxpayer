@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pakistan Taxpayer Directory - Visualizations</title>
+        <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Oxygen, Ubuntu, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background: #f5f5f5;
+            }
+
+            header {
+                background: linear-gradient(135deg, #0f4c81 0%, #1a6ba8 100%);
+                color: white;
+                padding: 1rem 2rem;
+                text-align: center;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                position: relative;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+                margin-bottom: 0.25rem;
+            }
+
+            header p {
+                opacity: 0.9;
+                font-size: 0.9rem;
+            }
+
+            .nav-buttons {
+                position: absolute;
+                top: 50%;
+                right: 2rem;
+                transform: translateY(-50%);
+                display: flex;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                padding: 0.5rem 1rem;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+                font-weight: 600;
+                transition: background 0.2s;
+                font-size: 0.9rem;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+            }
+
+            .nav-button:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+            .container {
+                max-width: 1600px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+
+            .chart-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .chart-container {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                padding: 1.5rem;
+                min-height: 400px;
+            }
+
+            .chart-container.full-width {
+                grid-column: 1 / -1;
+            }
+
+            .chart-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #0f4c81;
+                margin-bottom: 1rem;
+            }
+
+            .chart {
+                width: 100%;
+                height: 350px;
+            }
+
+            .filter-controls {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .filter-group {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .filter-group label {
+                font-weight: 600;
+                color: #0f4c81;
+                margin-right: 0.5rem;
+            }
+
+            .filter-group select {
+                padding: 0.5rem 1rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                cursor: pointer;
+                background: white;
+            }
+
+            .stats-box {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .stat-card {
+                border-left: 4px solid #0f4c81;
+                padding-left: 1rem;
+            }
+
+            .stat-label {
+                font-size: 0.85rem;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 0.5rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #0f4c81;
+            }
+
+            footer {
+                text-align: center;
+                padding: 2rem;
+                color: #666;
+                background: white;
+                margin-top: 3rem;
+            }
+
+            footer a {
+                color: #0f4c81;
+                text-decoration: none;
+            }
+
+            footer a:hover {
+                text-decoration: underline;
+            }
+
+            .loading {
+                text-align: center;
+                padding: 2rem;
+                color: #999;
+            }
+
+            @media (max-width: 1024px) {
+                .chart-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Pakistan Taxpayer Directory - Visualizations</h1>
+            <p>Interactive Tax Analysis (2013-2018)</p>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-button">Dashboard</a>
+                <a href="query.html" class="nav-button">Query</a>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter" onchange="updateVisualizations()">
+                        <option value="all">All Categories</option>
+                        <option value="company">Companies</option>
+                        <option value="aop">AOP</option>
+                        <option value="individual">Individuals</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats-box" id="statsBox"></div>
+
+            <div class="chart-grid">
+                <div class="chart-container full-width">
+                    <div class="chart-title">Tax Trends Over Time</div>
+                    <div class="chart" id="taxTrendsChart"></div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Category Distribution (Total Tax)</div>
+                    <div class="chart" id="categoryPieChart"></div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Tax Brackets Distribution</div>
+                    <div class="chart" id="taxDistributionChart"></div>
+                </div>
+
+                <div class="chart-container full-width">
+                    <div class="chart-title">Entity Growth Over Time</div>
+                    <div class="chart" id="entityGrowthChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                <strong>Data Source:</strong>
+                <a
+                    href="https://fbr.gov.pk/Categ/income-tax-directory/742"
+                    target="_blank"
+                >
+                    FBR Income Tax Directory
+                </a>
+            </p>
+            <p style="margin-top: 0.5rem">
+                Published by Federal Board of Revenue (FBR) Pakistan
+            </p>
+            <p style="margin-top: 1rem">
+                <a
+                    href="https://github.com/hashirsafdar/pakistan-taxpayer"
+                    target="_blank"
+                >
+                    View Source Code on GitHub
+                </a>
+            </p>
+        </footer>
+
+        <script>
+            let allData = {
+                taxTrends: null,
+                categorySummary: null,
+                taxDistribution: null,
+                entityGrowth: null
+            };
+
+            const chartInstances = {
+                taxTrends: null,
+                categoryPie: null,
+                taxDistribution: null,
+                entityGrowth: null
+            };
+
+            const COLORS = {
+                company: '#1976d2',
+                aop: '#e65100',
+                individual: '#7b1fa2'
+            };
+
+            async function loadAllData() {
+                try {
+                    const [trends, category, distribution, growth] = await Promise.all([
+                        fetch('data/web/tax_trends.json').then(r => r.json()),
+                        fetch('data/web/category_summary.json').then(r => r.json()),
+                        fetch('data/web/tax_distribution.json').then(r => r.json()),
+                        fetch('data/web/entity_growth.json').then(r => r.json())
+                    ]);
+
+                    allData.taxTrends = trends;
+                    allData.categorySummary = category;
+                    allData.taxDistribution = distribution;
+                    allData.entityGrowth = growth;
+
+                    initializeCharts();
+                    updateVisualizations();
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                    document.body.innerHTML += '<p style="color: red; text-align: center; margin-top: 2rem;">Error loading visualization data. Please ensure data files are generated.</p>';
+                }
+            }
+
+            function initializeCharts() {
+                chartInstances.taxTrends = echarts.init(document.getElementById('taxTrendsChart'));
+                chartInstances.categoryPie = echarts.init(document.getElementById('categoryPieChart'));
+                chartInstances.taxDistribution = echarts.init(document.getElementById('taxDistributionChart'));
+                chartInstances.entityGrowth = echarts.init(document.getElementById('entityGrowthChart'));
+
+                window.addEventListener('resize', () => {
+                    Object.values(chartInstances).forEach(chart => chart && chart.resize());
+                });
+            }
+
+            function formatNumber(num) {
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                } else if (num >= 1000) {
+                    return (num / 1000).toFixed(1) + 'k';
+                }
+                return num.toString();
+            }
+
+            function updateVisualizations() {
+                const selectedCategory = document.getElementById('categoryFilter').value;
+
+                updateTaxTrendsChart(selectedCategory);
+                updateCategoryPieChart();
+                updateTaxDistributionChart();
+                updateEntityGrowthChart(selectedCategory);
+                updateStatsBox(selectedCategory);
+            }
+
+            function updateTaxTrendsChart(category) {
+                const years = Object.keys(allData.taxTrends).sort();
+                const series = [];
+
+                if (category === 'all') {
+                    const categories = ['company', 'aop', 'individual'];
+                    categories.forEach(cat => {
+                        const data = years.map(year => allData.taxTrends[year][cat]?.tax || 0);
+                        series.push({
+                            name: cat.charAt(0).toUpperCase() + cat.slice(1),
+                            data: data,
+                            type: 'line',
+                            smooth: true,
+                            color: COLORS[cat],
+                            symbol: 'circle',
+                            symbolSize: 6
+                        });
+                    });
+                } else {
+                    const data = years.map(year => allData.taxTrends[year][category]?.tax || 0);
+                    series.push({
+                        name: category.charAt(0).toUpperCase() + category.slice(1),
+                        data: data,
+                        type: 'line',
+                        smooth: true,
+                        color: COLORS[category],
+                        symbol: 'circle',
+                        symbolSize: 6
+                    });
+                }
+
+                const option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: (params) => {
+                            let result = params[0].axisValue + '<br/>';
+                            params.forEach(param => {
+                                result += `${param.marker} ${param.seriesName}: ${formatNumber(param.value)}<br/>`;
+                            });
+                            return result;
+                        }
+                    },
+                    legend: {
+                        data: series.map(s => s.name),
+                        bottom: 10
+                    },
+                    grid: {
+                        left: 60,
+                        right: 40,
+                        top: 40,
+                        bottom: 60,
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: years,
+                        axisLabel: {
+                            fontSize: 11
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: (value) => formatNumber(value)
+                        }
+                    },
+                    series: series
+                };
+
+                chartInstances.taxTrends.setOption(option);
+            }
+
+            function updateCategoryPieChart() {
+                const categories = allData.categorySummary;
+                const data = Object.entries(categories).map(([key, value]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1),
+                    value: value.total_tax
+                }));
+
+                const option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: (params) => {
+                            const total = data.reduce((sum, item) => sum + item.value, 0);
+                            const percent = ((params.value / total) * 100).toFixed(1);
+                            return `${params.name}<br/>Total Tax: ${formatNumber(params.value)}<br/>Share: ${percent}%`;
+                        }
+                    },
+                    legend: {
+                        bottom: 10,
+                        left: 'center'
+                    },
+                    series: [{
+                        type: 'pie',
+                        radius: ['35%', '65%'],
+                        data: data,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }]
+                };
+
+                chartInstances.categoryPie.setOption(option);
+            }
+
+            function updateTaxDistributionChart() {
+                const distribution = allData.taxDistribution;
+                const labels = Object.keys(distribution).sort();
+                const data = labels.map(label => distribution[label]);
+
+                const option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: (params) => {
+                            return `${params[0].name}<br/>Entities: ${params[0].value.toLocaleString()}`;
+                        }
+                    },
+                    grid: {
+                        left: 60,
+                        right: 40,
+                        top: 40,
+                        bottom: 60,
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: labels,
+                        axisLabel: {
+                            rotate: 45,
+                            fontSize: 11
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: (value) => formatNumber(value)
+                        }
+                    },
+                    series: [{
+                        name: 'Entity Count',
+                        data: data,
+                        type: 'bar',
+                        color: '#1976d2',
+                        itemStyle: {
+                            borderRadius: [4, 4, 0, 0]
+                        }
+                    }]
+                };
+
+                chartInstances.taxDistribution.setOption(option);
+            }
+
+            function updateEntityGrowthChart(category) {
+                const years = Object.keys(allData.entityGrowth).sort();
+
+                // For now, show total entity growth
+                // Future: could breakdown by category if we generate that data
+                const data = years.map(year => allData.entityGrowth[year]);
+
+                const option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: (params) => {
+                            return `${params[0].axisValue}<br/>Entities: ${params[0].value.toLocaleString()}`;
+                        }
+                    },
+                    legend: {
+                        data: ['Total Entities'],
+                        bottom: 10
+                    },
+                    grid: {
+                        left: 60,
+                        right: 40,
+                        top: 40,
+                        bottom: 60,
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: years,
+                        axisLabel: {
+                            fontSize: 11
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: (value) => formatNumber(value)
+                        }
+                    },
+                    series: [{
+                        name: 'Total Entities',
+                        data: data,
+                        type: 'line',
+                        smooth: true,
+                        color: '#7b1fa2',
+                        symbol: 'circle',
+                        symbolSize: 6,
+                        areaStyle: {
+                            color: 'rgba(123, 31, 162, 0.2)'
+                        }
+                    }]
+                };
+
+                chartInstances.entityGrowth.setOption(option);
+            }
+
+            function updateStatsBox(category) {
+                const stats = allData.categorySummary;
+                const statsBox = document.getElementById('statsBox');
+
+                let html = '';
+
+                if (category === 'all') {
+                    let totalTax = 0;
+                    let totalEntities = 0;
+
+                    Object.values(stats).forEach(cat => {
+                        totalTax += cat.total_tax;
+                        totalEntities += cat.entity_count;
+                    });
+
+                    html = `
+                        <div class="stat-card">
+                            <div class="stat-label">Total Tax Revenue</div>
+                            <div class="stat-value">${formatNumber(totalTax)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Taxpayers</div>
+                            <div class="stat-value">${formatNumber(totalEntities)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Average Tax per Taxpayer</div>
+                            <div class="stat-value">${formatNumber(totalTax / totalEntities)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Data Period</div>
+                            <div class="stat-value">2013-2018</div>
+                        </div>
+                    `;
+                } else {
+                    const cat = stats[category];
+                    html = `
+                        <div class="stat-card">
+                            <div class="stat-label">Total Tax Revenue</div>
+                            <div class="stat-value">${formatNumber(cat.total_tax)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total ${category.charAt(0).toUpperCase() + category.slice(1)}s</div>
+                            <div class="stat-value">${formatNumber(cat.entity_count)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Average Tax per Entity</div>
+                            <div class="stat-value">${formatNumber(cat.avg_tax)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Highest Tax Paid</div>
+                            <div class="stat-value">${formatNumber(cat.max_tax)}</div>
+                        </div>
+                    `;
+                }
+
+                statsBox.innerHTML = html;
+            }
+
+            loadAllData();
+        </script>
+    </body>
+</html>

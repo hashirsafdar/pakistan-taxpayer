@@ -161,6 +161,117 @@ def generate_top_taxpayers_across_years(conn, years):
     }
 
 
+def generate_tax_trends_by_year_and_category(conn, years):
+    """Generate tax collected per year, broken down by category."""
+
+    print("\nGenerating tax trends by year and category...")
+
+    result = conn.execute("""
+        SELECT
+            year,
+            category,
+            SUM(tax_paid) as total_tax,
+            COUNT(*) as entity_count
+        FROM 'docs/data/all.parquet'
+        WHERE tax_paid > 0
+        GROUP BY year, category
+        ORDER BY year, category
+    """).fetchall()
+
+    trends = {}
+    for row in result:
+        year = str(row[0])
+        category = row[1]
+        if year not in trends:
+            trends[year] = {}
+        trends[year][category] = {
+            'tax': row[2],
+            'entities': row[3]
+        }
+
+    return trends
+
+
+def generate_category_summary(conn):
+    """Generate summary stats for each category."""
+
+    print("\nGenerating category summary...")
+
+    result = conn.execute("""
+        SELECT
+            category,
+            SUM(tax_paid) as total_tax,
+            COUNT(*) as entity_count,
+            AVG(tax_paid) as avg_tax,
+            MAX(tax_paid) as max_tax
+        FROM 'docs/data/all.parquet'
+        WHERE tax_paid > 0
+        GROUP BY category
+    """).fetchall()
+
+    categories = {}
+    for row in result:
+        categories[row[0]] = {
+            'total_tax': row[1],
+            'entity_count': row[2],
+            'avg_tax': row[3],
+            'max_tax': row[4]
+        }
+
+    return categories
+
+
+def generate_tax_distribution_histogram(conn):
+    """Generate histogram of tax paid amounts in brackets."""
+
+    print("\nGenerating tax distribution histogram...")
+
+    # Define tax brackets
+    brackets = [
+        (0, 100000, '0-100k'),
+        (100000, 500000, '100k-500k'),
+        (500000, 1000000, '500k-1M'),
+        (1000000, 5000000, '1M-5M'),
+        (5000000, 10000000, '5M-10M'),
+        (10000000, float('inf'), '10M+')
+    ]
+
+    histogram = {}
+    for min_val, max_val, label in brackets:
+        if max_val == float('inf'):
+            count = conn.execute(f"""
+                SELECT COUNT(*) FROM 'docs/data/all.parquet'
+                WHERE tax_paid >= {min_val}
+            """).fetchone()[0]
+        else:
+            count = conn.execute(f"""
+                SELECT COUNT(*) FROM 'docs/data/all.parquet'
+                WHERE tax_paid >= {min_val} AND tax_paid < {max_val}
+            """).fetchone()[0]
+        histogram[label] = count
+
+    return histogram
+
+
+def generate_entity_growth_over_time(conn, years):
+    """Generate count of distinct entities per year."""
+
+    print("\nGenerating entity growth over time...")
+
+    growth = {}
+    for year in years:
+        count = conn.execute(f"""
+            SELECT COUNT(DISTINCT CASE
+                WHEN category = 'individual' THEN id
+                ELSE ntn_7
+            END) FROM 'docs/data/all.parquet'
+            WHERE year = {year}
+        """).fetchone()[0]
+        growth[str(year)] = count
+
+    return growth
+
+
 def main():
     os.makedirs('docs/data/web', exist_ok=True)
     conn = duckdb.connect()
@@ -172,6 +283,28 @@ def main():
     with open('docs/data/web/top_taxpayers_across_years.json', 'w') as f:
         json.dump(across_years, f, indent=2)
     print("  Written: docs/data/web/top_taxpayers_across_years.json")
+
+    print("\nGenerating visualization data...")
+
+    tax_trends = generate_tax_trends_by_year_and_category(conn, years)
+    with open('docs/data/web/tax_trends.json', 'w') as f:
+        json.dump(tax_trends, f, indent=2)
+    print("  Written: docs/data/web/tax_trends.json")
+
+    category_summary = generate_category_summary(conn)
+    with open('docs/data/web/category_summary.json', 'w') as f:
+        json.dump(category_summary, f, indent=2)
+    print("  Written: docs/data/web/category_summary.json")
+
+    tax_distribution = generate_tax_distribution_histogram(conn)
+    with open('docs/data/web/tax_distribution.json', 'w') as f:
+        json.dump(tax_distribution, f, indent=2)
+    print("  Written: docs/data/web/tax_distribution.json")
+
+    entity_growth = generate_entity_growth_over_time(conn, years)
+    with open('docs/data/web/entity_growth.json', 'w') as f:
+        json.dump(entity_growth, f, indent=2)
+    print("  Written: docs/data/web/entity_growth.json")
 
     conn.close()
     print("\nWeb data generation complete!")
