@@ -2,6 +2,8 @@
 
 Extracted and processed taxpayer data from the Federal Board of Revenue (FBR) Pakistan's PDF Income Tax Directory for **6 years (2013-2018)**.
 
+[Read more about this here](https://hashirsafdar.com/posts/pakistan-taxpayer-data/)
+
 [Explore the top 1000 taxpayers across all this data here](https://github.hashirsafdar.com/pakistan-taxpayer/)
 
 ## Dataset Overview
